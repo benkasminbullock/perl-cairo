@@ -1,3 +1,25 @@
+2004/11/10 21:08 (-0500) rwmcfa1
+
+	* TODO: initial import
+
+	* Cairo.pm, Cairo.xs: added %backends facility
+
+	* Cario.xs, CairoSurface.xs: stuff moved out of Cairo.xs that belonged
+	here
+
+	* Cairo.xs: fixed some OUTLIST stuff (IN_OUTLIST.) cairo_current_matrix
+	fixed. 
+
+	* CairoPattern.xs: added class param to create_for_surface
+
+	* Makefile.PL: seperated structs out of objects. add refs to object
+	typemaps OUTPUT sections. don't return full strings for OUTPUT enum
+	types.
+
+	* cairo-perl.h: don't need stdio.h
+
+	* t/Cairo.t: test most all of cairo type. 90% done.
+
 2004/11/08 20:44 (-0500) rwmcfa1
 
 	* Cairo.xs, CairoMatrix.xs, CairoPattern.xs, CairoSurface.xs: all of 
