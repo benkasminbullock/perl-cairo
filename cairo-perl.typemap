@@ -1,0 +1,23 @@
+#
+# Copyright (c) 2004 by the cairo  perl team (see the file README)
+#
+# Licensed under the LGPL, see LICENSE file for more information.
+#
+# $Header$
+#
+
+TYPEMAP
+
+# Xlib
+Display *	T_PTROBJ
+Drawable 	T_PTROBJ
+Visual *	T_PTROBJ
+Colormap	T_PTROBJ
+
+# XCB
+XCBConnection *	T_PTROBJ
+XCBDRAWABLE	T_PTROBJ
+XCBVISUALTYPE *	T_PTROBJ
+
+# others
+const unsigned char *	T_PV

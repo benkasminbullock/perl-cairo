@@ -1,0 +1,13 @@
+.*\.bak
+blib
+.*\.bs
+.*\.c
+CairoEnums\.xs
+cairo-perl-auto\.typemap
+cairo-perl-enums\.h
+Makefile$
+Makefile\.old
+.*\.o
+pm_to_blib
+.*\.swp
+.*\.tar\.gz

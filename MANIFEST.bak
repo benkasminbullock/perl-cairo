@@ -1,0 +1,13 @@
+cairo-perl.h
+cairo-perl.typemap
+Cairo.pm
+Cairo.xs
+CairoFont.xs
+CairoMatrix.xs
+CairoPattern.xs
+CairoSurface.xs
+Makefile.PL
+MANIFEST
+MANIFEST.SKIP
+META.yml
+t/Cairo.t
