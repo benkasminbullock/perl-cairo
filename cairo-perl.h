@@ -15,10 +15,22 @@
 #include "XSUB.h"
 
 #include <cairo.h>
-#include <cairo-glitz.h>
-#include <cairo-png.h>
-#include <cairo-ps.h>
-#include <cairo-xlib.h>
+
+#ifdef CAIRO_HAS_GLITZ_SURFACE
+# include <cairo-glitz.h>
+#endif
+
+#ifdef CAIRO_HAS_PNG_SURFACE
+# include <cairo-png.h>
+#endif
+
+#ifdef CAIRO_HAS_PS_SURFACE
+# include <cairo-ps.h>
+#endif
+
+#ifdef CAIRO_HAS_XLIB_SURFACE
+# include <cairo-xlib.h>
+#endif
 
 #define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
 

@@ -1,3 +1,12 @@
+2005/02/06 11:18 (-0500) rwmcfa1
+
+	* CairoSurface.xs: fixed a bug in wrapping of cairo_surface_xlib_create
+	where the return value wasn't being caught in RETVAL. thank you -Wall -W
+
+	* cairo-perl.h: wrapped new includes (prev log msg) in #ifdef HAS's so
+	that we can build on systems where no all backends are supported. XS
+	code already supports this.
+
 2005-01-20  Carl Worth  <cworth@cworth.org>
 
 	* cairo-perl.h: Track split-up of cairo.h.

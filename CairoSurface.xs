@@ -58,7 +58,7 @@ cairo_surface_t * png_create (class, FILE * file, cairo_format_t format, int wid
 ## XXX: Display, Drawable ...
 cairo_surface_t * xlib_create (class, Display * dpy, Drawable drawable, Visual * visual, cairo_format_t format, Colormap colormap);
     CODE:
-	cairo_xlib_surface_create (dpy, drawable, visual, format, colormap);
+	RETVAL = cairo_xlib_surface_create (dpy, drawable, visual, format, colormap);
     OUTPUT:
 	RETVAL
 
