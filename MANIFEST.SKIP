@@ -9,5 +9,6 @@ Makefile$
 Makefile\.old
 .*\.o
 pm_to_blib
+.*\.png
 .*\.swp
 .*\.tar\.gz

@@ -7,8 +7,17 @@ CairoMatrix.xs
 CairoPattern.xs
 CairoSurface.xs
 ChangeLog
+examples/png/caps_joins.pl
+examples/png/hering.pl
+examples/png/outline.pl
+examples/png/README
+examples/png/spiral.pl
+examples/png/splines_tolerance.pl
+examples/png/stars.pl
+examples/simple.pl
 LICENSE
 Makefile.PL
+MakeHelper.pm
 MANIFEST
 MANIFEST.SKIP
 META.yml
