@@ -10,19 +10,18 @@
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::ImageSurface	PREFIX = cairo_image_surface_
 
-## XXX: add format
 cairo_surface_t * cairo_image_surface_create (class, cairo_format_t format, int width, int height)
-    CODE:
-	RETVAL = cairo_image_surface_create (format, width, height);
-	DBG ("creating surface %p\n", RETVAL);
-    OUTPUT:
-	RETVAL
+    ALIAS:
+	Cairo::Surface::new = 1
+    C_ARGS:
+	format, width, height
+    CLEANUP:
+	CAIRO_PERL_UNUSED (ix);
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::Surface PREFIX = cairo_surface_
 
-## manipulate state objects
-
+## destroy should happen auto-magically
+## void cairo_surface_destroy (cairo_surface_t * surface);
 void cairo_surface_DESTROY (cairo_surface_t * surface);
     CODE:
-	DBG ("destroying surface: %p\n", surface);
 	cairo_surface_destroy (surface);

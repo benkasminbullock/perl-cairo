@@ -6,6 +6,7 @@ CairoFont.xs
 CairoMatrix.xs
 CairoPattern.xs
 CairoSurface.xs
+ChangeLog
 LICENSE
 Makefile.PL
 MANIFEST

@@ -1,0 +1,10 @@
+2004/11/08 20:44 (-0500) rwmcfa1
+
+	* Cairo.xs, CairoMatrix.xs, CairoPattern.xs, CairoSurface.xs: all of 
+	the create functions have been cleaned up/fixed. debug prints removed.
+	create's alised to new's where appropriate.
+
+	* MANIFEST, MANIFEST.SKIP: ChangeLog added. build and CVS skipped
+
+	* Makefile.PL, cairo-perl.h, Cairo.xs: new (write_)boot code added,
+	in progress. use build dir for most of autogen'd stuff

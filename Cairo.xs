@@ -9,18 +9,29 @@
 
 #include <cairo-perl.h>
 
+void
+_cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
+{
+	dSP;
+	PUSHMARK (mark);
+	(*subaddr) (aTHX_ cv);
+	PUTBACK;	/* forget return values */
+}
+
 MODULE = Cairo	PACKAGE = Cairo	PREFIX = cairo_
 
 BOOT:
-	# boot the second XS file
-	boot_Cairo__Surface (aTHX_ cv);
+	{
+#include "cairo-perl-boot.xsh"
+	}
 
 cairo_t * cairo_create (class);
-    CODE:
-	RETVAL = cairo_create ();
-	DBG ("creating cr: %p\n", RETVAL);
-    OUTPUT:
-	RETVAL
+    ALIAS:
+	Cairo::new = 1
+    C_ARGS:
+	/* void */
+    CLEANUP:
+	CAIRO_PERL_UNUSED (ix);
 
 ## shouldn't have to deal with references from perl
 ##void cairo_reference (cairo_t * cr);
@@ -29,7 +40,6 @@ cairo_t * cairo_create (class);
 ##void cairo_destroy (cairo_t * cr);
 void cairo_DESTROY (cairo_t * cr);
     CODE:
-	DBG ("destroying cr: %p\n", cr);
 	cairo_destroy (cr);
 
 void cairo_save (cairo_t * cr);
@@ -41,10 +51,8 @@ cairo_t * cairo_copy (cairo_t * src)
     CODE:
 	RETVAL = cairo_create ();
 	cairo_copy (RETVAL, src);
-	DBG ("creating copy of %p: %p\n", src, RETVAL);
     OUTPUT:
 	RETVAL
-
 
 void cairo_set_target_surface (cairo_t * cr, cairo_surface_t * surface);
 
@@ -115,7 +123,7 @@ void cairo_set_line_join (cairo_t * cr, cairo_line_join_t line_join);
 
 ## XXX: double *
 ##void cairo_set_dash (cairo_t * cr, double * dashes, int ndash, double offset);
-void cairo_set_dash (cairo_t * cr, double offset, double dash1, ...)
+void cairo_set_dash (cairo_t * cr, double offset, dash1, ...)
     PREINIT:
 	DOUBLES_DECLARE
     CODE:
@@ -292,7 +300,10 @@ cairo_status_t cairo_status (cairo_t * cr);
 
 const char * cairo_status_string (cairo_t * cr);
 
-cairo_surface_t * cairo_surface_create_for_image (char * data, cairo_format_t format, int width, int height, int stride);
+## XXX: this one is kinda odd, image data is the first param
+cairo_surface_t * cairo_surface_create_for_image (class, char * data, cairo_format_t format, int width, int height, int stride);
+    C_ARGS:
+	data, format, width, height, stride
 
 cairo_surface_t * cairo_surface_create_similar (cairo_surface_t * other, cairo_format_t format, int width, int height);
 
@@ -310,32 +321,44 @@ cairo_status_t cairo_surface_set_filter (cairo_surface_t * surface, cairo_filter
 
 cairo_filter_t cairo_surface_get_filter (cairo_surface_t * surface);
 
-cairo_surface_t * cairo_image_surface_create (cairo_format_t format, int width, int height);
+cairo_surface_t * cairo_image_surface_create (class, cairo_format_t format, int width, int height);
+    C_ARGS:
+	format, width, height
 
-cairo_surface_t * cairo_image_surface_create_for_data (char * data, cairo_format_t format, int width, int height, int stride);
+cairo_surface_t * cairo_image_surface_create_for_data (class, char * data, cairo_format_t format, int width, int height, int stride);
+    C_ARGS:
+	data, format, width, height, stride
 
 #ifdef CAIRO_HAS_PS_SURFACE
 
-cairo_surface_t * cairo_ps_surface_create (FILE * file, double width_inches, double height_inches, double x_pixels_per_inch, double y_pixels_per_inch);
+cairo_surface_t * cairo_ps_surface_create (class, FILE * file, double width_inches, double height_inches, double x_pixels_per_inch, double y_pixels_per_inch);
+   C_ARGS:
+	file, width_inches, height_inches, x_pixels_per_inch, y_pixels_per_inch
 
 #endif /* CAIRO_HAS_PS_SURFACE */
 
 #ifdef CAIRO_HAS_PNG_SURFACE
 
-cairo_surface_t * cairo_png_surface_create (FILE * file, cairo_format_t format, int width, int height);
+cairo_surface_t * cairo_png_surface_create (class, FILE * file, cairo_format_t format, int width, int height);
+    C_ARGS:
+	file, format, width, height
 
 #endif /* CAIRO_HAS_PNG_SURFACE */
 
 #ifdef CAIRO_HAS_XLIB_SURFACE
 
 ## XXX: Display, Drawable ...
-cairo_surface_t * cairo_xlib_surface_create (Display * dpy, Drawable drawable, Visual * visual, cairo_format_t format, Colormap colormap);
+cairo_surface_t * cairo_xlib_surface_create (class, Display * dpy, Drawable drawable, Visual * visual, cairo_format_t format, Colormap colormap);
+    C_ARGS:
+	dpy, drawable, visual, format, colormap
 
 #endif /* CAIRO_HAS_XLIB_SURFACE */
 
 #ifdef CAIRO_HAS_GLITZ_SURFACE
 
 ## XXX: glitz_surface_t
-cairo_surface_t * cairo_glitz_surface_create (glitz_surface_t * surface);
+cairo_surface_t * cairo_glitz_surface_create (class, glitz_surface_t * surface);
+    C_ARGS:
+	surface
 
 #endif /* CAIRO_HAS_GLITZ_SURFACE */

@@ -17,7 +17,28 @@
 #include <stdio.h>
 #include <cairo.h>
 
+#define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
+
+/* XXX: copied/borrowed from gtk2-perl */
+void _cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark);
+/* XXX: copied/borrowed from gtk2-perl
+ *
+ * call the boot code of a module by symbol rather than by name.
+ *
+ * in a perl extension which uses several xs files but only one pm, you
+ * need to bootstrap the other xs files in order to get their functions
+ * exported to perl.  if the file has MODULE = Foo::Bar, the boot symbol
+ * would be boot_Foo__Bar.
+ */
+
+#define CAIRO_PERL_CALL_BOOT(name)				\
+	{							\
+		extern XS(name);				\
+		_cairo_perl_call_XS (aTHX_ name, cv, mark);	\
+	}
+
 #include <cairo-perl-enums.h>
+
 
 #ifdef CAIRO_DEBUG
 # define DBG(format, args...)	fprintf (stderr, format , ## args)

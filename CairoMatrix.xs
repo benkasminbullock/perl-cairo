@@ -11,16 +11,17 @@
 MODULE = Cairo::Matrix	PACKAGE = Cairo::Matrix PREFIX = cairo_matrix_
 
 cairo_matrix_t * cairo_matrix_create (class);
-    CODE:
-	RETVAL = cairo_matrix_create ();
-	DBG ("creating matrix: %p\n", RETVAL);
-    OUTPUT:
-	RETVAL
+    ALIAS:
+	Cairo::Matrix::new = 1
+    C_ARGS:
+	/* void */
+    CLEANUP:
+	CAIRO_PERL_UNUSED (ix);
 
+## destroy should happen auto-magically
 ##void cairo_matrix_destroy (cairo_matrix_t * matrix);
 void cairo_matrix_DESTROY (cairo_matrix_t * matrix);
     CODE:
-	DBG ("destroying matrix: %p\n", matrix);
 	cairo_matrix_destroy (matrix);
 
 ## XXX: cairo_status_t cairo_matrix_copy (cairo_matrix_t * matrix, const cairo_matrix_t * other);
