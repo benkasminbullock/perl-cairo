@@ -15,6 +15,10 @@
 #include "XSUB.h"
 
 #include <cairo.h>
+#include <cairo-glitz.h>
+#include <cairo-png.h>
+#include <cairo-ps.h>
+#include <cairo-xlib.h>
 
 #define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
 

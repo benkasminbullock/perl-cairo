@@ -1,3 +1,7 @@
+2005-01-20  Carl Worth  <cworth@cworth.org>
+
+	* cairo-perl.h: Track split-up of cairo.h.
+
 2004/11/28 13:20 (-0500) rwmcfa1
 
 	* Makefile.PL, MakeHelper.pm: initial import of MakeHelper, mess of
