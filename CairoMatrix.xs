@@ -11,12 +11,8 @@
 MODULE = Cairo::Matrix	PACKAGE = Cairo::Matrix PREFIX = cairo_matrix_
 
 cairo_matrix_t * cairo_matrix_create (class);
-    ALIAS:
-	Cairo::Matrix::new = 1
     C_ARGS:
 	/* void */
-    CLEANUP:
-	CAIRO_PERL_UNUSED (ix);
 
 ## destroy should happen auto-magically
 ##void cairo_matrix_destroy (cairo_matrix_t * matrix);
@@ -24,8 +20,14 @@ void cairo_matrix_DESTROY (cairo_matrix_t * matrix);
     CODE:
 	cairo_matrix_destroy (matrix);
 
+## XXX: status return type?
 ## XXX: cairo_status_t cairo_matrix_copy (cairo_matrix_t * matrix, const cairo_matrix_t * other);
-cairo_status_t cairo_matrix_copy (cairo_matrix_t * matrix, cairo_matrix_t * other);
+cairo_matrix_t * cairo_matrix_copy (cairo_matrix_t * matrix);
+    CODE:
+	RETVAL = cairo_matrix_create ();
+	cairo_matrix_copy (matrix, RETVAL);
+    OUTPUT:
+	RETVAL
 
 cairo_status_t cairo_matrix_set_identity (cairo_matrix_t * matrix);
 
@@ -43,13 +45,19 @@ cairo_status_t cairo_matrix_rotate (cairo_matrix_t * matrix, double radians);
 
 cairo_status_t cairo_matrix_invert (cairo_matrix_t * matrix);
 
-## XXX: 
+## XXX: status return type?
 ##cairo_status_t cairo_matrix_multiply (cairo_matrix_t * result, cairo_matrix_t * a, const cairo_matrix_t * b);
+cairo_matrix_t * cairo_matrix_multiply (cairo_matrix_t * a, cairo_matrix_t * b);
+    CODE:
+	RETVAL = cairo_matrix_create ();
+	cairo_matrix_multiply (RETVAL, a, b);
+    OUTPUT:
+	RETVAL
 
 ## XXX: status return type?
 ##cairo_status_t cairo_matrix_transform_distance (cairo_matrix_t * matrix, double * dx, double * dy);
-void cairo_matrix_transform_distance (cairo_matrix_t * matrix, OUTLIST double dx, OUTLIST double dy);
+void cairo_matrix_transform_distance (cairo_matrix_t * matrix, IN_OUTLIST double dx, IN_OUTLIST double dy);
 
 ## XXX: status return type?
 ##cairo_status_t cairo_matrix_transform_point (cairo_matrix_t * matrix, double * x, double * y);
-void cairo_matrix_transform_point (cairo_matrix_t * matrix, OUTLIST double x, OUTLIST double y);
+void cairo_matrix_transform_point (cairo_matrix_t * matrix, IN_OUTLIST double x, IN_OUTLIST double y);

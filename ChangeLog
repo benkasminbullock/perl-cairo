@@ -1,3 +1,27 @@
+2004/11/11 22:10 (-0500) rwmcfa1
+
+	* t/CairoMatrix.t, t/CairoPattern.t, t/CairoSurface.t: initial import,
+	95% complete tests
+
+	* Cairo.xs, CairoMatrix.xs, CairoSurface.xs, CairoPattern.xs: no more
+	new's, not really a good idea.
+	
+	* CairoFont.xs: all disabled for now
+
+	* CairoMatrix.xs: copy, multiply, and transforms fixed while doing
+	tests
+
+	* CairoPattern.xs: get_matrix fixed whlie doing tests
+
+	* CairoSurface.xs: cleaned up the namespace problems herein. fixed
+	several output funcs.
+
+	* MANIFEST: added TODO and new tests.
+
+	* MANIFEST.SKIP: skip CairoEnums.xs
+
+	* t/Cairo.t: no new test, change Surface stuff due to namespace above
+
 2004/11/10 21:08 (-0500) rwmcfa1
 
 	* TODO: initial import

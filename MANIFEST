@@ -14,3 +14,7 @@ MANIFEST.SKIP
 META.yml
 README
 t/Cairo.t
+t/CairoMatrix.t
+t/CairoPattern.t
+t/CairoSurface.t
+TODO

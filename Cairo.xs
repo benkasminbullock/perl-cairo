@@ -26,12 +26,8 @@ BOOT:
 	}
 
 cairo_t * cairo_create (class);
-    ALIAS:
-	Cairo::new = 1
     C_ARGS:
 	/* void */
-    CLEANUP:
-	CAIRO_PERL_UNUSED (ix);
 
 ## shouldn't have to deal with references from perl
 ##void cairo_reference (cairo_t * cr);

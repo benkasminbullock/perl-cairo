@@ -3,6 +3,7 @@ blib
 .*\.bs
 build
 .*\.c
+CairoEnums.xs
 CVS
 Makefile$
 Makefile\.old

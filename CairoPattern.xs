@@ -34,7 +34,14 @@ cairo_status_t cairo_pattern_add_color_stop (cairo_pattern_t * pattern, double o
   
 cairo_status_t cairo_pattern_set_matrix (cairo_pattern_t * pattern, cairo_matrix_t * matrix);
 
-cairo_status_t cairo_pattern_get_matrix (cairo_pattern_t * pattern, cairo_matrix_t * matrix);
+## XXX: status return type?
+## cairo_status_t cairo_pattern_get_matrix (cairo_pattern_t * pattern, cairo_matrix_t * matrix);
+cairo_matrix_t * cairo_pattern_get_matrix (cairo_pattern_t * pattern);
+    CODE:
+	RETVAL = cairo_matrix_create ();
+	cairo_pattern_get_matrix (pattern, RETVAL);
+    OUTPUT:
+	RETVAL
 
 cairo_status_t cairo_pattern_set_extend (cairo_pattern_t * pattern, cairo_extend_t extend);
 

@@ -10,7 +10,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-use Test::More tests => 48;
+use Test::More tests => 47;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -26,7 +26,6 @@ BEGIN
 ok (%Cairo::backends, '%Cairo::backends');
 
 isa_ok (my $cr = Cairo->create, 'Cairo', 'create');
-isa_ok ($cr = Cairo->new, 'Cairo', 'new');
 {
 	isa_ok (my $copy = $cr->copy, 'Cairo', 'copy');
 }
@@ -39,7 +38,7 @@ eval
 is ($@, '', '$cr->save|restore');
 
 {
-	my $surf = Cairo::ImageSurface->create ('RGB24', IMG_WIDTH, IMG_HEIGHT);
+	my $surf = Cairo::Surface->image_create ('RGB24', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface', 'support');
 
 	$cr->set_target_surface ($surf);
@@ -234,7 +233,7 @@ eval
 is ($@, '', 'fonts');
 
 {
-	my $surf = Cairo::ImageSurface->create ('RGB24', IMG_WIDTH, IMG_HEIGHT);
+	my $surf = Cairo::Surface->image_create ('RGB24', IMG_WIDTH, IMG_HEIGHT);
 	eval
 	{
 		$cr->show_surface ($surf, IMG_WIDTH, IMG_HEIGHT);
