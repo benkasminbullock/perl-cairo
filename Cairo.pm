@@ -14,8 +14,12 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
+our %backends = ();
+
 our $VERSION = '0.02';
 
 bootstrap Cairo $VERSION;
+
+_register_backends (\%backends);
 
 1;

@@ -150,19 +150,19 @@ void cairo_identity_matrix (cairo_t * cr);
 
 ## XXX: double *
 ##void cairo_transform_point (cairo_t * cr, double * x, double * y);
-void cairo_transform_point (cairo_t * cr, OUTLIST double x, OUTLIST double y);
+void cairo_transform_point (cairo_t * cr, IN_OUTLIST double x, IN_OUTLIST double y);
 
 ## XXX: double *
 ##void cairo_transform_distance (cairo_t * cr, double * dx, double * dy);
-void cairo_transform_distance (cairo_t * cr, OUTLIST double dx, OUTLIST double dy);
+void cairo_transform_distance (cairo_t * cr, IN_OUTLIST double dx, IN_OUTLIST double dy);
 
 ## XXX: double *
 ##void cairo_inverse_transform_point (cairo_t * cr, double * x, double * y);
-void cairo_inverse_transform_point (cairo_t * cr, OUTLIST double x, OUTLIST double y);
+void cairo_inverse_transform_point (cairo_t * cr, IN_OUTLIST double x, IN_OUTLIST double y);
 
 ## XXX: double *
 ##void cairo_inverse_transform_distance (cairo_t * cr, double * dx, double * dy);
-void cairo_inverse_transform_distance (cairo_t * cr, OUTLIST double dx, OUTLIST double dy);
+void cairo_inverse_transform_distance (cairo_t * cr, IN_OUTLIST double dx, IN_OUTLIST double dy);
 
 void cairo_new_path (cairo_t * cr);
 
@@ -279,7 +279,13 @@ cairo_line_join_t cairo_current_line_join (cairo_t * cr);
 
 double cairo_current_miter_limit (cairo_t * cr);
 
-void cairo_current_matrix (cairo_t * cr, cairo_matrix_t * matrix);
+##void cairo_current_matrix (cairo_t * cr, cairo_matrix_t * matrix);
+cairo_matrix_t * cairo_current_matrix (cairo_t * cr);
+    CODE:
+	RETVAL = cairo_matrix_create ();
+	cairo_current_matrix (cr, RETVAL);
+    OUTPUT:
+	RETVAL
 
 cairo_surface_t * cairo_current_target_surface (cairo_t * cr);
 
@@ -300,65 +306,25 @@ cairo_status_t cairo_status (cairo_t * cr);
 
 const char * cairo_status_string (cairo_t * cr);
 
-## XXX: this one is kinda odd, image data is the first param
-cairo_surface_t * cairo_surface_create_for_image (class, char * data, cairo_format_t format, int width, int height, int stride);
-    C_ARGS:
-	data, format, width, height, stride
+## XXX: HAS section, test for capibilities, cairo really needs to dynamically
+## register these. and there really ought to be version numbers associated with
+## them
 
-cairo_surface_t * cairo_surface_create_similar (cairo_surface_t * other, cairo_format_t format, int width, int height);
-
-void cairo_surface_reference (cairo_surface_t * surface);
-
-void cairo_surface_destroy (cairo_surface_t * surface);
-
-cairo_status_t cairo_surface_set_repeat (cairo_surface_t * surface, int repeat);
-
-cairo_status_t cairo_surface_set_matrix (cairo_surface_t * surface, cairo_matrix_t * matrix);
-
-cairo_status_t cairo_surface_get_matrix (cairo_surface_t * surface, cairo_matrix_t * matrix);
-
-cairo_status_t cairo_surface_set_filter (cairo_surface_t * surface, cairo_filter_t filter);
-
-cairo_filter_t cairo_surface_get_filter (cairo_surface_t * surface);
-
-cairo_surface_t * cairo_image_surface_create (class, cairo_format_t format, int width, int height);
-    C_ARGS:
-	format, width, height
-
-cairo_surface_t * cairo_image_surface_create_for_data (class, char * data, cairo_format_t format, int width, int height, int stride);
-    C_ARGS:
-	data, format, width, height, stride
-
+void _register_backends (HV * backends);
+    CODE:
 #ifdef CAIRO_HAS_PS_SURFACE
-
-cairo_surface_t * cairo_ps_surface_create (class, FILE * file, double width_inches, double height_inches, double x_pixels_per_inch, double y_pixels_per_inch);
-   C_ARGS:
-	file, width_inches, height_inches, x_pixels_per_inch, y_pixels_per_inch
-
-#endif /* CAIRO_HAS_PS_SURFACE */
-
+	hv_store (backends, "ps", 2, newSViv (1), 0);
+#endif
 #ifdef CAIRO_HAS_PNG_SURFACE
-
-cairo_surface_t * cairo_png_surface_create (class, FILE * file, cairo_format_t format, int width, int height);
-    C_ARGS:
-	file, format, width, height
-
-#endif /* CAIRO_HAS_PNG_SURFACE */
-
+	hv_store (backends, "png", 3, newSViv (1), 0);
+#endif
 #ifdef CAIRO_HAS_XLIB_SURFACE
-
-## XXX: Display, Drawable ...
-cairo_surface_t * cairo_xlib_surface_create (class, Display * dpy, Drawable drawable, Visual * visual, cairo_format_t format, Colormap colormap);
-    C_ARGS:
-	dpy, drawable, visual, format, colormap
-
-#endif /* CAIRO_HAS_XLIB_SURFACE */
-
+	hv_store (backends, "xlib", 4, newSViv (1), 0);
+#endif
+#ifdef CAIRO_HAS_XCB_SURFACE
+	hv_store (backends, "xcb", 3, newSViv (1), 0);
+#endif
 #ifdef CAIRO_HAS_GLITZ_SURFACE
-
-## XXX: glitz_surface_t
-cairo_surface_t * cairo_glitz_surface_create (class, glitz_surface_t * surface);
-    C_ARGS:
-	surface
-
-#endif /* CAIRO_HAS_GLITZ_SURFACE */
+	hv_store (backends, "glitz", 5, newSViv (1), 0);
+#endif
+ 

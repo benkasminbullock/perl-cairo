@@ -14,7 +14,6 @@
 #include "perl.h"
 #include "XSUB.h"
 
-#include <stdio.h>
 #include <cairo.h>
 
 #define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }

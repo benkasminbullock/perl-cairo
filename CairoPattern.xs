@@ -10,11 +10,9 @@
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::Pattern PREFIX = cairo_pattern_
 
-cairo_pattern_t * cairo_pattern_create_for_surface (cairo_surface_t * surface);
-    ALIAS:
-	Cairo::Pattern::new = 1
-    CLEANUP:
-	CAIRO_PERL_UNUSED (ix);
+cairo_pattern_t * cairo_pattern_create_for_surface (class, cairo_surface_t * surface);
+    C_ARGS:
+	surface
 
 cairo_pattern_t * cairo_pattern_create_linear (class, double x0, double y0, double x1, double y1);
     C_ARGS:

@@ -8,6 +8,7 @@
 # TODO:
 #	- file spec
 #	- pull a lot of this out into a helper pm or something
+#	- man this is horribly ulgy, stream-of-cons. even.
 #
 
 use strict;
@@ -27,9 +28,12 @@ our %objects = (
 	'cairo_t *' => 'Cairo',
 	'cairo_surface_t *' => 'Cairo::Surface',
 	'cairo_pattern_t *' => 'Cairo::Pattern',
+	'cairo_font_t *' => 'Cairo::Font',
+);
+
+our %structs = (
 	'cairo_matrix_t *' => 'Cairo::Matrix',
 	'cairo_glyph_t *' => 'Cairo::Glyph',
-	'cairo_font_t *' => 'Cairo::Font',
 	'cairo_font_extents_t *' => 'Cairo::Font::Extents',
 	'cairo_text_extents_t *' => 'Cairo::Text::Extents',
 	'glitz_surface_t *' => 'Glitz::Surface',
@@ -217,7 +221,7 @@ sub do_typemaps
 		$1;
 	}
 	
-	foreach (keys %objects, keys %enums)
+	foreach (keys %objects, keys %structs, keys %enums)
 	{
 		print TYPEMAP $_."\t".type_id ($_)."\n";
 	}
@@ -237,6 +241,19 @@ sub do_typemaps
 ';
 	}
 
+	foreach (keys %structs)
+	{
+		print TYPEMAP type_id ($_).'
+	if (sv_derived_from($arg, \"'.$structs{$_}.'\")) {
+	    IV tmp = SvIV((SV*)SvRV($arg));
+	    $var = INT2PTR($type,tmp);
+	}
+	else
+	    Perl_croak(aTHX_ \"$var is not of type '.$structs{$_}.'\")
+
+';
+	}
+
 	foreach (keys %enums)
 	{
 		print TYPEMAP type_id ($_).'
@@ -247,10 +264,22 @@ sub do_typemaps
 	
 	print TYPEMAP "\nOUTPUT\n\n";
 
+	my $ref;
 	foreach (keys %objects)
 	{
-		print TYPEMAP type_id ($_).'
+		/^(.*)_t \*/;
+		$ref = $1.'_reference';
+		print TYPEMAP type_id ($_)."
+	$ref (".'$var);
 	sv_setref_pv($arg, \"'.$objects{$_}.'\", (void*)$var);
+
+';
+	}
+
+	foreach (keys %structs)
+	{
+		print TYPEMAP type_id ($_).'
+	sv_setref_pv($arg, \"'.$structs{$_}.'\", (void*)$var);
 
 ';
 	}
@@ -324,15 +353,19 @@ sub do_enums
 
 		my $prefix = shift @enums;
 		my $full = shift @enums;
+		my $name = $full;
+		$name =~ s/$prefix//;
 
 		my $str = "	if (val == $full)
-		return newSVpv (\"$full\", 0);
+		return newSVpv (\"$name\", 0);
 ";
 
 		foreach $full (@enums)
 		{
+			$name = $full;
+			$name =~ s/$prefix//;
 			$str .= "	else if (val == $full)
-		return newSVpv (\"$full\", 0);
+		return newSVpv (\"$name\", 0);
 ";
 		}
 
