@@ -12,25 +12,21 @@ use constant
 };
 
 {
-	my $cr;
-
-	$cr = Cairo->create;
+	my $surf = Cairo::ImageSurface->create ('argb32', WIDTH, HEIGHT);
+	my $cr = Cairo::Context->create ($surf);
 
 	$0 =~ /(.*)\.pl/;
 	my $out = "$1.png";
 
-	open OUT, ">$out" or die "unable to open ($out) for output";
-
-	$cr->set_target_png (*OUT, 'ARGB32', WIDTH, HEIGHT);
-
 	$cr->rectangle (0, 0, WIDTH, HEIGHT);
-	$cr->set_rgb_color (1, 1, 1);
+	$cr->set_source_rgb (1, 1, 1);
 	$cr->fill;
 
 	draw_stars ($cr, WIDTH, HEIGHT);
 
 	$cr->show_page;
-	close OUT;
+
+	$surf->write_to_png ($out);
 }
 
 sub star_path
@@ -52,14 +48,14 @@ sub draw_stars
 {
 	my ($cr, $width, $height) = @_;
 
-	$cr->set_rgb_color (0, 0, 0);
+	$cr->set_source_rgb (0, 0, 0);
 
 	$cr->save;
 	{
 		$cr->translate (5, $height / 2.6);
 		$cr->scale ($height, $height);
 		star_path ($cr);
-		$cr->set_fill_rule ('WINDING');
+		$cr->set_fill_rule ('winding');
 		$cr->fill;
 	}
 	$cr->restore;
@@ -69,7 +65,7 @@ sub draw_stars
 		$cr->translate ($width - $height - 5, $height / 2.6);
 		$cr->scale ($height, $height);
 		star_path ($cr);
-		$cr->set_fill_rule ('EVEN_ODD');
+		$cr->set_fill_rule ('even-odd');
 		$cr->fill;
 	}
 	$cr->restore;

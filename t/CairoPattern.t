@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004 by the cairo  perl team (see the file README)
+# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
@@ -8,9 +8,8 @@
 
 use strict;
 use warnings;
-use Data::Dumper;
 
-use Test::More tests => 6;
+use Test::More tests => 12;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -19,30 +18,33 @@ use constant {
 
 use Cairo;
 
-{
-	my $surf = Cairo::Surface->image_create ('RGB24', IMG_WIDTH,
-						 IMG_HEIGHT);
-	isa_ok (Cairo::Pattern->create_for_surface ($surf), 'Cairo::Pattern',
-		'Cairo::Pattern->create_for_surface');
-}
+my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 
+my $pat = Cairo::SurfacePattern->create ($surf);
+isa_ok ($pat, 'Cairo::SurfacePattern');
+isa_ok ($pat, 'Cairo::Pattern');
 
-isa_ok (Cairo::Pattern->create_linear (1, 2, 3, 4), 'Cairo::Pattern',
-	'Cairo::Pattern->create_linear');
+$pat->set_extend ('none');
+is ($pat->get_extend, 'none', '$pat->set|get_extend');
 
-isa_ok (my $pat = Cairo::Pattern->create_radial (1, 2, 3, 4, 5, 6),
-	'Cairo::Pattern', 'Cairo::Pattern->create_radial');
+$pat->set_filter ('fast');
+is ($pat->get_filter, 'fast', '$pat->set|get_filter');
 
-$pat->add_color_stop (1, 0.5, 0.6, 0.7, 0.8);
+$pat = Cairo::LinearGradient->create (1, 2, 3, 4);
+isa_ok ($pat, 'Cairo::LinearGradient');
+isa_ok ($pat, 'Cairo::Gradient');
+isa_ok ($pat, 'Cairo::Pattern');
 
-{
-	my $matrix = Cairo::Matrix->create;
-	$pat->set_matrix ($matrix);
-	isa_ok ($pat->get_matrix, 'Cairo::Matrix', '$pat->get_matrix');
-}
+$pat = Cairo::RadialGradient->create (1, 2, 3, 4, 5, 6);
+isa_ok ($pat, 'Cairo::RadialGradient');
+isa_ok ($pat, 'Cairo::Gradient');
+isa_ok ($pat, 'Cairo::Pattern');
 
-$pat->set_extend ('NONE');
-is ($pat->get_extend, 'NONE', '$pat->set|get_extend');
+$pat->add_color_stop_rgb (1, 0.5, 0.6, 0.7);
+$pat->add_color_stop_rgba (1, 0.5, 0.6, 0.7, 0.8);
 
-$pat->set_filter ('FAST');
-is ($pat->get_filter, 'FAST', '$pat->set|get_filter');
+my $matrix = Cairo::Matrix->init_identity;
+$pat->set_matrix ($matrix);
+isa_ok ($pat->get_matrix, 'Cairo::Matrix');
+
+is ($pat->status, 'success');

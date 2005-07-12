@@ -1,16 +1,14 @@
 #
-# Copyright (c) 2004 by the cairo  perl team (see the file README)
+# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
 # $Header$
 #
-# TODO:
-#	- man this is horribly ulgy, stream-of-cons. even.
-#
 
 use strict;
 use warnings;
+use ExtUtils::Depends;
 use ExtUtils::PkgConfig;
 use ExtUtils::MakeMaker;
 
@@ -23,18 +21,22 @@ $MakeHelper::autogen_dir = $autogen_dir;
 my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo');
 
 my %objects = (
-	'cairo_t *' => 'Cairo',
+	'cairo_t *' => 'Cairo::Context',
 	'cairo_surface_t *' => 'Cairo::Surface',
+	'cairo_image_surface_t *' => 'Cairo::ImageSurface',
+	'cairo_pdf_surface_t *' => 'Cairo::PdfSurface',
+	'cairo_ps_surface_t *' => 'Cairo::PsSurface',
 	'cairo_pattern_t *' => 'Cairo::Pattern',
-	'cairo_font_t *' => 'Cairo::Font',
+	'cairo_surface_pattern_t *' => 'Cairo::SurfacePattern',
+	'cairo_gradient_t *' => 'Cairo::Gradient',
+	'cairo_linear_gradient_t *' => 'Cairo::LinearGradient',
+	'cairo_radial_gradient_t *' => 'Cairo::RadialGradient',
+	'cairo_font_face_t *' => 'Cairo::FontFace',
+	'cairo_scaled_font_t *' => 'Cairo::ScaledFont',
 );
 
 my %structs = (
 	'cairo_matrix_t *' => 'Cairo::Matrix',
-	'cairo_glyph_t *' => 'Cairo::Glyph',
-	'cairo_font_extents_t *' => 'Cairo::Font::Extents',
-	'cairo_text_extents_t *' => 'Cairo::Text::Extents',
-	'glitz_surface_t *' => 'Glitz::Surface',
 );
 
 my %enums = (
@@ -48,16 +50,16 @@ my %enums = (
 	cairo_operator_t => [qw/
 			CAIRO_OPERATOR_
 			CAIRO_OPERATOR_CLEAR
-			CAIRO_OPERATOR_SRC
-			CAIRO_OPERATOR_DST
+			CAIRO_OPERATOR_SOURCE
 			CAIRO_OPERATOR_OVER
-			CAIRO_OPERATOR_OVER_REVERSE
 			CAIRO_OPERATOR_IN
-			CAIRO_OPERATOR_IN_REVERSE
 			CAIRO_OPERATOR_OUT
-			CAIRO_OPERATOR_OUT_REVERSE
 			CAIRO_OPERATOR_ATOP
-			CAIRO_OPERATOR_ATOP_REVERSE
+			CAIRO_OPERATOR_DEST
+			CAIRO_OPERATOR_DEST_OVER
+			CAIRO_OPERATOR_DEST_IN
+			CAIRO_OPERATOR_DEST_OUT
+			CAIRO_OPERATOR_DEST_ATOP
 			CAIRO_OPERATOR_XOR
 			CAIRO_OPERATOR_ADD
 			CAIRO_OPERATOR_SATURATE
@@ -98,8 +100,15 @@ my %enums = (
 			CAIRO_STATUS_INVALID_POP_GROUP
 			CAIRO_STATUS_NO_CURRENT_POINT
 			CAIRO_STATUS_INVALID_MATRIX
-			CAIRO_STATUS_NO_TARGET_SURFACE
+			CAIRO_STATUS_INVALID_STATUS
 			CAIRO_STATUS_NULL_POINTER
+			CAIRO_STATUS_INVALID_STRING
+			CAIRO_STATUS_INVALID_PATH_DATA
+			CAIRO_STATUS_READ_ERROR
+			CAIRO_STATUS_WRITE_ERROR
+			CAIRO_STATUS_SURFACE_FINISHED
+			CAIRO_STATUS_SURFACE_TYPE_MISMATCH
+			CAIRO_STATUS_PATTERN_TYPE_MISMATCH
 	/],
 	cairo_filter_t => [qw/
 			CAIRO_FILTER_
@@ -116,44 +125,57 @@ my %enums = (
 			CAIRO_EXTEND_REPEAT
 			CAIRO_EXTEND_REFLECT
 	/],
+	cairo_path_data_type_t => [qw/
+			CAIRO_PATH_
+			CAIRO_PATH_MOVE_TO
+			CAIRO_PATH_LINE_TO
+			CAIRO_PATH_CURVE_TO
+			CAIRO_PATH_CLOSE_PATH
+	/],
+	cairo_content_t => [qw/
+			CAIRO_CONTENT_
+			CAIRO_CONTENT_COLOR
+			CAIRO_CONTENT_ALPHA
+			CAIRO_CONTENT_COLOR_ALPHA
+	/],
 );
 
+MakeHelper::do_enums (\%enums);
+
 my @xs_files = <*.xs>;
-my %xs = map { /^(.*)\.xs$/; $_ => "$1.c"; } @xs_files, 
-		MakeHelper::do_enums (\%enums);
 
 MakeHelper::write_boot (
 	xs_files => \@xs_files,
-	ignore => '(^Cairo$|Enums)',
+	ignore => '^Cairo$',
 );
 
 my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums);
 push @typemaps, 'cairo-perl.typemap';
 
-my %pm = (
-	'Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm',
-);
+my $dep = ExtUtils::Depends->new ('Cairo');
+$dep->set_inc ('-I. -I'.$autogen_dir.' '.$cairo_cfg{cflags});
+$dep->set_libs ($cairo_cfg{libs});
+$dep->add_xs (@xs_files);
+$dep->add_c ('cairo-perl-enums.c');
+$dep->add_pm ('Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm');
+$dep->add_typemaps (@typemaps);
+
+$dep->install (qw(cairo-perl.h));
+$dep->save_config ('build/IFiles.pm');
 
 WriteMakefile (
 	NAME => 'Cairo',
 	VERSION_FROM => 'Cairo.pm',
-	INC => '-I. -I'.$autogen_dir.' '.$cairo_cfg{cflags},
-	LIBS => $cairo_cfg{libs},
-	XS => \%xs,
-	PM => \%pm,
-	OBJECT => q/$(O_FILES)/,
 	XSPROTOARG => '-noprototypes',
-	TYPEMAPS => \@typemaps,
+	$dep->get_makefile_vars,
 );
 
-
 package MY;
- 
+
 sub postamble
 {
 	my $autogen_dir = $MakeHelper::autogen_dir;
 
 	"realclean ::
-	-\$(RM_RF) $autogen_dir CairoEnums.xs";
+	-\$(RM_RF) $autogen_dir cairo-perl-enums.c";
 }
-

@@ -12,25 +12,21 @@ use constant
 };
 
 {
-	my $cr;
-
-	$cr = Cairo->create;
+	my $surf = Cairo::ImageSurface->create ('argb32', WIDTH, HEIGHT);
+	my $cr = Cairo::Context->create ($surf);
 
 	$0 =~ /(.*)\.pl/;
 	my $out = "$1.png";
 
-	open OUT, ">$out" or die "unable to open ($out) for output";
-
-	$cr->set_target_png (*OUT, 'ARGB32', WIDTH, HEIGHT);
-
 	$cr->rectangle (0, 0, WIDTH, HEIGHT);
-	$cr->set_rgb_color (1, 1, 1);
+	$cr->set_source_rgb (1, 1, 1);
 	$cr->fill;
 
 	draw_caps_joins ($cr, WIDTH, HEIGHT);
 
 	$cr->show_page;
-	close OUT;
+
+	$surf->write_to_png ($out);
 }
 
 sub stroke_v_twice
@@ -48,8 +44,8 @@ sub stroke_v_twice
 	$cr->save;
 	{
 		$cr->set_line_width (2.0);
-		$cr->set_line_cap ('BUTT');
-		$cr->set_rgb_color (1, 1, 1);
+		$cr->set_line_cap ('butt');
+		$cr->set_source_rgb (1, 1, 1);
 		$cr->stroke;
 	}
 	$cr->restore;
@@ -64,23 +60,23 @@ sub draw_caps_joins
 	my $line_width = $height / 12 & (~1);
 
 	$cr->set_line_width ($line_width);
-	$cr->set_rgb_color (0, 0, 0);
+	$cr->set_source_rgb (0, 0, 0);
 
 	$cr->translate ($line_width, $line_width);
 	$width -= 2 * $line_width;
 
-	$cr->set_line_join ('BEVEL');
-	$cr->set_line_cap ('BUTT');
+	$cr->set_line_join ('bevel');
+	$cr->set_line_cap ('butt');
 	stroke_v_twice ($cr, $width, $height);
 
 	$cr->translate (0, $height / 4 - $line_width);
-	$cr->set_line_join ('MITER');
-	$cr->set_line_cap ('SQUARE');
+	$cr->set_line_join ('miter');
+	$cr->set_line_cap ('square');
 	stroke_v_twice ($cr, $width, $height);
 
 	$cr->translate (0, $height / 4 - $line_width);
-	$cr->set_line_join ('ROUND');
-	$cr->set_line_cap ('ROUND');
+	$cr->set_line_join ('round');
+	$cr->set_line_cap ('round');
 	stroke_v_twice ($cr, $width, $height);
 }
 

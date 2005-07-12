@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004 by the cairo  perl team (see the file README)
+# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
@@ -8,9 +8,8 @@
 
 use strict;
 use warnings;
-use Data::Dumper;
 
-use Test::More tests => 12;
+use Test::More tests => 18;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -19,79 +18,67 @@ use constant {
 
 use Cairo;
 
-isa_ok (my $surf = Cairo::Surface->image_create ('RGB24', IMG_WIDTH,
-						 IMG_HEIGHT),
-	'Cairo::Surface');
+my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
+isa_ok ($surf, 'Cairo::ImageSurface');
+isa_ok ($surf, 'Cairo::Surface');
 
-{
-	isa_ok ($surf->create_similar ('RGB24', IMG_WIDTH, IMG_HEIGHT),
-		'Cairo::Surface', '$surf->create_similar');
+$surf = Cairo::ImageSurface->create_for_data ('Urgs!', 'rgb24',
+                                              IMG_WIDTH, IMG_HEIGHT, 23);
+isa_ok ($surf, 'Cairo::ImageSurface');
+isa_ok ($surf, 'Cairo::Surface');
+
+$surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+isa_ok ($surf, 'Cairo::ImageSurface');
+isa_ok ($surf, 'Cairo::Surface');
+
+$surf->set_device_offset (23, 42);
+
+is ($surf->finish, 'success');
+
+SKIP: {
+	skip 'png surface', 3
+		unless Cairo::HAS_PNG_FUNCTIONS;
+
+	$surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
+	is ($surf->write_to_png ('tmp.png'), 'success');
+
+	$surf = Cairo::ImageSurface->create_from_png ('tmp.png');
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	unlink 'tmp.png';
 }
 
-eval
-{
-	$surf->set_repeat (1);
-};
-is ($@, '', '$sufr->set_repeate');
+SKIP: {
+	skip 'pdf surface', 4
+		unless Cairo::HAS_PDF_SURFACE;
 
-{
-	my $matrix = Cairo::Matrix->create;
-	$surf->set_matrix ($matrix);
-	isa_ok ($surf->get_matrix, 'Cairo::Matrix', '$surf->set|get_matrix');
+	$surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PdfSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PdfSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	$surf->set_dpi (72, 72);
+
+	unlink 'tmp.pdf';
 }
 
-$surf->set_filter ('FAST');
-is ($surf->get_filter, 'FAST', '$surf->set|get_filter');
+SKIP: {
+	skip 'ps surface', 4
+		unless Cairo::HAS_PS_SURFACE;
 
-# img isn't going to be very interesting
-my $outtmp = 't/out.tmp';
-open OUT, '>'.$outtmp
-	or die "failed to create output tmp file ($outtmp)";
-ok (*OUT, 'OUT support');
+	$surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PsSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 
-SKIP:
-{
-	skip "png backend not supported in bound cairo", 1
-		unless ($Cairo::backends{png});
-	isa_ok (Cairo::Surface->png_create (*OUT, 'ARGB32', IMG_WIDTH, 
-					    IMG_HEIGHT), 'Cairo::Surface');
+	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PsSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	# $surf->set_dpi (72, 72);
+
+	unlink 'tmp.ps';
 }
-
-SKIP:
-{
-	# XXX:
-	skip "ps backend currently hangs", 1;
-
-	skip "ps backend not supported in bound cairo", 1
-		unless ($Cairo::backends{ps});
-	isa_ok (Cairo::Surface->ps_create (*OUT, IMG_WIDTH, IMG_HEIGHT,
-					   72, 72), 'Cairo::Surface');
-}
-
-SKIP:
-{
-	# XXX:
-	skip "xlib backend no way to get display and drawable", 1;
-
-	skip "xlib backend not supported in bound cairo", 1
-		unless ($Cairo::backends{xlib});
-	isa_ok (Cairo::Surface->xlib_create (), 'Cairo::Surface');
-}
-
-SKIP:
-{
-	skip "xcb backend not supported in bound cairo", 1
-		unless ($Cairo::backends{xcb});
-	isa_ok (Cairo::Surface->xcb_create (), 'Cairo::Surface');
-}
-
-SKIP:
-{
-	skip "glitz backend not supported in bound cairo", 1
-		unless ($Cairo::backends{glitz});
-	isa_ok (Cairo::Surface->glitz_create (), 'Cairo::Surface');
-}
-
-close OUT;
-
-ok (unlink ($outtmp), 'rm tmpout');

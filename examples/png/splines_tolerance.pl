@@ -11,25 +11,21 @@ use constant
 };
 
 {
-	my $cr;
-
-	$cr = Cairo->create;
+	my $surf = Cairo::ImageSurface->create ('argb32', WIDTH, HEIGHT);
+	my $cr = Cairo::Context->create ($surf);
 
 	$0 =~ /(.*)\.pl/;
 	my $out = "$1.png";
 
-	open OUT, ">$out" or die "unable to open ($out) for output";
-
-	$cr->set_target_png (*OUT, 'ARGB32', WIDTH, HEIGHT);
-
 	$cr->rectangle (0, 0, WIDTH, HEIGHT);
-	$cr->set_rgb_color (1, 1, 1);
+	$cr->set_source_rgb (1, 1, 1);
 	$cr->fill;
 
 	draw_splines ($cr, WIDTH, HEIGHT);
 
 	$cr->show_page;
-	close OUT;
+
+	$surf->write_to_png ($out);
 }
 
 sub draw_spline
@@ -51,7 +47,7 @@ sub draw_splines
 	my $line_width = .08 * $width;
 	my $gap = $width / 6;
 
-	$cr->set_rgb_color (0, 0, 0);
+	$cr->set_source_rgb (0, 0, 0);
 	$cr->set_line_width ($line_width);
 
 	$cr->translate ($gap, 0);

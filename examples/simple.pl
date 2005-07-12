@@ -15,52 +15,49 @@ use constant
 	M_PI => 3.14159265,
 };
 
-die "png backend not supported" unless ($Cairo::backends{png});
+die "png backend not supported" unless (Cairo::HAS_PNG_FUNCTIONS);
 
 $0 =~ /(.*)\.pl/;
 my $png = "$1.png";
 
-open OUT, ">$png" or die "unable to open ($png) for output";
-
-my $cr = Cairo->create;
-$cr->set_target_png (*OUT, 'ARGB32', IMG_WIDTH, IMG_HEIGHT);
+my $surf = Cairo::ImageSurface->create ('argb32', IMG_WIDTH, IMG_HEIGHT);
+my $cr = Cairo::Context->create ($surf);
 
 $cr->rectangle (0, 0, IMG_WIDTH, IMG_HEIGHT);
-$cr->set_rgb_color (1, 1, 1);
+$cr->set_source_rgba (1, 1, 1, 0.5);
 $cr->fill;
-
-$cr->set_alpha (0.5);
 
 # black
 $cr->save;
-$cr->set_rgb_color (0, 0, 0);
+$cr->set_source_rgba (0, 0, 0, 0.5);
 $cr->translate (IMG_WIDTH / 2, IMG_HEIGHT - (IMG_HEIGHT / 4));
 do_star ();
 $cr->restore;
 
 # red
 $cr->save;
-$cr->set_rgb_color (1, 0, 0);
+$cr->set_source_rgba (1, 0, 0, 0.5);
 $cr->translate (IMG_WIDTH / 2, IMG_HEIGHT / 4);
 do_star ();
 $cr->restore;
 
 # green
 $cr->save;
-$cr->set_rgb_color (0, 1, 0);
+$cr->set_source_rgba (0, 1, 0, 0.5);
 $cr->translate (IMG_WIDTH / 4, IMG_HEIGHT / 2);
 do_star ();
 $cr->restore;
 
 # blue
 $cr->save;
-$cr->set_rgb_color (0, 0, 1);
+$cr->set_source_rgba (0, 0, 1, 0.5);
 $cr->translate (IMG_WIDTH - (IMG_WIDTH / 4), IMG_HEIGHT / 2);
 do_star ();
 $cr->restore;
 
 $cr->show_page;
-close OUT;
+
+$surf->write_to_png ($png);
 
 sub do_star
 {

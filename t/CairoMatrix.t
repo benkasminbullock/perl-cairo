@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004 by the cairo  perl team (see the file README)
+# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
@@ -8,35 +8,42 @@
 
 use strict;
 use warnings;
-use Data::Dumper;
 
-use Test::More tests => 6;
+use Test::More tests => 10;
 
 use Cairo;
 
-isa_ok (my $matrix = Cairo::Matrix->create, 'Cairo::Matrix');
+my $matrix = Cairo::Matrix->init (1, 2, 3, 4, 5, 6);
+isa_ok ($matrix, 'Cairo::Matrix');
 
-{
-	isa_ok ($matrix->copy, 'Cairo::Matrix', '$matrix->copy');
-}
+$matrix = Cairo::Matrix->init_identity;
+isa_ok ($matrix, 'Cairo::Matrix');
+
+$matrix = Cairo::Matrix->init_translate (1, 2);
+isa_ok ($matrix, 'Cairo::Matrix');
+
+$matrix = Cairo::Matrix->init_scale (3, 4);
+isa_ok ($matrix, 'Cairo::Matrix');
+
+$matrix = Cairo::Matrix->init_rotate (3.1415);
+isa_ok ($matrix, 'Cairo::Matrix');
 
 eval
 {
-	$matrix->set_identity;
-	$matrix->translate (2, 3);
+	$matrix->translate (1, 2);
 	$matrix->scale (3, 4);
-	$matrix->rotate (3.14);
-	$matrix->invert;
+	$matrix->rotate (3.1415);
 };
-is ($@, '', 'set_identity, translate, scale, rotate, invert');
+is ($@, '', 'set_identity, translate, scale, rotate');
 
-$matrix->set_affine (1, 2, 3, 4, 5, 6);
-is_deeply ([$matrix->get_affine], [1, 2, 3, 4, 5, 6],
-	   '$matrix->set|get_affine');
+is ($matrix->invert, 'success');
 
-is_deeply ([$matrix->transform_distance (1, 2)], [7, 10],
-	   '$matrix->transform_distance');
+my $id = Cairo::Matrix->init_identity;
 
-is_deeply ([$matrix->transform_point (2, 3)], [16, 22],
-	   '$matrix->transform_point');
+isa_ok ($matrix->multiply ($id), 'Cairo::Matrix');
 
+is_deeply ([$id->transform_distance (1, 1)], [1, 1],
+	   '$id->transform_distance');
+
+is_deeply ([$id->transform_point (1, 1)], [1, 1],
+	   '$id->transform_point');

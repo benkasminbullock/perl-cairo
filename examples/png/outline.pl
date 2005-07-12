@@ -11,63 +11,34 @@ use constant
 };
 
 {
-	my $cr;
-
-	$cr = Cairo->create;
+	my $surf = Cairo::ImageSurface->create ('argb32', WIDTH, HEIGHT);
+	my $cr = Cairo::Context->create ($surf);
 
 	$0 =~ /(.*)\.pl/;
 	my $out = "$1.png";
 
-	open OUT, ">$out" or die "unable to open ($out) for output";
-
-	$cr->set_target_png (*OUT, 'ARGB32', WIDTH, HEIGHT);
-
 	$cr->rectangle (0, 0, WIDTH, HEIGHT);
-	$cr->set_rgb_color (1, 1, 1);
+	$cr->set_source_rgb (1, 1, 1);
 	$cr->fill;
 
 	draw_outlines ($cr, WIDTH, HEIGHT);
 
 	$cr->show_page;
-	close OUT;
+
+	$surf->write_to_png ($out);
 }
 
 sub create_gradient
 {
 	my ($cr, $width, $height) = @_;
 
-	my $gradient;
-	my $matrix;
-	my $gradient_pattern;
+	my $gradient = Cairo::LinearGradient->create (0, 0, $width, 0);
 
-	$cr->save;
+	$gradient->add_color_stop_rgb (0.0, 0., 0., 0.);
+	$gradient->add_color_stop_rgb (0.5, 1., 1., 1.);
+	$gradient->add_color_stop_rgb (1.0, 0., 0., 0.);
 
-	$gradient = $cr->current_target_surface->create_similar
-			('ARGB32', 3, 2);
-	$cr->set_target_surface ($gradient);
-
-	$cr->set_rgb_color (0, 0, 0);
-	$cr->rectangle (0, 0, 1, 2);
-	$cr->fill;
-
-	$cr->set_rgb_color (1, 1, 1);
-	$cr->rectangle (1, 0, 1, 2);
-	$cr->fill;
-
-	$cr->set_rgb_color (0, 0, 0);
-	$cr->rectangle (2, 0, 1, 2);
-	$cr->fill;
-
-	$cr->restore;
-
-	$matrix = Cairo::Matrix->create;
-	$matrix->scale (2.0 / $width, 1.0 / $height);
-	
-	$gradient_pattern = Cairo::Pattern::->create_for_surface ($gradient);
-	$gradient_pattern->set_matrix ($matrix);
-	$gradient_pattern->set_filter ('BILINEAR');
-
-	return $gradient_pattern;
+	return $gradient;
 }
 
 sub draw_outlines
@@ -83,15 +54,15 @@ sub draw_outlines
 
 	$gradient = create_gradient ($cr, $width, $height);
 
-	$cr->set_pattern ($gradient);
+	$cr->set_source ($gradient);
 	draw_flat ($cr, $width, $height);
 
 	$cr->translate ($width + $pad, 0);
-	$cr->set_pattern ($gradient);
+	$cr->set_source ($gradient);
 	draw_tent ($cr, $width, $height);
 
 	$cr->translate ($width + $pad, 0);
-	$cr->set_pattern ($gradient);
+	$cr->set_source ($gradient);
 	draw_cylinder ($cr, $width, $height);
 
 	$cr->restore;
@@ -100,7 +71,7 @@ sub draw_outlines
 sub draw_flat
 {
 	my ($cr, $width, $height) = @_;
-	
+
 	my $hwidth = $width / 2.0;
 
 	$cr->rectangle (0, $hwidth, $width, $height - $hwidth);

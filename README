@@ -45,12 +45,14 @@ This module requires these other modules and libraries:
 In order to build it from source, you'll also need
 
   ExtUtils::PkgConfig (perl module)
+  ExtUtils::Depends (perl module)
 
 COPYRIGHT AND LICENSE
 
-Copyright (C) 2004 by the Cairo perl team
+Copyright (C) 2004-2005 by the cairo perl team
 
 Ross McFarland           rwmcfa1 at neces dot com
+Torsten Schoenfeld       kaffeetisch at gmx dot de
 
 This library is free software; you can redistribute it and/or modify it under
 the terms of the GNU Library General Public License as published by the Free

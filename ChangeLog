@@ -1,3 +1,45 @@
+2005/07/12	tsch
+
+	* Cairo.pm, Cairo.xs, t/Cairo.t: Replace the %backends hash with
+	Cairo::HAS_PS_SURFACE, HAS_PDF_SURFACE, HAS_XLIB_SURFACE,
+	HAS_FT_FONT and HAS_PNG_FUNCTIONS.
+
+	* Cairo.pm, CairoPattern.xs, CairoSurface.xs, Makefile.PL:
+	Implement the pattern and surface hierarchy suggested by the
+	language bindings guidelines.
+
+	* Cairo.xs: Use Cairo::Context for the namespace of cairo_t,
+	instead of just Cairo, as suggested by the guidelines.
+
+	* Cairo.xs, CairoFont.xs, CairoMatrix.xs, CairoPattern.xs,
+	CairoSurface.xs, cairo-perl.h: Add new, remove old API.  Shuffle
+	some things around.
+
+	* Cairo.xs: Convert font and text extents and glyphs to and from
+	native Perl data structures.
+
+	* Cairo.xs, cairo-perl.h, cairo-perl.typemap: Remove everything
+	that cannot be used from Perl, like the XLib and Glitz stuff.
+
+	* CairoPath.xs, t/CairoPath.t: Add support for cairo_path_t,
+	including a nice tied interface that lets you iterate over paths
+	as if they were normal array references.
+
+	* MakeHelper.pm: Extend the typemap generator to support "const"
+	and "_noinc" types.  Change the enum handling to use the Glib
+	convention, i.e. lowercase and hyphen instead of underscore.
+
+	* Makefile.PL, README: Use ExtUtils::Depends.
+
+	* examples/simple.pl, examples/png/caps_join.pl,
+	examples/png/hering.pl, examples/png/outline.pl,
+	examples/png/spiral.pl, examples/png/splines_tolerance.pl,
+	examples/png/stars.pl: Update the examples to make them work again
+	after all those API changes.
+
+	* t/Cairo.t, t/CairoFont.t, CairoMatrix.t, CairoPattern.t,
+	CairoSurface.t: Redo and/or expand the whole test suite.
+
 2005/02/06 11:18 (-0500) rwmcfa1
 
 	* CairoSurface.xs: fixed a bug in wrapping of cairo_surface_xlib_create
