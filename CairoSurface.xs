@@ -31,9 +31,19 @@ SV * cairo_surface_create_similar (SV * other, cairo_content_t content, int widt
     OUTPUT:
 	RETVAL
 
-cairo_status_t cairo_surface_finish (cairo_surface_t *surface);
+cairo_status_t cairo_surface_status (cairo_surface_t *surface);
+
+void cairo_surface_finish (cairo_surface_t *surface);
 
 void cairo_surface_set_device_offset (cairo_surface_t *surface, double x_offset, double y_offset);
+
+##void cairo_surface_get_font_options (cairo_surface_t *surface, cairo_font_options_t *options);
+cairo_font_options_t * cairo_surface_get_font_options (cairo_surface_t *surface)
+    CODE:
+	RETVAL = cairo_font_options_create ();
+	cairo_surface_get_font_options (surface, RETVAL);
+    OUTPUT:
+	RETVAL
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 

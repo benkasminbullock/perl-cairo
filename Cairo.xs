@@ -313,6 +313,16 @@ cairo_matrix_t * cairo_get_font_matrix (cairo_t *cr)
     OUTPUT:
 	RETVAL
 
+void cairo_set_font_options (cairo_t *cr, const cairo_font_options_t *options);
+
+##void cairo_get_font_options (cairo_t *cr, cairo_font_options_t *options);
+cairo_font_options_t * cairo_get_font_options (cairo_t *cr)
+    CODE:
+	RETVAL = cairo_font_options_create ();
+	cairo_get_font_options (cr, RETVAL);
+    OUTPUT:
+	RETVAL
+
 void cairo_show_text (cairo_t * cr, const char * utf8);
 
 ##void cairo_show_glyphs (cairo_t * cr, cairo_glyph_t * glyphs, int num_glyphs);

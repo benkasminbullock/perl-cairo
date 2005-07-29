@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 48;
+use Test::More tests => 49;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -118,6 +118,11 @@ $cr->set_font_size (12);
 
 $cr->set_font_matrix ($mat);
 isa_ok ($cr->get_font_matrix, 'Cairo::Matrix');
+
+my $opt = Cairo::FontOptions->create;
+
+$cr->set_font_options ($opt);
+ok ($opt->equal ($cr->get_font_options));
 
 my @glyphs = ({ index => 1, x => 2, y => 3 },
               { index => 2, x => 3, y => 4 },

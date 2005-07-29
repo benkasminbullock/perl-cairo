@@ -34,7 +34,7 @@ eval
 	$matrix->scale (3, 4);
 	$matrix->rotate (3.1415);
 };
-is ($@, '', 'set_identity, translate, scale, rotate');
+is ($@, '', 'translate, scale, rotate');
 
 is ($matrix->invert, 'success');
 

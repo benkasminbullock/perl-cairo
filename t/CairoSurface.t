@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -33,7 +33,11 @@ isa_ok ($surf, 'Cairo::Surface');
 
 $surf->set_device_offset (23, 42);
 
-is ($surf->finish, 'success');
+is ($surf->status, 'success');
+
+$surf->finish;
+
+isa_ok ($surf->get_font_options, 'Cairo::FontOptions');
 
 SKIP: {
 	skip 'png surface', 3

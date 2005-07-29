@@ -1,3 +1,22 @@
+2005/07/29	tsch
+
+	* t/Cairo.t, xs/Cairo.xs: Wrap cairo_get_font_options.
+
+	* t/CairoFont.t, xs/CairoFont.xs: Wrap cairo_font_face_status,
+	cairo_scaled_font_status, cairo_font_options_*.  Update
+	cairo_scaled_font_create.
+
+	* t/CairoSurface.t, CairoSurface.xs: Wrap cairo_surface_status,
+	cairo_surface_get_font_options.
+
+	* Makefile.PL: Wrap the new cairo_font_options_t stuff.
+
+	* Makefile.PL: Require cairo 0.6.0.  Add new and update the old
+	enums.  Install all files necessary for other modules to use
+	Cairo.
+
+	* cairo-perl.typemap: Add a cairo_bool_t typemap.
+
 2005/07/12	tsch
 
 	* Cairo.pm, Cairo.xs, t/Cairo.t: Replace the %backends hash with

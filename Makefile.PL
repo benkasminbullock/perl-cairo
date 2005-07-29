@@ -18,7 +18,7 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo');
+my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 0.6.0');
 
 my %objects = (
 	'cairo_t *' => 'Cairo::Context',
@@ -37,6 +37,7 @@ my %objects = (
 
 my %structs = (
 	'cairo_matrix_t *' => 'Cairo::Matrix',
+	'cairo_font_options_t *' => 'Cairo::FontOptions',
 );
 
 my %enums = (
@@ -109,6 +110,9 @@ my %enums = (
 			CAIRO_STATUS_SURFACE_FINISHED
 			CAIRO_STATUS_SURFACE_TYPE_MISMATCH
 			CAIRO_STATUS_PATTERN_TYPE_MISMATCH
+			CAIRO_STATUS_INVALID_CONTENT
+			CAIRO_STATUS_INVALID_FORMAT
+			CAIRO_STATUS_INVALID_VISUAL
 	/],
 	cairo_filter_t => [qw/
 			CAIRO_FILTER_
@@ -138,6 +142,35 @@ my %enums = (
 			CAIRO_CONTENT_ALPHA
 			CAIRO_CONTENT_COLOR_ALPHA
 	/],
+	cairo_antialias_t => [qw/
+			CAIRO_ANTIALIAS_
+			CAIRO_ANTIALIAS_DEFAULT
+			CAIRO_ANTIALIAS_NONE
+			CAIRO_ANTIALIAS_GRAY
+			CAIRO_ANTIALIAS_SUBPIXEL
+	/],
+	cairo_subpixel_order_t => [qw/
+			CAIRO_SUBPIXEL_ORDER_
+			CAIRO_SUBPIXEL_ORDER_DEFAULT
+			CAIRO_SUBPIXEL_ORDER_RGB
+			CAIRO_SUBPIXEL_ORDER_BGR
+			CAIRO_SUBPIXEL_ORDER_VRGB
+			CAIRO_SUBPIXEL_ORDER_VBGR
+	/],
+	cairo_hint_style_t => [qw/
+			CAIRO_HINT_STYLE_
+			CAIRO_HINT_STYLE_DEFAULT
+			CAIRO_HINT_STYLE_NONE
+			CAIRO_HINT_STYLE_SLIGHT
+			CAIRO_HINT_STYLE_MEDIUM
+			CAIRO_HINT_STYLE_FULL
+	/],
+	cairo_hint_metrics_t => [qw/
+			CAIRO_HINT_METRICS_
+			CAIRO_HINT_METRICS_DEFAULT
+			CAIRO_HINT_METRICS_OFF
+			CAIRO_HINT_METRICS_ON
+	/],
 );
 
 MakeHelper::do_enums (\%enums);
@@ -160,7 +193,11 @@ $dep->add_c ('cairo-perl-enums.c');
 $dep->add_pm ('Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm');
 $dep->add_typemaps (@typemaps);
 
-$dep->install (qw(cairo-perl.h));
+$dep->install (qw(cairo-perl.h
+                  cairo-perl.typemap
+                  build/cairo-perl-enums.h
+                  build/cairo-perl-auto.h
+                  build/cairo-perl-auto.typemap));
 $dep->save_config ('build/IFiles.pm');
 
 WriteMakefile (
