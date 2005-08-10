@@ -45,6 +45,12 @@ cairo_font_options_t * cairo_surface_get_font_options (cairo_surface_t *surface)
     OUTPUT:
 	RETVAL
 
+void cairo_surface_flush (cairo_surface_t *surface);
+
+void cairo_surface_mark_dirty (cairo_surface_t *surface);
+
+void cairo_surface_mark_dirty_rectangle (cairo_surface_t *surface, int x, int y, int width, int height);
+
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 
 cairo_status_t cairo_surface_write_to_png (cairo_surface_t *surface, const char *filename);

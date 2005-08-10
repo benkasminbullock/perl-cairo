@@ -1,3 +1,18 @@
+2005/08/10	tsch
+
+	* t/Cairo.t, Cairo.xs: Bind cairo_set_antialias and
+	cairo_get_antialias.
+
+	* t/CairoSurface.t, CairoSurface.xs: Bind cairo_surface_flush,
+	cairo_surface_mark_dirty, cairo_surface_mark_dirty_rectangle.
+
+	* MANIFEST, META.yml: Remove META.yml; let EU::MakeMaker generate
+	it on "make dist".
+
+	* Makefile.PL: Require cairo 0.9.0.  Add our prerequisites to the
+	WriteMakefile call so that they appear in the generated META.yml.
+	Support CAIRO_STATUS_FILE_NOT_FOUND.
+
 2005/07/29	tsch
 
 	* t/Cairo.t, xs/Cairo.xs: Wrap cairo_get_font_options.

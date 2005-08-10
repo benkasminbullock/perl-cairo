@@ -203,6 +203,8 @@ void cairo_set_source_surface (cairo_t *cr, cairo_surface_t *surface, double x, 
 
 void cairo_set_tolerance (cairo_t * cr, double tolerance);
 
+void cairo_set_antialias (cairo_t *cr, cairo_antialias_t antialias);
+
 void cairo_set_fill_rule (cairo_t * cr, cairo_fill_rule_t fill_rule);
 
 void cairo_set_line_width (cairo_t * cr, double width);
@@ -399,6 +401,8 @@ cairo_operator_t cairo_get_operator (cairo_t *cr);
 cairo_pattern_t * cairo_get_source (cairo_t *cr);
 
 double cairo_get_tolerance (cairo_t *cr);
+
+cairo_antialias_t cairo_get_antialias (cairo_t *cr);
 
 void cairo_get_current_point (cairo_t *cr, OUTLIST double x, OUTLIST double y);
 

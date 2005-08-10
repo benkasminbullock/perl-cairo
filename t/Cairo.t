@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 49;
+use Test::More tests => 50;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -42,6 +42,9 @@ $cr->set_source_surface ($surf, 23, 42);
 
 $cr->set_tolerance (0.75);
 is ($cr->get_tolerance, 0.75);
+
+$cr->set_antialias ('subpixel');
+is ($cr->get_antialias, 'subpixel');
 
 $cr->set_fill_rule ('winding');
 is ($cr->get_fill_rule, 'winding');

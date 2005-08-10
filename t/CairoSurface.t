@@ -39,6 +39,10 @@ $surf->finish;
 
 isa_ok ($surf->get_font_options, 'Cairo::FontOptions');
 
+$surf->mark_dirty;
+$surf->mark_dirty_rectangle (10, 10, 10, 10);
+$surf->flush;
+
 SKIP: {
 	skip 'png surface', 3
 		unless Cairo::HAS_PNG_FUNCTIONS;

@@ -18,7 +18,12 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 0.6.0');
+our %prereqs = (
+	'ExtUtils::Depends'   => 0.2,
+	'ExtUtils::PkgConfig' => 1.0,
+);
+
+my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 0.9.0');
 
 my %objects = (
 	'cairo_t *' => 'Cairo::Context',
@@ -113,6 +118,7 @@ my %enums = (
 			CAIRO_STATUS_INVALID_CONTENT
 			CAIRO_STATUS_INVALID_FORMAT
 			CAIRO_STATUS_INVALID_VISUAL
+			CAIRO_STATUS_FILE_NOT_FOUND
 	/],
 	cairo_filter_t => [qw/
 			CAIRO_FILTER_
@@ -203,6 +209,7 @@ $dep->save_config ('build/IFiles.pm');
 WriteMakefile (
 	NAME => 'Cairo',
 	VERSION_FROM => 'Cairo.pm',
+	PREREQ_PM => \%prereqs,
 	XSPROTOARG => '-noprototypes',
 	$dep->get_makefile_vars,
 );
