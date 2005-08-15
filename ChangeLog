@@ -1,3 +1,13 @@
+2005/08/15	tsch
+
+	* Cairo.pm, README: Release 0.01.  Also add stub documentation.
+
+	* MANIFEST.SKIP: Remove CairoEnums.xs.
+
+	* Makefile.PL: Add ABSTRACT_FROM to the WriteMakefile call.
+
+	* TODO: Update to reflect the present situation.
+
 2005/08/10	tsch
 
 	* t/Cairo.t, Cairo.xs: Bind cairo_set_antialias and

@@ -209,6 +209,7 @@ $dep->save_config ('build/IFiles.pm');
 WriteMakefile (
 	NAME => 'Cairo',
 	VERSION_FROM => 'Cairo.pm',
+	ABSTRACT_FROM => 'Cairo.pm',
 	PREREQ_PM => \%prereqs,
 	XSPROTOARG => '-noprototypes',
 	$dep->get_makefile_vars,

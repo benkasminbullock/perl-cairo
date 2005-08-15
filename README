@@ -1,9 +1,9 @@
 # $Header$
 
-Cairo version 0.02
+Cairo version 0.01
 ==================
 
-Perl bindings to the Cairo graphics library (http://www.cairographics.org)
+Perl bindings to the cairo graphics library (http://www.cairographics.org).
 
 INSTALLATION
 
@@ -13,7 +13,6 @@ To install this module type the following:
    make
    make test
    make install
-
 
 To avoid installing to a system directory, if you don't have root access,
 you can change the installation prefix at Makefile.PL time with
