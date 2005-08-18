@@ -52,7 +52,7 @@ our @ISA = qw/Cairo::Gradient/;
 
 # --------------------------------------------------------------------------- #
 
-package GStreamer;
+package Cairo;
 
 1;
 
