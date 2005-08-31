@@ -23,7 +23,7 @@ our %prereqs = (
 	'ExtUtils::PkgConfig' => 1.0,
 );
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 0.9.0');
+my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.0.0');
 
 my %backend_macros = (
 	'cairo_ps_surface_t' => 'CAIRO_HAS_PS_SURFACE',

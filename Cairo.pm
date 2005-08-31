@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 Cairo->bootstrap ($VERSION);
 

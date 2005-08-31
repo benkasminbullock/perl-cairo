@@ -1,6 +1,6 @@
 # $Header$
 
-Cairo version 0.01
+Cairo version 0.02
 ==================
 
 Perl bindings to the cairo graphics library (http://www.cairographics.org).

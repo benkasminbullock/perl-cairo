@@ -1,0 +1,10 @@
+Overview of changes in Cairo 0.02
+=================================
+
+* Fix compilation error that occured when the PS and PDF backends of cairo were
+  disabled.  [Reported by Christopher Oezbek]
+
+Overview of changes in Cairo 0.01
+=================================
+
+* Initial release.

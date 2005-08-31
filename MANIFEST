@@ -11,6 +11,7 @@ MANIFEST
 MANIFEST.SKIP
 MakeHelper.pm
 Makefile.PL
+NEWS
 README
 TODO
 cairo-perl.h

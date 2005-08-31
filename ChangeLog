@@ -1,3 +1,8 @@
+2005/09/01	tsch
+
+	* Cairo.pm, MANIFEST, Makefile.PL, NEWS, README: Release 0.02.
+	Require cairo 1.0.0.
+
 2005/08/31	tsch
 
 	* MakeHelper.pm, Makefile.PL: Surround our _noinc typedefs for the
@@ -7,7 +12,7 @@
 2005/08/18	tsch
 
 	* Cairo.pm: Fix incorrect package line that read GStreamer instead
-	of Ciaro.
+	of Cairo.
 
 2005/08/15	tsch
 
