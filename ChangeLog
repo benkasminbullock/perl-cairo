@@ -1,3 +1,9 @@
+2005/08/31	tsch
+
+	* MakeHelper.pm, Makefile.PL: Surround our _noinc typedefs for the
+	PS and PDF backends with appropriate ifdefs to fix compilation
+	when these backends were not installed with cairo.
+
 2005/08/18	tsch
 
 	* Cairo.pm: Fix incorrect package line that read GStreamer instead

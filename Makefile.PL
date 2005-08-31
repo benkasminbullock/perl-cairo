@@ -25,6 +25,11 @@ our %prereqs = (
 
 my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 0.9.0');
 
+my %backend_macros = (
+	'cairo_ps_surface_t' => 'CAIRO_HAS_PS_SURFACE',
+	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
+);
+
 my %objects = (
 	'cairo_t *' => 'Cairo::Context',
 	'cairo_surface_t *' => 'Cairo::Surface',
@@ -119,6 +124,7 @@ my %enums = (
 			CAIRO_STATUS_INVALID_FORMAT
 			CAIRO_STATUS_INVALID_VISUAL
 			CAIRO_STATUS_FILE_NOT_FOUND
+			CAIRO_STATUS_INVALID_DASH
 	/],
 	cairo_filter_t => [qw/
 			CAIRO_FILTER_
@@ -188,7 +194,8 @@ MakeHelper::write_boot (
 	ignore => '^Cairo$',
 );
 
-my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums);
+my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums,
+                                        \%backend_macros);
 push @typemaps, 'cairo-perl.typemap';
 
 my $dep = ExtUtils::Depends->new ('Cairo');

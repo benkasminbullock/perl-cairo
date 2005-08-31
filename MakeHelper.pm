@@ -67,6 +67,7 @@ sub do_typemaps
 	my %objects = %{shift ()};
 	my %structs = %{shift ()};
 	my %enums = %{shift ()};
+	my %backend_macros = %{shift()};
 
 	my $cairo_perl = File::Spec->catfile ($autogen_dir,
 					      'cairo-perl-auto.typemap');
@@ -198,7 +199,13 @@ EOS
 	foreach (keys %objects)
 	{
 		/^(.*) \*/;
+		if (exists $backend_macros{$1}) {
+			print HEADER "#ifdef $backend_macros{$1}\n";
+		}
 		print HEADER "typedef $1 ${1}_noinc;\n";
+		if (exists $backend_macros{$1}) {
+			print HEADER "#endif\n";
+		}
 	}
 
 	close HEADER;
