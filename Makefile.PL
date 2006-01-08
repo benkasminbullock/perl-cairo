@@ -208,7 +208,6 @@ $dep->add_typemaps (@typemaps);
 
 $dep->install (qw(cairo-perl.h
                   cairo-perl.typemap
-                  build/cairo-perl-enums.h
                   build/cairo-perl-auto.h
                   build/cairo-perl-auto.typemap));
 $dep->save_config ('build/IFiles.pm');

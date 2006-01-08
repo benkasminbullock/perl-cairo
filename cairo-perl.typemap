@@ -8,7 +8,7 @@
 
 TYPEMAP
 
-cairo_bool_t		T_IV
+cairo_bool_t		T_UV
 
 cairo_font_extents_t *	T_CAIRO_FONT_EXTENTS
 cairo_text_extents_t *	T_CAIRO_TEXT_EXTENTS

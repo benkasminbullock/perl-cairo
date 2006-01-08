@@ -28,7 +28,14 @@
 # include <cairo-pdf.h>
 #endif
 
-#include <cairo-perl-enums.h>
+/*
+ * standard object and struct handling
+ */
+void *cairo_object_from_sv (SV *sv, const char *package);
+SV *cairo_object_to_sv (void *object, const char *package);
+
+void *cairo_struct_from_sv (SV *sv, const char *package);
+SV *cairo_struct_to_sv (void *object, const char *package);
 
 /*
  * custom struct handling
@@ -78,14 +85,14 @@ typedef cairo_pattern_t cairo_radial_gradient_t;
 
 #include <cairo-perl-auto.h>
 
-/* XXX: copied/borrowed from gtk2-perl
- *
- * call the boot code of a module by symbol rather than by name.
+/* call the boot code of a module by symbol rather than by name.
  *
  * in a perl extension which uses several xs files but only one pm, you
  * need to bootstrap the other xs files in order to get their functions
  * exported to perl.  if the file has MODULE = Foo::Bar, the boot symbol
  * would be boot_Foo__Bar.
+ *
+ * copied/borrowed from gtk2-perl.
  */
 void _cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark);
 #define CAIRO_PERL_CALL_BOOT(name)				\
@@ -95,11 +102,5 @@ void _cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mar
 	}
 
 #define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
-
-#ifdef CAIRO_DEBUG
-# define DBG(format, args...)	fprintf (stderr, format , ## args)
-#else
-# define DBG
-#endif
 
 #endif /* _CAIRO_PERL_H_ */

@@ -14,6 +14,8 @@ use File::Spec;
 
 our $autogen_dir = '.';
 
+# --------------------------------------------------------------------------- #
+
 # copied/borrowed from Gtk2-Perl's CodeGen
 sub write_boot
 {
@@ -62,12 +64,14 @@ sub write_boot
 	close $file;
 }
 
+# --------------------------------------------------------------------------- #
+
 sub do_typemaps
 {
 	my %objects = %{shift ()};
 	my %structs = %{shift ()};
 	my %enums = %{shift ()};
-	my %backend_macros = %{shift()};
+	my %backend_macros = %{shift ()};
 
 	my $cairo_perl = File::Spec->catfile ($autogen_dir,
 					      'cairo-perl-auto.typemap');
@@ -98,8 +102,17 @@ EOS
 
 	foreach (keys %objects, keys %structs, keys %enums)
 	{
-		print TYPEMAP "$_\t".type_id ($_)."\n";
-		print TYPEMAP "const $_\t".type_id ($_)."\n";
+		print TYPEMAP "$_\tT_CAIROPERL_GENERIC_WRAPPER\n";
+	}
+
+	foreach (keys %objects, keys %structs)
+	{
+		my $trunk = $_;
+		$trunk =~ s/ \*//;
+
+		print TYPEMAP "const $_\tT_CAIROPERL_GENERIC_WRAPPER\n";
+		print TYPEMAP "${trunk}_ornull *\tT_CAIROPERL_GENERIC_WRAPPER\n";
+		print TYPEMAP "const ${trunk}_ornull *\tT_CAIROPERL_GENERIC_WRAPPER\n";
 	}
 
 	foreach (keys %objects)
@@ -107,80 +120,36 @@ EOS
 		my $trunk = $_;
 		$trunk =~ s/ \*//;
 
-		print TYPEMAP "${trunk}_noinc *\t".type_id ($_)."_NOINC\n";
+		print TYPEMAP "${trunk}_noinc *\tT_CAIROPERL_GENERIC_WRAPPER\n";
 	}
 
-	print TYPEMAP "\nINPUT\n\n";
+	my $conversion_code = ';
+	  (my $ntype = $type) =~ s/(?:const\s+)?([:\w]+)(?:\s*\*)$/$1/x;
+	  my $result = $type;
+	  if ($ntype =~ m/(.+)_t(_.+)?/) {
+	    my ($name, $options) = ($1, $2);
+	    $name =~ s/([^_]+)/ucfirst $1/ge;
+	    $name =~ s/_//g;
+	    $result = $name . $options;
+	  }
+	  \$result';
 
-	foreach (keys %objects)
-	{
-		print TYPEMAP type_id ($_).'
-	if (sv_derived_from($arg, \"'.$objects{$_}.'\")) {
-	    IV tmp = SvIV((SV*)SvRV($arg));
-	    $var = INT2PTR($type,tmp);
-	}
-	else
-	    Perl_croak(aTHX_ \"$var is not of type '.$objects{$_}.'\")
+        print TYPEMAP <<"EOS";
 
-';
-	}
+INPUT
 
-	foreach (keys %structs)
-	{
-		print TYPEMAP type_id ($_).'
-	if (sv_derived_from($arg, \"'.$structs{$_}.'\")) {
-	    IV tmp = SvIV((SV*)SvRV($arg));
-	    $var = INT2PTR($type,tmp);
-	}
-	else
-	    Perl_croak(aTHX_ \"$var is not of type '.$structs{$_}.'\")
+T_CAIROPERL_GENERIC_WRAPPER
+	\$var = Sv\${$conversion_code} (\$arg);
 
-';
-	}
+OUTPUT
 
-	foreach (keys %enums)
-	{
-		print TYPEMAP type_id ($_).'
-	$var = cairo_'.func_name ($_).'_from_sv ($arg);
-
-';
-	}
-
-	print TYPEMAP "\nOUTPUT\n\n";
-
-	my $ref;
-	foreach (keys %objects)
-	{
-		/^(.*)_t \*/;
-		$ref = $1.'_reference';
-		print TYPEMAP type_id ($_)."
-	$ref (".'$var);
-	sv_setref_pv($arg, \"'.$objects{$_}.'\", (void*)$var);
-
-';
-		print TYPEMAP type_id ($_).'_NOINC
-	sv_setref_pv($arg, \"'.$objects{$_}.'\", (void*)$var);
-
-';
-	}
-
-	foreach (keys %structs)
-	{
-		print TYPEMAP type_id ($_).'
-	sv_setref_pv($arg, \"'.$structs{$_}.'\", (void*)$var);
-
-';
-	}
-
-	foreach (keys %enums)
-	{
-		print TYPEMAP type_id ($_).'
-	$arg = cairo_'.func_name ($_).'_to_sv ($var);
-
-';
-	}
+T_CAIROPERL_GENERIC_WRAPPER
+	\$arg = newSV\${$conversion_code} (\$var);
+EOS
 
 	close TYPEMAP;
+
+	# ------------------------------------------------------------------- #
 
 	my $header = File::Spec->catfile ($autogen_dir,
 					  'cairo-perl-auto.h');
@@ -193,25 +162,104 @@ EOS
  */
 
 #include <cairo.h>
-
 EOS
+
+	sub mangle
+	{
+		my $mangled = shift;
+		$mangled =~ s/_t$//;
+		$mangled =~ s/([^_]+)/ucfirst $1/ge;
+		$mangled =~ s/_//g;
+		return $mangled;
+	}
+
+	sub reference
+	{
+		my $ref = shift;
+		$ref =~ s/_t$//;
+		$ref .= '_reference';
+		return $ref;
+	}
+
+	sub name
+	{
+		$_[0] =~ /cairo_(\w+)_t/;
+		return $1;
+	}
+
+	# ------------------------------------------------------------------- #
+
+	print HEADER "\n/* objects */\n\n";
 
 	foreach (keys %objects)
 	{
-		/^(.*) \*/;
-		if (exists $backend_macros{$1}) {
-			print HEADER "#ifdef $backend_macros{$1}\n";
+		/^(.+) \*/;
+		my $type = $1;
+		my $mangled = mangle ($type);
+		my $ref = reference ($type);
+
+		if (exists $backend_macros{$type}) {
+			print HEADER "#ifdef $backend_macros{$type}\n";
 		}
-		print HEADER "typedef $1 ${1}_noinc;\n";
-		if (exists $backend_macros{$1}) {
-			print HEADER "#endif\n";
+
+		print HEADER <<"EOS";
+typedef $type ${type}_noinc;
+typedef $type ${type}_ornull;
+#define Sv$mangled(sv)			(($type *) cairo_object_from_sv (sv, "$objects{$_}"))
+#define Sv${mangled}_ornull(sv)		(((sv) && SvOK (sv)) ? Sv$mangled(sv) : NULL)
+#define newSV$mangled(object)		(cairo_object_to_sv (($type *) $ref (object), "$objects{$_}"))
+#define newSV${mangled}_noinc(object)	(cairo_object_to_sv (($type *) object, "$objects{$_}"))
+#define newSV${mangled}_ornull(object)	(((object) == NULL) ? &PL_sv_undef : newSV$mangled(object))
+EOS
+
+		if (exists $backend_macros{$type}) {
+			print HEADER "#endif /* $backend_macros{$type} */\n";
 		}
+	}
+
+	# ------------------------------------------------------------------- #
+
+	print HEADER "\n/* structs */\n\n";
+
+	foreach (keys %structs)
+	{
+		/^(.+) \*/;
+		my $type = $1;
+		my $mangled = mangle ($type);
+
+		print HEADER <<"EOS";
+typedef $type ${type}_ornull;
+#define Sv$mangled(sv)			(($type *) cairo_struct_from_sv (sv, "$structs{$_}"))
+#define Sv${mangled}_ornull(sv)		(((sv) && SvOK (sv)) ? Sv$mangled(sv) : NULL)
+#define newSV$mangled(struct)		(cairo_struct_to_sv (($type *) struct, "$structs{$_}"))
+#define newSV${mangled}_ornull(struct)	(((struct) == NULL) ? &PL_sv_undef : newSV$mangled(struct))
+EOS
+	}
+
+	# ------------------------------------------------------------------- #
+
+	print HEADER "\n/* enums */\n\n";
+
+	foreach (keys %enums)
+	{
+		my $type = $_;
+		my $mangled = mangle ($type);
+		my $name = name ($type);
+
+		print HEADER <<"EOS";
+int cairo_${name}_from_sv (SV * $name);
+SV * cairo_${name}_to_sv (int val);
+#define Sv$mangled(sv)		(cairo_${name}_from_sv (sv))
+#define newSV$mangled(val)	(cairo_${name}_to_sv (val))
+EOS
 	}
 
 	close HEADER;
 
 	return ($cairo_perl);
 }
+
+# --------------------------------------------------------------------------- #
 
 sub do_enums
 {
@@ -220,12 +268,6 @@ sub do_enums
 	my $cairo_enums = 'cairo-perl-enums.c';
 	open ENUMS, '>', $cairo_enums
 		or die "unable to open ($cairo_enums) for output";
-
-	sub name
-	{
-		$_[0] =~ /cairo_(\w+)_t/;
-		$1;
-	}
 
 	print ENUMS "
 /*
@@ -298,23 +340,9 @@ sub do_enums
 		$str;
 	}
 
-	open HDR, '>', "$autogen_dir/cairo-perl-enums.h";
-	print HDR "/*
- * This file was automatically generated.  Do not edit.
- */
-
-#ifndef _CAIRO_PERL_ENUMS_H_
-#define _CAIRO_PERL_ENUMS_H_
-";
-
 	foreach (keys %enums)
 	{
 		my $name = name ($_);
-
-		print HDR "
-int cairo_".$name."_from_sv (SV * $name);
-SV * cairo_".$name."_to_sv (int val);
-";
 
 		print ENUMS 'int
 cairo_'.$name.'_from_sv (SV * '.$name.')
@@ -337,10 +365,6 @@ cairo_'.$name.'_to_sv (int val)
 
 ';
 	}
-
-	print HDR "
-#endif /* _CAIRO_PERL_ENUMS_H_ */\n";
-	close HDR;
 
 	close ENUMS;
 }

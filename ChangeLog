@@ -1,3 +1,16 @@
+2006/01/08	tsch
+
+	* Cairo.pm: Make DynaLoader export all our symbols.
+
+	* Cairo.xs, MakeHelper.pm, Makefile.PL, cairo-perl.h: Revamp the
+	type conversion API.  Instead of implementing everything in the
+	typemap, we now have macros like newSVCairoPattern SvCairoPattern.
+	These get exported, so other modules can make use of them.
+
+	* cairo-perl.h: Remove the DBG macro.
+
+	* cairo-perl.typemap: Use T_UV instead of T_IV for cairo_bool_t.
+
 2005/09/01	tsch
 
 	* Cairo.pm, MANIFEST, Makefile.PL, NEWS, README: Release 0.02.

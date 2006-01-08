@@ -41,6 +41,44 @@ _cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 
 /* ------------------------------------------------------------------------- */
 
+void *
+cairo_object_from_sv (SV *sv, const char *package)
+{
+	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
+		croak("Cannot convert scalar 0x%x to an object of type %s",
+		      sv, package);
+	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
+}
+
+SV *
+cairo_object_to_sv (void *object, const char *package)
+{
+	SV *sv = newSV (0);
+	sv_setref_pv(sv, package, object);
+	return sv;
+}
+
+/* ------------------------------------------------------------------------- */
+
+void *
+cairo_struct_from_sv (SV *sv, const char *package)
+{
+	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
+		croak("Cannot convert scalar 0x%x to a struct of type %s",
+		      sv, package);
+	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
+}
+
+SV *
+cairo_struct_to_sv (void *object, const char *package)
+{
+	SV *sv = newSV (0);
+	sv_setref_pv(sv, package, object);
+	return sv;
+}
+
+/* ------------------------------------------------------------------------- */
+
 SV *
 newSVCairoFontExtents (cairo_font_extents_t * extents)
 {
