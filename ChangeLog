@@ -1,3 +1,8 @@
+2006/01/28	tsch
+
+	* Cairo.pm: Add documentation for Cairo::Context, paths, patterns,
+	transformations, and text.
+
 2006/01/08	tsch
 
 	* Cairo.pm: Make DynaLoader export all our symbols.
