@@ -1,5 +1,9 @@
 2006/01/29	tsch
 
+	* Cairo.pm, NEWS, README: Release 0.03.
+
+2006/01/29	tsch
+
 	* Cairo.pm, CairoPattern.xs, Makefile.PL, cairo-perl.h,
 	t/CairoPattern.t: Add Cairo::SolidPattern::create_rgb and
 	create_rgba.
@@ -15,8 +19,9 @@
 
 	* Cairo.xs, MakeHelper.pm, Makefile.PL, cairo-perl.h: Revamp the
 	type conversion API.  Instead of implementing everything in the
-	typemap, we now have macros like newSVCairoPattern SvCairoPattern.
-	These get exported, so other modules can make use of them.
+	typemap, we now have macros like newSVCairoPattern and
+	SvCairoPattern.  These get exported, so other modules can make use
+	of them.
 
 	* cairo-perl.h: Remove the DBG macro.
 

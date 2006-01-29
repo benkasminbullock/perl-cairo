@@ -1,3 +1,10 @@
+Overview of changes in Cairo 0.03
+=================================
+
+* Export a sane type conversion API for other modules to use.
+* Add lots of documentation in the form of API listings.
+* Add Cairo::SolidPattern::create_rgb and create_rgba.
+
 Overview of changes in Cairo 0.02
 =================================
 
