@@ -1,3 +1,9 @@
+2006/01/29	tsch
+
+	* Cairo.pm, CairoPattern.xs, Makefile.PL, cairo-perl.h,
+	t/CairoPattern.t: Add Cairo::SolidPattern::create_rgb and
+	create_rgba.
+
 2006/01/28	tsch
 
 	* Cairo.pm: Add documentation for Cairo::Context, paths, patterns,

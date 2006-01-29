@@ -36,6 +36,10 @@ our @ISA = qw/Cairo::Surface/;
 
 # --------------------------------------------------------------------------- #
 
+package Cairo::SolidPattern;
+
+our @ISA = qw/Cairo::Pattern/;
+
 package Cairo::SurfacePattern;
 
 our @ISA = qw/Cairo::Pattern/;
@@ -565,6 +569,34 @@ C<$cr-E<gt>close_path>.
 =over
 
 =item $matrix: I<Cairo::Matrix>
+
+=back
+
+=item $matrix = $pattern->get_matrix
+
+=item $pattern = Cairo::SolidPattern->create_rgb ($red, $green, $blue)
+
+=over
+
+=item $red: double
+
+=item $green: double
+
+=item $blue: double
+
+=back
+
+=item $pattern = Cairo::SolidPattern->create_rgba ($red, $green, $blue, $alpha)
+
+=over
+
+=item $red: double
+
+=item $green: double
+
+=item $blue: double
+
+=item $alpha: double
 
 =back
 

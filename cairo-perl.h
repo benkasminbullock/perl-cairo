@@ -56,11 +56,13 @@ cairo_path_t * SvCairoPath (SV * sv);
 typedef cairo_surface_t cairo_image_surface_t;
 #define cairo_image_surface_reference cairo_surface_reference
 #define cairo_image_surface_destroy cairo_surface_destroy
+
 #ifdef CAIRO_HAS_PDF_SURFACE
   typedef cairo_surface_t cairo_pdf_surface_t;
 # define cairo_pdf_surface_reference cairo_surface_reference
 # define cairo_pdf_surface_destroy cairo_surface_destroy
 #endif
+
 #ifdef CAIRO_HAS_PS_SURFACE
   typedef cairo_surface_t cairo_ps_surface_t;
 # define cairo_ps_surface_reference cairo_surface_reference
@@ -70,15 +72,22 @@ typedef cairo_surface_t cairo_image_surface_t;
 /*
  * support for custom pattern types
  */
+typedef cairo_pattern_t cairo_solid_pattern_t;
+#define cairo_solid_pattern_reference cairo_pattern_reference
+#define cairo_solid_pattern_destroy cairo_pattern_destroy
+
 typedef cairo_pattern_t cairo_surface_pattern_t;
 #define cairo_surface_pattern_reference cairo_pattern_reference
 #define cairo_surface_pattern_destroy cairo_pattern_destroy
+
 typedef cairo_pattern_t cairo_gradient_t;
 #define cairo_gradient_reference cairo_pattern_reference
 #define cairo_gradient_destroy cairo_pattern_destroy
+
 typedef cairo_pattern_t cairo_linear_gradient_t;
 #define cairo_linear_gradient_reference cairo_pattern_reference
 #define cairo_linear_gradient_destroy cairo_pattern_destroy
+
 typedef cairo_pattern_t cairo_radial_gradient_t;
 #define cairo_radial_gradient_reference cairo_pattern_reference
 #define cairo_radial_gradient_destroy cairo_pattern_destroy

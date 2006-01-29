@@ -28,6 +28,20 @@ cairo_status_t cairo_pattern_status (cairo_pattern_t *pattern);
 
 # --------------------------------------------------------------------------- #
 
+MODULE = Cairo::Pattern	PACKAGE = Cairo::SolidPattern	PREFIX = cairo_pattern_
+
+# cairo_pattern_t* cairo_pattern_create_rgb (double red, double green, double blue);
+cairo_solid_pattern_t_noinc * cairo_pattern_create_rgb (class, double red, double green, double blue)
+    C_ARGS:
+	red, green, blue
+
+# cairo_pattern_t* cairo_pattern_create_rgba (double red, double green, double blue, double alpha);
+cairo_solid_pattern_t_noinc * cairo_pattern_create_rgba (class, double red, double green, double blue, double alpha)
+    C_ARGS:
+	red, green, blue, alpha
+
+# --------------------------------------------------------------------------- #
+
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SurfacePattern	PREFIX = cairo_pattern_
 
 cairo_surface_pattern_t_noinc * create (class, cairo_surface_t * surface);
