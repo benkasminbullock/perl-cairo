@@ -1,42 +1,42 @@
 2006/05/07	tsch
 
 	* .cvsignore, MANIFEST.SKIP: Update.
-	
+
 	* Cairo.pm: Update copyright notice.
-	
+
 	* MANIFEST, cairo-perl-private.h: Add a private header file for
 	non-public declarations that are used in more than one place.
-	
+
 	* MakeHelper.pm: Improve the enum converters to produce more useful
 	error messages.
-	
+
 	* Makefile.PL: Incorporate a slightly modified patch from  Christopher
 	Oezbek to prompt the user if he wants to install EU::Depends and
 	EU::PkgConfig if they can't be found.  Require cairo >= 1.1.6.  Update
 	and rearrange enums.
-	
+
 	* cairo-perl.h, Cairo.xs: Move CAIRO_PERL_CALL_BOOT to Cairo.xs.
-	
+
 	* cairo-perl.h, CairoSurface.xs, CairoPattern.xs, Makefile.PL: Use
 	cairo_surface_get_type and cairo_pattern_get_type to redo the sub-type
 	handling for surfaces and patterns.
-	
+
 	* cairo-perl-private.h, Cairo.xs, CairoMatrix.xs, CairoPattern.xs: Add
 	pcairo_copy_matrix and use it all over the place to make matrix handling
 	more robust.
-	
+
 	* Cairo.xs, t/Cairo.t: Wrap cairo_version, cairo_version_string,
 	cairo_push_group, cairo_push_group_with_content, cairo_pop_group,
 	cairo_pop_group_to_source, cairo_new_sub_path, cairo_set_scaled_font,
 	and cairo_get_group_target.
-	
+
 	* CairoFont.xs, t/CairoFont.t: Wrap cairo_font_face_get_type,
 	cairo_scaled_font_get_type, cairo_scaled_font_text_extents,
 	cairo_scaled_font_get_font_face, cairo_scaled_font_get_font_matrix,
 	cairo_scaled_font_get_ctm, and cairo_scaled_font_get_font_options.
-	
+
 	* CairoPattern.xs, t/CairoPattern.t: Wrap cairo_pattern_get_type.
-	
+
 	* CairoSurface.xs, t/CairoSurface.t: Wrap
 	cairo_surface_get_device_offset, cairo_surface_get_type,
 	cairo_pdf_surface_set_size, cairo_ps_surface_set_dpi,
