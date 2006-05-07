@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 21;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -32,8 +32,10 @@ isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
 
 $surf->set_device_offset (23, 42);
+is_deeply ([$surf->get_device_offset], [23, 42]);
 
 is ($surf->status, 'success');
+is ($surf->get_type, 'image');
 
 $surf->finish;
 
@@ -65,11 +67,13 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PdfSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::PdfSurface');
-	isa_ok ($surf, 'Cairo::Surface');
-
 	$surf->set_dpi (72, 72);
+	$surf->set_size (23, 42);
+
+	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	# the pdf backend falls back to an image surface currently
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.pdf';
 }
@@ -82,11 +86,17 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::PsSurface');
-	isa_ok ($surf, 'Cairo::Surface');
+	$surf->set_dpi (72, 72);
+	$surf->set_size (23, 42);
+	
+	$surf->dsc_comment("Bla?");
+	$surf->dsc_begin_setup;
+	$surf->dsc_begin_page_setup;
 
-	# $surf->set_dpi (72, 72);
+	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	# the ps backend falls back to an image surface currently
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.ps';
 }

@@ -28,6 +28,8 @@
 # include <cairo-pdf.h>
 #endif
 
+#include <cairo-perl-auto.h>
+
 /*
  * standard object and struct handling
  */
@@ -51,65 +53,21 @@ SV * newSVCairoPath (cairo_path_t * path);
 cairo_path_t * SvCairoPath (SV * sv);
 
 /*
- * support for custom surface types
+ * special treatment for surfaces
  */
-typedef cairo_surface_t cairo_image_surface_t;
-#define cairo_image_surface_reference cairo_surface_reference
-#define cairo_image_surface_destroy cairo_surface_destroy
-
-#ifdef CAIRO_HAS_PDF_SURFACE
-  typedef cairo_surface_t cairo_pdf_surface_t;
-# define cairo_pdf_surface_reference cairo_surface_reference
-# define cairo_pdf_surface_destroy cairo_surface_destroy
-#endif
-
-#ifdef CAIRO_HAS_PS_SURFACE
-  typedef cairo_surface_t cairo_ps_surface_t;
-# define cairo_ps_surface_reference cairo_surface_reference
-# define cairo_ps_surface_destroy cairo_surface_destroy
-#endif
+SV * cairo_surface_to_sv (cairo_surface_t *surface);
+#undef newSVCairoSurface
+#undef newSVCairoSurface_noinc
+#define newSVCairoSurface(object)	(cairo_surface_to_sv (cairo_surface_reference (object)))
+#define newSVCairoSurface_noinc(object)	(cairo_surface_to_sv (object))
 
 /*
- * support for custom pattern types
+ * special treatment for patterns
  */
-typedef cairo_pattern_t cairo_solid_pattern_t;
-#define cairo_solid_pattern_reference cairo_pattern_reference
-#define cairo_solid_pattern_destroy cairo_pattern_destroy
-
-typedef cairo_pattern_t cairo_surface_pattern_t;
-#define cairo_surface_pattern_reference cairo_pattern_reference
-#define cairo_surface_pattern_destroy cairo_pattern_destroy
-
-typedef cairo_pattern_t cairo_gradient_t;
-#define cairo_gradient_reference cairo_pattern_reference
-#define cairo_gradient_destroy cairo_pattern_destroy
-
-typedef cairo_pattern_t cairo_linear_gradient_t;
-#define cairo_linear_gradient_reference cairo_pattern_reference
-#define cairo_linear_gradient_destroy cairo_pattern_destroy
-
-typedef cairo_pattern_t cairo_radial_gradient_t;
-#define cairo_radial_gradient_reference cairo_pattern_reference
-#define cairo_radial_gradient_destroy cairo_pattern_destroy
-
-#include <cairo-perl-auto.h>
-
-/* call the boot code of a module by symbol rather than by name.
- *
- * in a perl extension which uses several xs files but only one pm, you
- * need to bootstrap the other xs files in order to get their functions
- * exported to perl.  if the file has MODULE = Foo::Bar, the boot symbol
- * would be boot_Foo__Bar.
- *
- * copied/borrowed from gtk2-perl.
- */
-void _cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark);
-#define CAIRO_PERL_CALL_BOOT(name)				\
-	{							\
-		extern XS(name);				\
-		_cairo_perl_call_XS (aTHX_ name, cv, mark);	\
-	}
-
-#define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
+SV * cairo_pattern_to_sv (cairo_pattern_t *surface);
+#undef newSVCairoPattern
+#undef newSVCairoPattern_noinc
+#define newSVCairoPattern(object)	(cairo_pattern_to_sv (cairo_pattern_reference (object)))
+#define newSVCairoPattern_noinc(object)	(cairo_pattern_to_sv (object))
 
 #endif /* _CAIRO_PERL_H_ */

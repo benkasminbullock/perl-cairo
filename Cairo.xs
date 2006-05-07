@@ -8,17 +8,24 @@
  */
 
 #include <cairo-perl.h>
+#include <cairo-perl-private.h>
 
 /* ------------------------------------------------------------------------- */
 
-void
-_cairo_perl_call_XS (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
+static void
+call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 {
 	dSP;
 	PUSHMARK (mark);
 	(*subaddr) (aTHX_ cv);
 	PUTBACK;	/* forget return values */
 }
+
+#define CAIRO_PERL_CALL_BOOT(name)				\
+	{							\
+		extern XS(name);				\
+		call_xs (aTHX_ name, cv, mark);	\
+	}
 
 /* ------------------------------------------------------------------------- */
 
@@ -212,6 +219,14 @@ SvCairoGlyph (SV * sv)
 
 /* ------------------------------------------------------------------------- */
 
+MODULE = Cairo	PACKAGE = Cairo	PREFIX = cairo_
+
+int cairo_version ();
+
+const char* cairo_version_string ();
+
+# ---------------------------------------------------------------------------- #
+
 MODULE = Cairo	PACKAGE = Cairo::Context	PREFIX = cairo_
 
 BOOT:
@@ -228,6 +243,14 @@ void DESTROY (cairo_t * cr);
 void cairo_save (cairo_t * cr);
 
 void cairo_restore (cairo_t * cr);
+
+void cairo_push_group (cairo_t *cr);
+
+void cairo_push_group_with_content (cairo_t *cr, cairo_content_t content);
+
+cairo_pattern_t * cairo_pop_group (cairo_t *cr);
+
+void cairo_pop_group_to_source (cairo_t *cr);
 
 void cairo_set_operator (cairo_t * cr, cairo_operator_t op);
 
@@ -284,6 +307,8 @@ void cairo_device_to_user (cairo_t *cr, IN_OUTLIST double x, IN_OUTLIST double y
 void cairo_device_to_user_distance (cairo_t *cr, IN_OUTLIST double dx, IN_OUTLIST double dy);
 
 void cairo_new_path (cairo_t * cr);
+
+void cairo_new_sub_path (cairo_t *cr);
 
 void cairo_move_to (cairo_t * cr, double x, double y);
 
@@ -347,9 +372,11 @@ void cairo_set_font_matrix (cairo_t *cr, const cairo_matrix_t *matrix);
 
 ##void cairo_get_font_matrix (cairo_t *cr, cairo_matrix_t *matrix);
 cairo_matrix_t * cairo_get_font_matrix (cairo_t *cr)
+    PREINIT:
+	cairo_matrix_t matrix;
     CODE:
-	RETVAL = malloc (sizeof (cairo_matrix_t));
-	cairo_get_font_matrix (cr, RETVAL);
+	cairo_get_font_matrix (cr, &matrix);
+	RETVAL = pcairo_copy_matrix (&matrix);
     OUTPUT:
 	RETVAL
 
@@ -362,6 +389,8 @@ cairo_font_options_t * cairo_get_font_options (cairo_t *cr)
 	cairo_get_font_options (cr, RETVAL);
     OUTPUT:
 	RETVAL
+
+void cairo_set_scaled_font (cairo_t *cr, const cairo_scaled_font_t *scaled_font);
 
 void cairo_show_text (cairo_t * cr, const char * utf8);
 
@@ -456,13 +485,17 @@ double cairo_get_miter_limit (cairo_t *cr);
 
 ##void cairo_get_matrix (cairo_t *cr, cairo_matrix_t *matrix);
 cairo_matrix_t * cairo_get_matrix (cairo_t *cr)
+    PREINIT:
+	cairo_matrix_t matrix;
     CODE:
-	RETVAL = malloc (sizeof (cairo_matrix_t));
-	cairo_get_matrix (cr, RETVAL);
+	cairo_get_matrix (cr, &matrix);
+	RETVAL = pcairo_copy_matrix (&matrix);
     OUTPUT:
 	RETVAL
 
 cairo_surface_t * cairo_get_target (cairo_t *cr);
+
+cairo_surface_t * cairo_get_group_target (cairo_t *cr);
 
 cairo_path_t * cairo_copy_path (cairo_t *cr);
 

@@ -923,6 +923,6 @@ Contains the reference manual
 
 =head1 COPYRIGHT
 
-Copyright (C) 2005 by the cairo perl team
+Copyright (C) 2005-2006 by the cairo perl team
 
 =cut

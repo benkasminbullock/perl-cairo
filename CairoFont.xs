@@ -7,10 +7,13 @@
  */
 
 #include <cairo-perl.h>
+#include <cairo-perl-private.h>
 
 MODULE = Cairo::Font	PACKAGE = Cairo::FontFace	PREFIX = cairo_font_face_
 
 cairo_status_t cairo_font_face_status (cairo_font_face_t * font);
+
+cairo_font_type_t cairo_font_face_get_type (cairo_font_face_t *font_face);
 
 void DESTROY (cairo_font_face_t * font)
     CODE:
@@ -25,12 +28,24 @@ cairo_scaled_font_t_noinc * cairo_scaled_font_create (class, cairo_font_face_t *
 
 cairo_status_t cairo_scaled_font_status (cairo_scaled_font_t *scaled_font);
 
+cairo_font_type_t cairo_scaled_font_get_type (cairo_scaled_font_t *scaled_font);
+
 ##cairo_status_t cairo_scaled_font_extents (cairo_scaled_font_t *scaled_font, cairo_font_extents_t *extents);
 cairo_font_extents_t * cairo_scaled_font_extents (cairo_scaled_font_t *scaled_font)
     PREINIT:
 	cairo_font_extents_t extents;
     CODE:
 	cairo_scaled_font_extents (scaled_font, &extents);
+	RETVAL = &extents;
+    OUTPUT:
+	RETVAL
+
+##void cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8, cairo_text_extents_t *extents);
+cairo_text_extents_t * cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8)
+    PREINIT:
+	cairo_text_extents_t extents;
+    CODE:
+	cairo_scaled_font_text_extents (scaled_font, utf8, &extents);
 	RETVAL = &extents;
     OUTPUT:
 	RETVAL
@@ -49,6 +64,36 @@ cairo_text_extents_t * cairo_scaled_font_glyph_extents (cairo_scaled_font_t *sca
 	cairo_scaled_font_glyph_extents (scaled_font, glyphs, num_glyphs, &extents);
 	RETVAL = &extents;
 	free (glyphs);
+    OUTPUT:
+	RETVAL
+
+cairo_font_face_t * cairo_scaled_font_get_font_face (cairo_scaled_font_t *scaled_font);
+
+##void cairo_scaled_font_get_font_matrix (cairo_scaled_font_t *scaled_font, cairo_matrix_t *font_matrix);
+cairo_matrix_t * cairo_scaled_font_get_font_matrix (cairo_scaled_font_t *scaled_font)
+    PREINIT:
+	cairo_matrix_t font_matrix;
+    CODE:
+	cairo_scaled_font_get_font_matrix (scaled_font, &font_matrix);
+	RETVAL = pcairo_copy_matrix (&font_matrix);
+    OUTPUT:
+	RETVAL
+
+##void cairo_scaled_font_get_ctm (cairo_scaled_font_t *scaled_font, cairo_matrix_t *ctm);
+cairo_matrix_t * cairo_scaled_font_get_ctm (cairo_scaled_font_t *scaled_font)
+    PREINIT:
+	cairo_matrix_t ctm;
+    CODE:
+	cairo_scaled_font_get_ctm (scaled_font, &ctm);
+	RETVAL = pcairo_copy_matrix (&ctm);
+    OUTPUT:
+	RETVAL
+
+##void cairo_scaled_font_get_font_options (cairo_scaled_font_t *scaled_font, cairo_font_options_t *options);
+cairo_font_options_t * cairo_scaled_font_get_font_options (cairo_scaled_font_t *scaled_font)
+    CODE:
+	RETVAL = cairo_font_options_create ();
+	cairo_scaled_font_get_font_options (scaled_font, RETVAL);
     OUTPUT:
 	RETVAL
 

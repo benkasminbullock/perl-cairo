@@ -278,6 +278,15 @@ sub do_enums
 
 ";
 
+	sub canonicalize
+	{
+		my ($name, $prefix) = @_;
+		$name =~ s/$prefix//;
+		$name =~ tr/_/-/;
+		$name = lc ($name);
+		return $name;
+	}
+
 	sub if_tree_from
 	{
 		my @enums = @_;
@@ -285,27 +294,23 @@ sub do_enums
 		my $prefix = shift @enums;
 
 		my $full = shift @enums;
-		my $name = $full;
-		$name =~ s/$prefix//;
-		$name =~ tr/_/-/;
-		$name = lc ($name);
+		my $name = canonicalize($full, $prefix);
 		my $len = length ($name);
 
-		my $str = "	if (strncmp (str, \"$name\", $len) == 0)
+		my $str = <<"EOS";
+	if (strncmp (str, "$name", $len) == 0)
 		return $full;
-";
+EOS
 
 		foreach $full (@enums)
 		{
-			$name = $full;
-			$name =~ s/$prefix//;
-			$name =~ tr/_/-/;
-			$name = lc ($name);
+			my $name = canonicalize($full, $prefix);
 			$len = length ($name);
 
-			$str .= "	else if (strncmp (str, \"$name\", $len) == 0)
+			$str .= <<"EOS";
+	else if (strncmp (str, "$name", $len) == 0)
 		return $full;
-";
+EOS
 		}
 
 		$str;
@@ -317,24 +322,20 @@ sub do_enums
 
 		my $prefix = shift @enums;
 		my $full = shift @enums;
-		my $name = $full;
-		$name =~ s/$prefix//;
-		$name =~ tr/_/-/;
-		$name = lc ($name);
+		my $name = canonicalize($full, $prefix);
 
-		my $str = "	if (val == $full)
-		return newSVpv (\"$name\", 0);
-";
+		my $str = <<"EOS";
+	if (val == $full)
+		return newSVpv ("$name", 0);
+EOS
 
 		foreach $full (@enums)
 		{
-			$name = $full;
-			$name =~ s/$prefix//;
-			$name =~ tr/_/-/;
-			$name = lc ($name);
-			$str .= "	else if (val == $full)
-		return newSVpv (\"$name\", 0);
-";
+			my $name = canonicalize($full, $prefix);
+			$str .= <<"EOS";
+	else if (val == $full)
+		return newSVpv ("$name", 0);
+EOS
 		}
 
 		$str;
@@ -342,28 +343,34 @@ sub do_enums
 
 	foreach (keys %enums)
 	{
-		my $name = name ($_);
+		my $name = name($_);
+		my @enum_values = @{$enums{$_}};
+		my $value_list = join ", ", map { canonicalize($_, $enum_values[0]) } @enum_values[1..$#enum_values];
+		
+		my $tree_from = if_tree_from (@enum_values);
+		my $tree_to = if_tree_to (@enum_values);
 
-		print ENUMS 'int
-cairo_'.$name.'_from_sv (SV * '.$name.')
+		print ENUMS <<"EOS";
+int
+cairo_${name}_from_sv (SV * $name)
 {
-	char * str = SvPV_nolen ('.$name.');
+	char * str = SvPV_nolen ($name);
 
-'.if_tree_from (@{$enums{$_}}).'
-	croak ("bad value for '.$name.' (%s)\n", str);
+	$tree_from
+	croak ("`%s' is not a valid $_ value; valid values are: $value_list\\n", str);
 
-	free (str);
 	return 0;
 }
 
 SV *
-cairo_'.$name.'_to_sv (int val)
+cairo_${name}_to_sv (int val)
 {
-'.if_tree_to (@{$enums{$_}}).'
-	return newSVpv ("unknown/invalid", 0);
+	$tree_to
+	warn ("unknown $_ value %d encountered", val);
+	return &PL_sv_undef;
 }
 
-';
+EOS
 	}
 
 	close ENUMS;

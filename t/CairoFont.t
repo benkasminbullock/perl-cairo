@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 13;
+use Test::More tests => 20;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -48,12 +48,22 @@ my $cr = Cairo::Context->create ($surf);
 my $face = $cr->get_font_face;
 
 is ($face->status, 'success');
+ok (defined $face->get_type);
 
 my $matrix = Cairo::Matrix->init_identity;
 my $ctm = Cairo::Matrix->init_identity;
 
 my $font = Cairo::ScaledFont->create ($face, $matrix, $ctm, $options);
 isa_ok ($font, 'Cairo::ScaledFont');
+
 is ($font->status, 'success');
+ok (defined $font->get_type);
+
 isa_ok ($font->extents, 'HASH');
+isa_ok ($font->text_extents('Bla'), 'HASH');
 isa_ok ($font->glyph_extents ({ index => 1, x => 2, y => 3 }), 'HASH');
+
+isa_ok ($font->get_font_face, 'Cairo::FontFace');
+isa_ok ($font->get_font_matrix, 'Cairo::Matrix');
+isa_ok ($font->get_ctm, 'Cairo::Matrix');
+isa_ok ($font->get_font_options, 'Cairo::FontOptions');

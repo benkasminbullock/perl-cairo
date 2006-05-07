@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -55,3 +55,4 @@ $pat->set_matrix ($matrix);
 isa_ok ($pat->get_matrix, 'Cairo::Matrix');
 
 is ($pat->status, 'success');
+is ($pat->get_type, 'radial');

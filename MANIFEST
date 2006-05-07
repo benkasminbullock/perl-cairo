@@ -15,6 +15,7 @@ NEWS
 README
 TODO
 cairo-perl.h
+cairo-perl-private.h
 cairo-perl.typemap
 examples/png/README
 examples/png/caps_joins.pl
