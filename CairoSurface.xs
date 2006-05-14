@@ -56,17 +56,144 @@ cairo_surface_to_sv (cairo_surface_t *surface)
 	return sv;
 }
 
+/* -------------------------------------------------------------------------- */
+
+typedef struct {
+	SV *func;
+	SV *data;
+	void *context;
+} CairoPerlCallback;
+
+#ifdef PERL_IMPLICIT_CONTEXT
+# define dCAIRO_PERL_CALLBACK_MARSHAL_SP		\
+	SV ** sp;
+# define CAIRO_PERL_CALLBACK_MARSHAL_INIT(callback)	\
+	PERL_SET_CONTEXT (callback->context);		\
+	SPAGAIN;
+#else
+# define dCAIRO_PERL_CALLBACK_MARSHAL_SP		\
+	dSP;
+# define CAIRO_PERL_CALLBACK_MARSHAL_INIT(callback)	\
+	/* nothing to do */
+#endif
+
+static CairoPerlCallback *
+cairo_perl_callback_new (SV *func, SV *data)
+{
+	CairoPerlCallback *callback;
+
+	callback = calloc (sizeof (CairoPerlCallback), 1);
+
+	callback->func = newSVsv (func);
+	if (data)
+		callback->data = newSVsv (data);
+
+#ifdef PERL_IMPLICIT_CONTEXT
+	callback->context = aTHX;
+#endif
+
+	return callback;
+}
+
+static void
+cairo_perl_callback_free (CairoPerlCallback *callback)
+{
+	SvREFCNT_dec (callback->func);
+	if (callback->data)
+		SvREFCNT_dec (callback->data);
+	free (callback);
+}
+
+/* -------------------------------------------------------------------------- */
+
+static cairo_status_t
+write_func_marshaller (void *closure,
+                       const unsigned char *data,
+                       unsigned int length)
+{
+	CairoPerlCallback *callback;
+	cairo_status_t status;
+	dCAIRO_PERL_CALLBACK_MARSHAL_SP;
+
+	callback = (CairoPerlCallback *) closure;
+
+	CAIRO_PERL_CALLBACK_MARSHAL_INIT (callback);
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK (SP);
+
+	EXTEND (SP, 2);
+	PUSHs (callback->data ? callback->data : &PL_sv_undef);
+	PUSHs (sv_2mortal (newSVpv ((const char *) data, length)));
+
+	PUTBACK;
+	call_sv (callback->func, G_DISCARD | G_EVAL);
+	SPAGAIN;
+
+	status = SvTRUE (ERRSV) ? SvCairoStatus (ERRSV) : CAIRO_STATUS_SUCCESS;
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	return status;
+}
+
+/* -------------------------------------------------------------------------- */
+
+static cairo_status_t
+read_func_marshaller (void *closure,
+                      unsigned char *data,
+                      unsigned int length)
+{
+	CairoPerlCallback *callback;
+	cairo_status_t status = CAIRO_STATUS_SUCCESS;
+	dCAIRO_PERL_CALLBACK_MARSHAL_SP;
+
+	callback = (CairoPerlCallback *) closure;
+
+	CAIRO_PERL_CALLBACK_MARSHAL_INIT (callback);
+
+	ENTER;
+	SAVETMPS;
+	PUSHMARK (SP);
+
+	EXTEND (SP, 2);
+	PUSHs (callback->data ? callback->data : &PL_sv_undef);
+	PUSHs (sv_2mortal (newSVuv (length)));
+
+	PUTBACK;
+	call_sv (callback->func, G_SCALAR | G_EVAL);
+	SPAGAIN;
+
+	if (SvTRUE (ERRSV)) {
+		status = SvCairoStatus (ERRSV);
+	} else {
+		STRLEN n_a;
+		char *retval;
+		retval = POPpx;
+		memcpy (data, retval, n_a);
+	}
+
+	PUTBACK;
+	FREETMPS;
+	LEAVE;
+
+	return status;
+}
+
+/* -------------------------------------------------------------------------- */
+
 MODULE = Cairo::Surface	PACKAGE = Cairo::Surface	PREFIX = cairo_surface_
 
 void DESTROY (cairo_surface_t * surface);
     CODE:
 	cairo_surface_destroy (surface);
 
-cairo_surface_t * cairo_surface_create_similar (cairo_surface_t * other, cairo_content_t content, int width, int height);
+cairo_surface_t_noinc * cairo_surface_create_similar (cairo_surface_t * other, cairo_content_t content, int width, int height);
 
 cairo_status_t cairo_surface_status (cairo_surface_t *surface);
-
-void cairo_surface_finish (cairo_surface_t *surface);
 
 void cairo_surface_set_device_offset (cairo_surface_t *surface, double x_offset, double y_offset);
 
@@ -102,8 +229,19 @@ cairo_surface_type_t cairo_surface_get_type (cairo_surface_t *surface);
 
 cairo_status_t cairo_surface_write_to_png (cairo_surface_t *surface, const char *filename);
 
-# FIXME
 ##cairo_status_t cairo_surface_write_to_png_stream (cairo_surface_t *surface, cairo_write_func_t write_func, void *closure);
+cairo_status_t
+cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=NULL)
+    PREINIT:
+	CairoPerlCallback *callback;
+    CODE:
+	callback = cairo_perl_callback_new (func, data);
+	RETVAL = cairo_surface_write_to_png_stream (surface,
+	                                            write_func_marshaller,
+	                                            callback);
+	cairo_perl_callback_free (callback);
+    OUTPUT:
+	RETVAL
 
 #endif
 
@@ -132,8 +270,18 @@ cairo_surface_t_noinc * cairo_image_surface_create_from_png (class, const char *
     C_ARGS:
 	filename
 
-# FIXME
 ##cairo_surface_t * cairo_image_surface_create_from_png_stream (cairo_read_func_t read_func, void *closure);
+cairo_surface_t_noinc *
+cairo_image_surface_create_from_png_stream (class, SV *func, SV *data=NULL)
+    PREINIT:
+	CairoPerlCallback *callback;
+    CODE:
+	callback = cairo_perl_callback_new (func, data);
+	RETVAL = cairo_image_surface_create_from_png_stream (
+			read_func_marshaller, callback);
+	cairo_perl_callback_free (callback);
+    OUTPUT:
+	RETVAL
 
 #endif
 
@@ -148,8 +296,22 @@ cairo_surface_t_noinc * cairo_pdf_surface_create (class, const char *filename, d
     C_ARGS:
 	filename, width_in_points, height_in_points
 
-# FIXME
 ##cairo_surface_t * cairo_pdf_surface_create_for_stream (cairo_write_func_t write_func, void *closure, double width_in_points, double height_in_points);
+cairo_surface_t_noinc *
+cairo_pdf_surface_create_for_stream (class, SV *func, SV *data, double width_in_points, double height_in_points)
+    PREINIT:
+	CairoPerlCallback *callback;
+    CODE:
+	callback = cairo_perl_callback_new (func, data);
+	RETVAL = cairo_pdf_surface_create_for_stream (write_func_marshaller,
+	                                              callback,
+	                                              width_in_points,
+	                                              height_in_points);
+	cairo_surface_set_user_data (
+		RETVAL, (const cairo_user_data_key_t *) &callback, callback,
+		(cairo_destroy_func_t) cairo_perl_callback_free);
+    OUTPUT:
+	RETVAL
 
 void cairo_pdf_surface_set_dpi (cairo_surface_t *surface, double x_dpi, double y_dpi);
 
@@ -168,8 +330,22 @@ cairo_surface_t_noinc * cairo_ps_surface_create (class, const char *filename, do
     C_ARGS:
 	filename, width_in_points, height_in_points
 
-# FIXME
 ##cairo_surface_t * cairo_ps_surface_create_for_stream (cairo_write_func_t write_func, void *closure, double width_in_points, double height_in_points);
+cairo_surface_t_noinc *
+cairo_ps_surface_create_for_stream (class, SV *func, SV *data, double width_in_points, double height_in_points)
+    PREINIT:
+	CairoPerlCallback *callback;
+    CODE:
+	callback = cairo_perl_callback_new (func, data);
+	RETVAL = cairo_ps_surface_create_for_stream (write_func_marshaller,
+	                                             callback,
+	                                             width_in_points,
+	                                             height_in_points);
+	cairo_surface_set_user_data (
+		RETVAL, (const cairo_user_data_key_t *) &callback, callback,
+		(cairo_destroy_func_t) cairo_perl_callback_free);
+    OUTPUT:
+	RETVAL
 
 void cairo_ps_surface_set_dpi (cairo_surface_t *surface, double x_dpi, double y_dpi);
 

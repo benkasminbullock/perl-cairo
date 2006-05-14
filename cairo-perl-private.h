@@ -10,8 +10,6 @@
 #ifndef _CAIRO_PERL_PRIVATE_H_
 #define _CAIRO_PERL_PRIVATE_H_
 
-#define CAIRO_PERL_UNUSED(var) if (0) { (var) = (var); }
-
-cairo_matrix_t * pcairo_copy_matrix (cairo_matrix_t *matrix);
+cairo_matrix_t * cairo_perl_copy_matrix (cairo_matrix_t *matrix);
 
 #endif /* _CAIRO_PERL_PRIVATE_H_ */

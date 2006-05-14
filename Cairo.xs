@@ -376,7 +376,7 @@ cairo_matrix_t * cairo_get_font_matrix (cairo_t *cr)
 	cairo_matrix_t matrix;
     CODE:
 	cairo_get_font_matrix (cr, &matrix);
-	RETVAL = pcairo_copy_matrix (&matrix);
+	RETVAL = cairo_perl_copy_matrix (&matrix);
     OUTPUT:
 	RETVAL
 
@@ -489,7 +489,7 @@ cairo_matrix_t * cairo_get_matrix (cairo_t *cr)
 	cairo_matrix_t matrix;
     CODE:
 	cairo_get_matrix (cr, &matrix);
-	RETVAL = pcairo_copy_matrix (&matrix);
+	RETVAL = cairo_perl_copy_matrix (&matrix);
     OUTPUT:
 	RETVAL
 

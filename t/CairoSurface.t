@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 21;
+use Test::More tests => 42;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -37,8 +37,6 @@ is_deeply ([$surf->get_device_offset], [23, 42]);
 is ($surf->status, 'success');
 is ($surf->get_type, 'image');
 
-$surf->finish;
-
 isa_ok ($surf->get_font_options, 'Cairo::FontOptions');
 
 $surf->mark_dirty;
@@ -46,21 +44,60 @@ $surf->mark_dirty_rectangle (10, 10, 10, 10);
 $surf->flush;
 
 SKIP: {
-	skip 'png surface', 3
+	skip 'png surface', 16
 		unless Cairo::HAS_PNG_FUNCTIONS;
 
 	$surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 	is ($surf->write_to_png ('tmp.png'), 'success');
+	
+	is ($surf->write_to_png_stream (sub {
+		my ($closure, $data) = @_;
+		is ($closure, 'blub');
+		like ($data, qr/PNG/);
+		die 'write-error';
+	}, 'blub'), 'no-memory');
+	
+	is ($surf->write_to_png_stream (sub {
+		my ($closure, $data) = @_;
+		is ($closure, undef);
+		like ($data, qr/PNG/);
+		die 'write-error';
+	}), 'no-memory');
 
 	$surf = Cairo::ImageSurface->create_from_png ('tmp.png');
 	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
+	open my $fh, 'tmp.png';
+	$surf = Cairo::ImageSurface->create_from_png_stream (sub {
+		my ($closure, $length) = @_;
+		my $buffer;
+
+		if ($length != sysread($fh, $buffer, $length)) {
+			die 'no-memory';
+		}
+
+		return $buffer;
+	});
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+	is ($surf->status, 'success');
+	close $fh;
+
+	$surf = Cairo::ImageSurface->create_from_png_stream (sub {
+		my ($closure, $length) = @_;
+		is ($closure, 'blub');
+		die 'read-error';
+	}, 'blub');
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+	is ($surf->status, 'read-error');
+
 	unlink 'tmp.png';
 }
 
 SKIP: {
-	skip 'pdf surface', 4
+	skip 'pdf surface', 8
 		unless Cairo::HAS_PDF_SURFACE;
 
 	$surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -76,10 +113,19 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.pdf';
+
+	$surf = Cairo::PdfSurface->create_for_stream (sub {
+		my ($closure, $data) = @_;
+		is ($closure, 'blub');
+		like ($data, qr/PDF/);
+		die 'write-error';
+	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PdfSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 }
 
 SKIP: {
-	skip 'ps surface', 4
+	skip 'ps surface', 8
 		unless Cairo::HAS_PS_SURFACE;
 
 	$surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
@@ -99,4 +145,13 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.ps';
+
+	$surf = Cairo::PsSurface->create_for_stream (sub {
+		my ($closure, $data) = @_;
+		is ($closure, 'blub');
+		like ($data, qr/PS/);
+		die 'write-error';
+	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::PsSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 }

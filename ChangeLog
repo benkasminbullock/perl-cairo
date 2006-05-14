@@ -1,3 +1,26 @@
+2006/05/14	tsch
+
+	* t/CairoSurface.t, CairoSurface.xs: Remove
+	Cairo::Surface::finish; it's memory management related and not
+	needed, as far as I can tell.  Scream if you used it.
+
+	* t/CairoSurface.t, CairoSurface.xs: Bind and test
+	cairo_surface_write_to_png_stream,
+	cairo_image_surface_create_from_png_stream,
+	cairo_pdf_surface_create_for_stream, and
+	cairo_ps_surface_create_for_stream.
+
+	* CairoSurface.xs: Don't leak cairo_surface_create_similar's
+	return value.
+
+	* cairo-perl-private.h: Remove CAIRO_PERL_UNUSED.
+
+	* cairo-perl-private.h, Cairo.xs, CairoFont.xs, CairoMatrix.xs,
+	CairoPattern.xs: Rename pcairo_copy_matrix to
+	cairo_perl_copy_matrix.
+
+	* TODO: Update.
+
 2006/05/07	tsch
 
 	* .cvsignore, MANIFEST.SKIP: Update.

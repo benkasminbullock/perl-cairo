@@ -64,7 +64,7 @@ cairo_matrix_t * cairo_pattern_get_matrix (cairo_pattern_t * pattern);
 	cairo_matrix_t matrix;
     CODE:
 	cairo_pattern_get_matrix (pattern, &matrix);
-	RETVAL = pcairo_copy_matrix (&matrix);
+	RETVAL = cairo_perl_copy_matrix (&matrix);
     OUTPUT:
 	RETVAL
 

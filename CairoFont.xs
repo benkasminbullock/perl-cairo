@@ -75,7 +75,7 @@ cairo_matrix_t * cairo_scaled_font_get_font_matrix (cairo_scaled_font_t *scaled_
 	cairo_matrix_t font_matrix;
     CODE:
 	cairo_scaled_font_get_font_matrix (scaled_font, &font_matrix);
-	RETVAL = pcairo_copy_matrix (&font_matrix);
+	RETVAL = cairo_perl_copy_matrix (&font_matrix);
     OUTPUT:
 	RETVAL
 
@@ -85,7 +85,7 @@ cairo_matrix_t * cairo_scaled_font_get_ctm (cairo_scaled_font_t *scaled_font)
 	cairo_matrix_t ctm;
     CODE:
 	cairo_scaled_font_get_ctm (scaled_font, &ctm);
-	RETVAL = pcairo_copy_matrix (&ctm);
+	RETVAL = cairo_perl_copy_matrix (&ctm);
     OUTPUT:
 	RETVAL
 
