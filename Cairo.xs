@@ -221,9 +221,15 @@ SvCairoGlyph (SV * sv)
 
 MODULE = Cairo	PACKAGE = Cairo	PREFIX = cairo_
 
-int cairo_version ();
+# int cairo_version ();
+int cairo_version (class=NULL)
+    C_ARGS:
+	/* void */
 
-const char* cairo_version_string ();
+# const char* cairo_version_string ();
+const char* cairo_version_string (class=NULL)
+    C_ARGS:
+	/* void */
 
 # ---------------------------------------------------------------------------- #
 

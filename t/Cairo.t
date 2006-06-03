@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 54;
+use Test::More tests => 56;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -20,8 +20,11 @@ BEGIN {
 	use_ok ('Cairo');
 }
 
-ok(Cairo::version > 0);
+ok(defined Cairo::version);
 ok(defined Cairo::version_string);
+
+ok(defined Cairo->version);
+ok(defined Cairo->version_string);
 
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::Surface');

@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use Cairo;
 
-
 use constant
 {
 	WIDTH => 600,
@@ -79,6 +78,3 @@ sub draw_caps_joins
 	$cr->set_line_cap ('round');
 	stroke_v_twice ($cr, $width, $height);
 }
-
-
-

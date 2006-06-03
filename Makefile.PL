@@ -22,7 +22,7 @@ while ((my $module, my $version) = each(%prereqs)) {
 	unless (eval "use $module $version; 1" ) {
 		print "This module requires $module to install itself.\n";
 		my $yn = ExtUtils::MakeMaker::prompt("  Install $module from CPAN?", 'y');
-      
+
 		unless ($yn =~ /^y/i) {
 			die " *** Cannot install without $module.  Exiting ...\n";
 		}
@@ -37,7 +37,7 @@ while ((my $module, my $version) = each(%prereqs)) {
 
 		CPAN::Shell->install($module);
 
-		chdir $cwd 
+		chdir $cwd
 			or die "Cannot chdir() back to $cwd: $!";
 	}
 	eval "use $module $version; 1" or die $@;
@@ -47,7 +47,7 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.1.6');
+my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.1.7');
 
 my %backend_macros = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',

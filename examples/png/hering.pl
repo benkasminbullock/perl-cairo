@@ -4,7 +4,6 @@ use strict;
 use warnings;
 use Cairo;
 
-
 use constant
 {
 	WIDTH => 300,

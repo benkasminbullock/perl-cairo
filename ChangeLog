@@ -1,3 +1,28 @@
+2006/06/03	tsch
+
+	* Cairo.pm: Document Cairo::get_group_target, Cairo::new_sub_path,
+	Cairo::Pattern::get_type, Cairo::set_scaled_font, Cairo::version,
+	and Cairo::version_string.
+
+	* t/Cairo.t, Cairo.xs: Allow Cairo::version[_string] to be called
+	as a function and as a class method.
+
+	* CairoPattern.xs, CairoSurface.xs, t/CairoSurface.t, Makefile.PL,
+	examples/simple.pl, examples/png/caps_joins.pl,
+	examples/png/hering.pl: Whitespace fixes.
+
+	* t/CairoSurface.t, CairoSurface.xs: Wrap
+	cairo_surface_get_content.
+
+	* MakeHelper.pm: Don't add a linebreak to croaks so perl prints
+	line information.
+
+	* Makefile.PL: Require cairo 1.1.7.
+
+	* examples/png/README, examples/png/bevels.pl,
+	examples/png/spline-pipeline.pl, examples/png/text-rotate.pl,
+	examples/png/text.pl: New example ports.
+
 2006/05/14	tsch
 
 	* t/CairoSurface.t, CairoSurface.xs: Remove

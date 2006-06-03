@@ -8,7 +8,7 @@ use strict;
 use warnings;
 use Cairo;
 
-use constant 
+use constant
 {
 	IMG_WIDTH => 640,
 	IMG_HEIGHT => 480,

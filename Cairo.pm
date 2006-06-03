@@ -126,6 +126,8 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =item $surface = $cr->get_target
 
+=item $surface = $cr->get_group_target
+
 =item $cr->set_source_rgb ($red, $green, $blue)
 
 =over
@@ -412,6 +414,8 @@ C<$cr-E<gt>close_path>.
 
 =item $cr->new_path
 
+=item $cr->new_sub_path
+
 =item $cr->close_path
 
 =item $cr->arc ($xc, $yc, $radius, $angle1, $angle2)
@@ -563,6 +567,8 @@ C<$cr-E<gt>close_path>.
 =over
 
 =item $status = $pattern->status
+
+=item $type = $pattern->get_type
 
 =item $pattern->set_matrix ($matrix)
 
@@ -847,6 +853,14 @@ I<x> and I<y>.  Example:
 
 =item $options = $cr->get_font_options
 
+=item $cr->set_scaled_font ($scaled_font)
+
+=over
+
+=item $scaled_font: I<Cairo::ScaledFont>
+
+=back
+
 =item $cr->show_text ($utf8)
 
 =over
@@ -890,6 +904,20 @@ I<x> and I<y>.  Example:
 =item ...: list of glyphs
 
 =back
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head2 Version Information -- Run-time version checks.
+
+=over
+
+=item $version = Cairo->version
+
+=item $string = Cairo->version_string
 
 =back
 

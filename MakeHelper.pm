@@ -357,7 +357,7 @@ cairo_${name}_from_sv (SV * $name)
 	char * str = SvPV_nolen ($name);
 
 	$tree_from
-	croak ("`%s' is not a valid $_ value; valid values are: $value_list\\n", str);
+	croak ("`%s' is not a valid $_ value; valid values are: $value_list", str);
 
 	return 0;
 }

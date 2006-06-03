@@ -38,7 +38,7 @@ get_package (cairo_pattern_t *pattern)
 		package = "Cairo::Pattern";
 		break;
 	}
-	
+
 	return package;
 }
 

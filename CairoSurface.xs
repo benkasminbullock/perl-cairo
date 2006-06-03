@@ -44,7 +44,7 @@ get_package (cairo_surface_t *surface)
 		package = "Cairo::Surface";
 		break;
 	}
-	
+
 	return package;
 }
 
@@ -224,6 +224,8 @@ void cairo_surface_mark_dirty (cairo_surface_t *surface);
 void cairo_surface_mark_dirty_rectangle (cairo_surface_t *surface, int x, int y, int width, int height);
 
 cairo_surface_type_t cairo_surface_get_type (cairo_surface_t *surface);
+
+cairo_content_t cairo_surface_get_content (cairo_surface_t *surface);
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 

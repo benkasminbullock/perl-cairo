@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 42;
+use Test::More tests => 43;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -21,6 +21,7 @@ use Cairo;
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
+is ($surf->get_content, 'color');
 
 $surf = Cairo::ImageSurface->create_for_data ('Urgs!', 'rgb24',
                                               IMG_WIDTH, IMG_HEIGHT, 23);
@@ -49,14 +50,14 @@ SKIP: {
 
 	$surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 	is ($surf->write_to_png ('tmp.png'), 'success');
-	
+
 	is ($surf->write_to_png_stream (sub {
 		my ($closure, $data) = @_;
 		is ($closure, 'blub');
 		like ($data, qr/PNG/);
 		die 'write-error';
 	}, 'blub'), 'no-memory');
-	
+
 	is ($surf->write_to_png_stream (sub {
 		my ($closure, $data) = @_;
 		is ($closure, undef);
@@ -134,7 +135,7 @@ SKIP: {
 
 	$surf->set_dpi (72, 72);
 	$surf->set_size (23, 42);
-	
+
 	$surf->dsc_comment("Bla?");
 	$surf->dsc_begin_setup;
 	$surf->dsc_begin_page_setup;
