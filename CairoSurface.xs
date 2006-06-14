@@ -209,6 +209,8 @@ cairo_surface_get_device_offset (cairo_surface_t *surface)
 	PUSHs (sv_2mortal (newSVnv (x_offset)));
 	PUSHs (sv_2mortal (newSVnv (y_offset)));
 
+void cairo_surface_set_fallback_resolution (cairo_surface_t *surface, double x_pixels_per_inch, double y_pixels_per_inch);
+
 ##void cairo_surface_get_font_options (cairo_surface_t *surface, cairo_font_options_t *options);
 cairo_font_options_t * cairo_surface_get_font_options (cairo_surface_t *surface)
     CODE:
@@ -261,9 +263,24 @@ cairo_surface_t_noinc * cairo_image_surface_create_for_data (class, unsigned cha
     C_ARGS:
 	data, format, width, height, stride
 
+# unsigned char * cairo_image_surface_get_data (cairo_surface_t *surface);
+SV *
+cairo_image_surface_get_data (cairo_surface_t *surface)
+    PREINIT:
+	unsigned char *data;
+    CODE:
+	data = cairo_image_surface_get_data (surface);
+	RETVAL = data ? newSVpv ((char *) data, 0) : &PL_sv_undef;
+    OUTPUT:
+	RETVAL
+
+cairo_format_t cairo_image_surface_get_format (cairo_surface_t *surface);
+
 int cairo_image_surface_get_width (cairo_surface_t *surface);
 
 int cairo_image_surface_get_height (cairo_surface_t *surface);
+
+int cairo_image_surface_get_stride (cairo_surface_t *surface);
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 
@@ -315,8 +332,6 @@ cairo_pdf_surface_create_for_stream (class, SV *func, SV *data, double width_in_
     OUTPUT:
 	RETVAL
 
-void cairo_pdf_surface_set_dpi (cairo_surface_t *surface, double x_dpi, double y_dpi);
-
 void cairo_pdf_surface_set_size (cairo_surface_t *surface, double width_in_points, double height_in_points);
 
 #endif
@@ -348,8 +363,6 @@ cairo_ps_surface_create_for_stream (class, SV *func, SV *data, double width_in_p
 		(cairo_destroy_func_t) cairo_perl_callback_free);
     OUTPUT:
 	RETVAL
-
-void cairo_ps_surface_set_dpi (cairo_surface_t *surface, double x_dpi, double y_dpi);
 
 void cairo_ps_surface_set_size (cairo_surface_t	*surface, double width_in_points, double height_in_points);
 

@@ -1,3 +1,16 @@
+2006/06/14	tsch
+
+	* Makefile.PL: Require cairo >= 1.1.8.
+
+	* CairoSurface.xs, t/CairoSurface.t: Wrap and test
+	cairo_surface_set_fallback_resolution,
+	cairo_image_surface_get_data, cairo_image_surface_get_format, and
+	cairo_image_surface_get_stride.  Remove the wrappers and tests for
+	cairo_pdf_surface_set_dpi and cairo_ps_surface_set_dpi.
+
+	* t/CairoSurface.t: Test Cairo::ImageSurface::get_width and
+	get_height.
+
 2006/06/03	tsch
 
 	* Cairo.pm: Document Cairo::get_group_target, Cairo::new_sub_path,

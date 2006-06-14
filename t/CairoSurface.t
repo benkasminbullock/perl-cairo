@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 43;
+use Test::More tests => 48;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -23,10 +23,17 @@ isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
 is ($surf->get_content, 'color');
 
+is ($surf->get_format, 'rgb24');
+is ($surf->get_width, IMG_WIDTH);
+is ($surf->get_height, IMG_HEIGHT);
+
 $surf = Cairo::ImageSurface->create_for_data ('Urgs!', 'rgb24',
                                               IMG_WIDTH, IMG_HEIGHT, 23);
 isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
+
+is ($surf->get_data, 'Urgs!');
+is ($surf->get_stride, 23);
 
 $surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::ImageSurface');
@@ -34,6 +41,8 @@ isa_ok ($surf, 'Cairo::Surface');
 
 $surf->set_device_offset (23, 42);
 is_deeply ([$surf->get_device_offset], [23, 42]);
+
+$surf->set_fallback_resolution (72, 72);
 
 is ($surf->status, 'success');
 is ($surf->get_type, 'image');
@@ -105,7 +114,6 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PdfSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf->set_dpi (72, 72);
 	$surf->set_size (23, 42);
 
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
@@ -133,7 +141,6 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf->set_dpi (72, 72);
 	$surf->set_size (23, 42);
 
 	$surf->dsc_comment("Bla?");

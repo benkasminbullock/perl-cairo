@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
+# Copyright (c) 2004-2006 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
@@ -47,7 +47,7 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.1.7');
+my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.1.8');
 
 my %backend_macros = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
@@ -55,11 +55,11 @@ my %backend_macros = (
 );
 
 my %objects = (
-	'cairo_t *'                 => 'Cairo::Context',
-	'cairo_font_face_t *'       => 'Cairo::FontFace',
-	'cairo_pattern_t *'         => 'Cairo::Pattern',
-	'cairo_scaled_font_t *'     => 'Cairo::ScaledFont',
-	'cairo_surface_t *'         => 'Cairo::Surface',
+	'cairo_t *'             => 'Cairo::Context',
+	'cairo_font_face_t *'   => 'Cairo::FontFace',
+	'cairo_pattern_t *'     => 'Cairo::Pattern',
+	'cairo_scaled_font_t *' => 'Cairo::ScaledFont',
+	'cairo_surface_t *'     => 'Cairo::Surface',
 );
 
 my %structs = (
