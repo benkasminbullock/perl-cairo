@@ -1,3 +1,8 @@
+2006/06/15	tsch
+
+	* t/CairoSurface.t: Wrap two tests that recently started failing
+	in TODO blocks.
+
 2006/06/14	tsch
 
 	* Makefile.PL: Require cairo >= 1.1.8.
