@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
+# Copyright (c) 2004-2006 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
 #
@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
@@ -951,6 +951,6 @@ Contains the reference manual
 
 =head1 COPYRIGHT
 
-Copyright (C) 2005-2006 by the cairo perl team
+Copyright (C) 2004-2006 by the cairo perl team
 
 =cut

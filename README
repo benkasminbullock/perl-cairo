@@ -1,6 +1,6 @@
 # $Header$
 
-Cairo version 0.03
+Cairo version 0.04
 ==================
 
 Perl bindings to the cairo graphics library (http://www.cairographics.org).
@@ -48,7 +48,7 @@ In order to build it from source, you'll also need
 
 COPYRIGHT AND LICENSE
 
-Copyright (C) 2004-2005 by the cairo perl team
+Copyright (C) 2004-2006 by the cairo perl team
 
 Ross McFarland           rwmcfa1 at neces dot com
 Torsten Schoenfeld       kaffeetisch at gmx dot de

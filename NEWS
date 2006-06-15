@@ -1,3 +1,34 @@
+Overview of changes in Cairo 0.04
+=================================
+
+* Remove the wrappers for cairo_pdf_surface_set_dpi and
+  cairo_ps_surface_set_dpi.  Developers should use
+  cairo_surface_set_fallback_resolution instead.
+* Improve the enum converters to produce more useful error messages.
+* Wrap the streaming functions:
+  - cairo_surface_write_to_png_stream
+  - cairo_image_surface_create_from_png_stream
+  - cairo_pdf_surface_create_for_stream
+  - cairo_ps_surface_create_for_stream
+* Wrap new API:
+  - cairo_version, cairo_version_string, cairo_push_group,
+    cairo_push_group_with_content, cairo_pop_group, cairo_pop_group_to_source,
+    cairo_new_sub_path, cairo_set_scaled_font, cairo_get_group_target
+  - cairo_font_face_get_type, cairo_scaled_font_get_type,
+    cairo_scaled_font_text_extents, cairo_scaled_font_get_font_face,
+    cairo_scaled_font_get_font_matrix, cairo_scaled_font_get_ctm,
+    cairo_scaled_font_get_font_options
+  - cairo_pattern_get_type
+  - cairo_surface_get_device_offset, cairo_surface_get_type,
+    cairo_surface_get_content, cairo_surface_set_fallback_resolution
+  - cairo_image_surface_get_data, cairo_image_surface_get_format,
+    cairo_image_surface_get_stride
+  - cairo_pdf_surface_set_size
+  - cairo_ps_surface_set_dpi, cairo_ps_surface_set_size,
+    cairo_ps_surface_dsc_comment, cairo_ps_surface_dsc_begin_setup,
+    cairo_ps_surface_dsc_begin_setup
+* Port more examples from cairo-demo.
+
 Overview of changes in Cairo 0.03
 =================================
 

@@ -1,5 +1,9 @@
 2006/06/15	tsch
 
+	* Cairo.pm, MANIFEST, NEWS, README: Release 0.04.
+
+2006/06/15	tsch
+
 	* t/CairoSurface.t: Wrap two tests that recently started failing
 	in TODO blocks.
 
