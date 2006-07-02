@@ -19,6 +19,8 @@ void DESTROY (cairo_font_face_t * font)
     CODE:
 	cairo_font_face_destroy (font);
 
+# --------------------------------------------------------------------------- #
+
 MODULE = Cairo::Font	PACKAGE = Cairo::ScaledFont	PREFIX = cairo_scaled_font_
 
 ##cairo_scaled_font_t* cairo_scaled_font_create (cairo_font_face_t *font_face, const cairo_matrix_t *font_matrix, const cairo_matrix_t *ctm, const cairo_font_options_t *options);
@@ -100,6 +102,8 @@ cairo_font_options_t * cairo_scaled_font_get_font_options (cairo_scaled_font_t *
 void DESTROY (cairo_scaled_font_t * font)
     CODE:
 	cairo_scaled_font_destroy (font);
+
+# --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Font	PACKAGE = Cairo::FontOptions	PREFIX = cairo_font_options_
 
