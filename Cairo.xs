@@ -221,6 +221,32 @@ SvCairoGlyph (SV * sv)
 
 MODULE = Cairo	PACKAGE = Cairo	PREFIX = cairo_
 
+int VERSION (class=NULL)
+    CODE:
+	RETVAL = CAIRO_VERSION;
+    OUTPUT:
+	RETVAL
+
+int VERSION_ENCODE (...)
+    PREINIT:
+	int major, minor, micro;
+    CODE:
+	if (items == 3) {
+		major = SvIV (ST (0));
+		minor = SvIV (ST (1));
+		micro = SvIV (ST (2));
+	} else if (items == 4) {
+		major = SvIV (ST (1));
+		minor = SvIV (ST (2));
+		micro = SvIV (ST (3));
+	} else {
+		croak ("Usage: Cairo::VERSION_ENCODE (major, minor, micro) or Cairo->VERSION_ENCODE (major, minor, micro)");
+	}
+
+	RETVAL = CAIRO_VERSION_ENCODE (major, minor, micro);
+    OUTPUT:
+	RETVAL
+
 # int cairo_version ();
 int cairo_version (class=NULL)
     C_ARGS:

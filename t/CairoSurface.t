@@ -145,15 +145,8 @@ SKIP: {
 
 	$surf->set_size (23, 42);
 
-	$surf->dsc_comment("Bla?");
-	$surf->dsc_begin_setup;
-	$surf->dsc_begin_page_setup;
-
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
-	TODO: {
-		local $TODO = "create_similar trouble";
-		isa_ok ($surf, 'Cairo::ImageSurface');
-	}
+	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.ps';
@@ -166,4 +159,8 @@ SKIP: {
 	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
+
+	$surf->dsc_comment("Bla?");
+	$surf->dsc_begin_setup;
+	$surf->dsc_begin_page_setup;
 }

@@ -1,3 +1,14 @@
+2006/07/02	tsch
+
+	* Makefile.PL: Require cairo 1.2.0.  Add CAIRO_FORMAT_RGB16_565.
+
+	* Cairo.pm, CairoFont.xs: Cosmetical changes.
+
+	* Cairo.xs: Add Cairo::VERSION and Cairo::VERSION_ENCODE.
+
+	* t/CairoSurface.t: Shuffle a few tests around to avoid some
+	strange singularities.
+
 2006/06/15	tsch
 
 	* Cairo.pm, MANIFEST, NEWS, README: Release 0.04.

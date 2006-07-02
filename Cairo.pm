@@ -90,9 +90,9 @@ Cairo - Perl interface to the cairo library
 =head1 ABSTRACT
 
 Cairo provides Perl bindings for the vector graphics library cairo.  It
-supports multiple output targets, including the X Window Systems, PDF, and PNG.
-Cairo produces identical output on all those targets and makes use of hardware
-acceleration wherever possible.
+supports multiple output targets, including PDF and PNG.  Cairo produces
+identical output on all those targets and makes use of hardware acceleration
+wherever possible.
 
 =head1 API DOCUMENTATION
 

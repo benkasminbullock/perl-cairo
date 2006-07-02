@@ -11,6 +11,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 use MakeHelper;
 
+my %extreqs = (
+	'cairo' => '1.2.0',
+);
+
 # Unfortunately we already need these prereqs for writing the Makefile ...
 my %prereqs = (
 	'ExtUtils::Depends'   => 0.2,
@@ -47,7 +51,12 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ('cairo >= 1.1.8');
+my %cairo_cfg;
+eval { %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}"); };
+if ($@) {
+	warn $@;
+        die "*** please use Cairo 0.03 to work with cairo 1.0.x\n";
+}
 
 my %backend_macros = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
@@ -126,6 +135,7 @@ my %enums = (
 			CAIRO_FORMAT_RGB24
 			CAIRO_FORMAT_A8
 			CAIRO_FORMAT_A1
+			CAIRO_FORMAT_RGB16_565
 	/],
 	cairo_hint_metrics_t => [qw/
 			CAIRO_HINT_METRICS_
