@@ -1,5 +1,9 @@
 2006-07-15	tsch
 
+	* Cairo.pm, NEWS, README: Beta release 0.90.
+
+2006-07-15	tsch
+
 	* Cairo.pm: Update existing, add new documentation.
 
 	* TODO: Update.

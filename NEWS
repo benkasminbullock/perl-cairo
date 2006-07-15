@@ -1,3 +1,12 @@
+Overview of changes in Cairo 0.90
+=================================
+
+* Require cairo 1.2.0.
+* Add support for SVG surfaces.
+* Add Cairo::VERSION and Cairo::VERSION_ENCODE.
+* Wrap CAIRO_FORMAT_RGB16_565.
+* Remove Cairo::HAS_XLIB_SURFACE and HAS_FT_FONT.
+
 Overview of changes in Cairo 0.04
 =================================
 

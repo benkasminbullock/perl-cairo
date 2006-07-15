@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '0.04';
+our $VERSION = '0.90';
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
