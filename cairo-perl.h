@@ -28,6 +28,10 @@
 # include <cairo-pdf.h>
 #endif
 
+#ifdef CAIRO_HAS_SVG_SURFACE
+# include <cairo-svg.h>
+#endif
+
 #include <cairo-perl-auto.h>
 
 /*

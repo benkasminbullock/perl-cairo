@@ -50,6 +50,8 @@ cairo_pattern_to_sv (cairo_pattern_t *pattern)
 	return sv;
 }
 
+/* ------------------------------------------------------------------------- */
+
 MODULE = Cairo::Pattern	PACKAGE = Cairo::Pattern PREFIX = cairo_pattern_
 
 void DESTROY (cairo_pattern_t * pattern);
@@ -76,6 +78,9 @@ cairo_pattern_type_t cairo_pattern_get_type (cairo_pattern_t *pattern);
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SolidPattern	PREFIX = cairo_pattern_
 
+BOOT:
+	cair_perl_set_isa ("Cairo::SolidPattern", "Cairo::Pattern");
+
 # cairo_pattern_t* cairo_pattern_create_rgb (double red, double green, double blue);
 cairo_pattern_t_noinc * cairo_pattern_create_rgb (class, double red, double green, double blue)
     C_ARGS:
@@ -89,6 +94,9 @@ cairo_pattern_t_noinc * cairo_pattern_create_rgba (class, double red, double gre
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SurfacePattern	PREFIX = cairo_pattern_
+
+BOOT:
+	cair_perl_set_isa ("Cairo::SurfacePattern", "Cairo::Pattern");
 
 cairo_pattern_t_noinc * create (class, cairo_surface_t * surface);
     CODE:
@@ -108,6 +116,9 @@ cairo_filter_t cairo_pattern_get_filter (cairo_pattern_t * pattern);
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::Gradient	PREFIX = cairo_pattern_
 
+BOOT:
+	cair_perl_set_isa ("Cairo::Gradient", "Cairo::Pattern");
+
 void cairo_pattern_add_color_stop_rgb (cairo_pattern_t *pattern, double offset, double red, double green, double blue);
 
 void cairo_pattern_add_color_stop_rgba (cairo_pattern_t *pattern, double offset, double red, double green, double blue, double alpha);
@@ -115,6 +126,9 @@ void cairo_pattern_add_color_stop_rgba (cairo_pattern_t *pattern, double offset,
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::LinearGradient	PREFIX = cairo_pattern_
+
+BOOT:
+	cair_perl_set_isa ("Cairo::LinearGradient", "Cairo::Gradient");
 
 cairo_pattern_t_noinc * create (class, double x0, double y0, double x1, double y1);
     CODE:
@@ -125,6 +139,9 @@ cairo_pattern_t_noinc * create (class, double x0, double y0, double x1, double y
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::RadialGradient	PREFIX = cairo_pattern_
+
+BOOT:
+	cair_perl_set_isa ("Cairo::RadialGradient", "Cairo::Gradient");
 
 cairo_pattern_t_noinc * create (class, double cx0, double cy0, double radius0, double cx1, double cy1, double radius1);
     CODE:

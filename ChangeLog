@@ -1,3 +1,16 @@
+2006-07-15	tsch
+
+	* Cairo.pm, Cairo.xs, CairoPattern.xs, CairoSurface.xs,
+	cairo-perl-private.h: Add cairo_perl_set_isa and use it for
+	surfaces and patterns.
+
+	* CairoSurface.xs, Makefile.PL, cairo-perl.h, t/CairoSurface.t:
+	Add support for svg surfaces if available.
+
+	* t/CairoSurface.t: Remove TODO block and revert workaround
+	related to the weird unknown surface types.  It's been fixed
+	upstream: https://bugs.freedesktop.org/show_bug.cgi?id=7322
+
 2006/07/02	tsch
 
 	* Makefile.PL: Require cairo 1.2.0.  Add CAIRO_FORMAT_RGB16_565.

@@ -7,6 +7,7 @@
  */
 
 #include <cairo-perl.h>
+#include <cairo-perl-private.h>
 
 static const char *
 get_package (cairo_surface_t *surface)
@@ -28,6 +29,10 @@ get_package (cairo_surface_t *surface)
 		package = "Cairo::PsSurface";
 		break;
 
+	    case CAIRO_SURFACE_TYPE_SVG:
+		package = "Cairo::SvgSurface";
+		break;
+
 	    case CAIRO_SURFACE_TYPE_XLIB:
 	    case CAIRO_SURFACE_TYPE_XCB:
 	    case CAIRO_SURFACE_TYPE_GLITZ:
@@ -35,7 +40,6 @@ get_package (cairo_surface_t *surface)
 	    case CAIRO_SURFACE_TYPE_WIN32:
 	    case CAIRO_SURFACE_TYPE_BEOS:
 	    case CAIRO_SURFACE_TYPE_DIRECTFB:
-	    case CAIRO_SURFACE_TYPE_SVG:
 		package = "Cairo::Surface";
 		break;
 
@@ -253,6 +257,9 @@ cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::ImageSurface	PREFIX = cairo_image_surface_
 
+BOOT:
+	cair_perl_set_isa ("Cairo::ImageSurface", "Cairo::Surface");
+
 ##cairo_surface_t * cairo_image_surface_create (cairo_format_t format, int width, int height);
 cairo_surface_t_noinc * cairo_image_surface_create (class, cairo_format_t format, int width, int height)
     C_ARGS:
@@ -310,6 +317,9 @@ cairo_image_surface_create_from_png_stream (class, SV *func, SV *data=NULL)
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::PdfSurface	PREFIX = cairo_pdf_surface_
 
+BOOT:
+	cair_perl_set_isa ("Cairo::PdfSurface", "Cairo::Surface");
+
 ##cairo_surface_t * cairo_pdf_surface_create (const char *filename, double width_in_points, double height_in_points);
 cairo_surface_t_noinc * cairo_pdf_surface_create (class, const char *filename, double width_in_points, double height_in_points)
     C_ARGS:
@@ -342,6 +352,9 @@ void cairo_pdf_surface_set_size (cairo_surface_t *surface, double width_in_point
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::PsSurface	PREFIX = cairo_ps_surface_
 
+BOOT:
+	cair_perl_set_isa ("Cairo::PsSurface", "Cairo::Surface");
+
 ##cairo_surface_t * cairo_ps_surface_create (const char *filename, double width_in_points, double height_in_points);
 cairo_surface_t_noinc * cairo_ps_surface_create (class, const char *filename, double width_in_points, double height_in_points)
     C_ARGS:
@@ -371,5 +384,69 @@ void cairo_ps_surface_dsc_comment (cairo_surface_t *surface, const char *comment
 void cairo_ps_surface_dsc_begin_setup (cairo_surface_t *surface);
 
 void cairo_ps_surface_dsc_begin_page_setup (cairo_surface_t *surface);
+
+#endif
+
+# --------------------------------------------------------------------------- #
+
+#ifdef CAIRO_HAS_SVG_SURFACE
+
+MODULE = Cairo::Surface	PACKAGE = Cairo::SvgSurface	PREFIX = cairo_svg_surface_
+
+BOOT:
+	cair_perl_set_isa ("Cairo::SvgSurface", "Cairo::Surface");
+
+# cairo_surface_t * cairo_svg_surface_create (const char *filename, double width_in_points, double height_in_points);
+cairo_surface_t_noinc *
+cairo_svg_surface_create (class, const char *filename, double width_in_points, double height_in_points)
+    C_ARGS:
+	filename, width_in_points, height_in_points
+
+# cairo_surface_t * cairo_svg_surface_create_for_stream (cairo_write_func_t write_func, void *closure, double width_in_points, double height_in_points);
+cairo_surface_t_noinc *
+cairo_svg_surface_create_for_stream (class, SV *func, SV *data, double width_in_points, double height_in_points)
+    PREINIT:
+	CairoPerlCallback *callback;
+    CODE:
+	callback = cairo_perl_callback_new (func, data);
+	RETVAL = cairo_svg_surface_create_for_stream (write_func_marshaller,
+						      callback,
+						      width_in_points,
+						      height_in_points);
+	cairo_surface_set_user_data (
+		RETVAL, (const cairo_user_data_key_t *) &callback, callback,
+		(cairo_destroy_func_t) cairo_perl_callback_free);
+    OUTPUT:
+	RETVAL
+
+void cairo_svg_surface_restrict_to_version (cairo_surface_t *surface, cairo_svg_version_t version);
+
+# void cairo_svg_get_versions (cairo_svg_version_t const **versions, int *num_versions);
+void
+cairo_svg_surface_get_versions (class=NULL)
+    PREINIT:
+	cairo_svg_version_t const *versions = NULL;
+	int num_versions = 0, i;
+    PPCODE:
+	PERL_UNUSED_VAR (ax);
+	cairo_svg_get_versions (&versions, &num_versions);
+	EXTEND (sp, num_versions);
+	for (i = 0; i < num_versions; i++)
+		PUSHs (sv_2mortal (newSVCairoSvgVersion (versions[i])));
+
+# const char * cairo_svg_version_to_string (cairo_svg_version_t version);
+const char *
+cairo_svg_surface_version_to_string (...)
+    CODE:
+	if (items == 1) {
+		RETVAL = cairo_svg_version_to_string (SvCairoSvgVersion (ST (0)));
+	} else if (items == 2) {
+		RETVAL = cairo_svg_version_to_string (SvCairoSvgVersion (ST (1)));
+	} else {
+		RETVAL = NULL;
+		croak ("Usage: Cairo::SvgSurface::version_to_string (version) or Cairo::SvgSurface->version_to_string (version)");
+	}
+    OUTPUT:
+	RETVAL
 
 #endif

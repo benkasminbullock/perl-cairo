@@ -22,42 +22,6 @@ Cairo->bootstrap ($VERSION);
 
 # --------------------------------------------------------------------------- #
 
-package Cairo::ImageSurface;
-
-our @ISA = qw/Cairo::Surface/;
-
-package Cairo::PdfSurface;
-
-our @ISA = qw/Cairo::Surface/;
-
-package Cairo::PsSurface;
-
-our @ISA = qw/Cairo::Surface/;
-
-# --------------------------------------------------------------------------- #
-
-package Cairo::SolidPattern;
-
-our @ISA = qw/Cairo::Pattern/;
-
-package Cairo::SurfacePattern;
-
-our @ISA = qw/Cairo::Pattern/;
-
-package Cairo::Gradient;
-
-our @ISA = qw/Cairo::Pattern/;
-
-package Cairo::LinearGradient;
-
-our @ISA = qw/Cairo::Gradient/;
-
-package Cairo::RadialGradient;
-
-our @ISA = qw/Cairo::Gradient/;
-
-# --------------------------------------------------------------------------- #
-
 package Cairo;
 
 1;

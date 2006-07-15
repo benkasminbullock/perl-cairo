@@ -29,8 +29,6 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 
 /* ------------------------------------------------------------------------- */
 
-/* XXX: these need extensive testing */
-
 #define DOUBLES_DECLARE	\
 	int i, n; double * pts;
 #define DOUBLES_SLURP_FROM_STACK(first)				\
@@ -45,6 +43,25 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 #define DOUBLES_ARRAY	pts
 #define DOUBLES_CLEANUP	\
 	free (pts);
+
+/* ------------------------------------------------------------------------- */
+
+/* Copied from Glib/GType.xs. */
+void
+cair_perl_set_isa (const char *child_package,
+                   const char *parent_package)
+{
+	char *child_isa_full;
+	AV *isa;
+
+	child_isa_full = malloc (strlen (child_package) + 5 + 1);
+	child_isa_full = strcpy (child_isa_full, child_package);
+	child_isa_full = strcat (child_isa_full, "::ISA");
+	isa = get_av (child_isa_full, TRUE); /* create on demand */
+	free (child_isa_full);
+
+	av_push (isa, newSVpv (parent_package, 0));
+}
 
 /* ------------------------------------------------------------------------- */
 
@@ -564,20 +581,9 @@ HAS_PDF_SURFACE ()
 	RETVAL
 
 bool
-HAS_XLIB_SURFACE ()
+HAS_SVG_SURFACE ()
     CODE:
-#ifdef CAIRO_HAS_XLIB_SURFACE
-	RETVAL = TRUE;
-#else
-	RETVAL = FALSE;
-#endif
-    OUTPUT:
-	RETVAL
-
-bool
-HAS_FT_FONT ()
-    CODE:
-#ifdef CAIRO_HAS_FT_FONT
+#ifdef CAIRO_HAS_SVG_SURFACE
 	RETVAL = TRUE;
 #else
 	RETVAL = FALSE;

@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 48;
+use Test::More tests => 60;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -99,10 +99,7 @@ SKIP: {
 		is ($closure, 'blub');
 		die 'read-error';
 	}, 'blub');
-	TODO: {
-		local $TODO = "create_from_png_stream trouble";
-		isa_ok ($surf, 'Cairo::ImageSurface');
-	}
+	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 	is ($surf->status, 'read-error');
 
@@ -145,6 +142,10 @@ SKIP: {
 
 	$surf->set_size (23, 42);
 
+	$surf->dsc_comment("Bla?");
+	$surf->dsc_begin_setup;
+	$surf->dsc_begin_page_setup;
+
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
@@ -159,8 +160,38 @@ SKIP: {
 	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
+}
 
-	$surf->dsc_comment("Bla?");
-	$surf->dsc_begin_setup;
-	$surf->dsc_begin_page_setup;
+SKIP: {
+	skip 'svg surface', 12
+		unless Cairo::HAS_SVG_SURFACE;
+
+	$surf = Cairo::SvgSurface->create ('tmp.svg', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::SvgSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	$surf->restrict_to_version ('1-1');
+	$surf->restrict_to_version ('1-2');
+
+	unlink 'tmp.svg';
+
+	$surf = Cairo::SvgSurface->create_for_stream (sub {
+		my ($closure, $data) = @_;
+		is ($closure, 'blub');
+		like ($data, qr/xml/);
+		die 'write-error';
+	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($surf, 'Cairo::SvgSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	my @versions = Cairo::SvgSurface::get_versions();
+	ok (scalar @versions > 0);
+	is ($versions[0], '1-1');
+
+	@versions = Cairo::SvgSurface->get_versions();
+	ok (scalar @versions > 0);
+	is ($versions[0], '1-1');
+
+	like (Cairo::SvgSurface::version_to_string('1-1'), qr/1\.1/);
+	like (Cairo::SvgSurface->version_to_string('1-1'), qr/1\.1/);
 }
