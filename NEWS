@@ -1,3 +1,9 @@
+Overview of changes in Cairo 0.91
+=================================
+
+* Make it possible to use the bindings with cairo 1.0.x and later.  This makes
+  it possible to drop the cairo requirement back to 1.0.0.
+
 Overview of changes in Cairo 0.90
 =================================
 

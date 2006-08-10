@@ -1,5 +1,9 @@
 2006-08-10	tsch
 
+	* Cairo.pm, NEWS, README: Beta release 0.91.
+
+2006-08-10	tsch
+
 	* Cairo.xs, CairoFont.xs, CairoPattern.xs, CairoSurface.xs,
 	MakeHelper.pm, Makefile.PL, cairo-perl-private.h, t/Cairo.t,
 	t/CairoFont.t, t/CairoPattern.t, t/CairoSurface.t: Make it
