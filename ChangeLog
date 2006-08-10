@@ -1,3 +1,25 @@
+2006-08-10	tsch
+
+	* Cairo.xs, CairoFont.xs, CairoPattern.xs, CairoSurface.xs,
+	MakeHelper.pm, Makefile.PL, cairo-perl-private.h, t/Cairo.t,
+	t/CairoFont.t, t/CairoPattern.t, t/CairoSurface.t: Make it
+	possible to compile and run the bindings against cairo 1.0.x.  Use
+	a package lookup table for patterns and surfaces to work around
+	the lack of type accessors.  Add version guards around things that
+	were introduced in 1.2.0.
+
+	* CairoSurface.xs: Use OUTLIST for
+	cairo_surface_get_device_offset.
+
+	* CairoPattern.xs, CairoSurface.xs, cairo-perl-private.h: Rename
+	cair_perl_set_isa to cairo_perl_set_isa.  Doh!
+
+	* t/CairoSurface.t: Explicitly clear the image surface on cairo
+	1.0.x before writing it out since 1.0.x doesn't do it for us.  Use
+	lexical surface variables to make sure they get destroyed before
+	execution ends which in turn makes sure all tests inside callbacks
+	are run before Test::More checks if reality matches the test plan.
+
 2006-07-15	tsch
 
 	* Cairo.pm, NEWS, README: Beta release 0.90.

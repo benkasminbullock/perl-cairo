@@ -48,8 +48,8 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 
 /* Copied from Glib/GType.xs. */
 void
-cair_perl_set_isa (const char *child_package,
-                   const char *parent_package)
+cairo_perl_set_isa (const char *child_package,
+                    const char *parent_package)
 {
 	char *child_isa_full;
 	AV *isa;
@@ -293,6 +293,8 @@ void cairo_save (cairo_t * cr);
 
 void cairo_restore (cairo_t * cr);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 void cairo_push_group (cairo_t *cr);
 
 void cairo_push_group_with_content (cairo_t *cr, cairo_content_t content);
@@ -300,6 +302,8 @@ void cairo_push_group_with_content (cairo_t *cr, cairo_content_t content);
 cairo_pattern_t * cairo_pop_group (cairo_t *cr);
 
 void cairo_pop_group_to_source (cairo_t *cr);
+
+#endif
 
 void cairo_set_operator (cairo_t * cr, cairo_operator_t op);
 
@@ -357,7 +361,11 @@ void cairo_device_to_user_distance (cairo_t *cr, IN_OUTLIST double dx, IN_OUTLIS
 
 void cairo_new_path (cairo_t * cr);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 void cairo_new_sub_path (cairo_t *cr);
+
+#endif
 
 void cairo_move_to (cairo_t * cr, double x, double y);
 
@@ -439,7 +447,11 @@ cairo_font_options_t * cairo_get_font_options (cairo_t *cr)
     OUTPUT:
 	RETVAL
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 void cairo_set_scaled_font (cairo_t *cr, const cairo_scaled_font_t *scaled_font);
+
+#endif
 
 void cairo_show_text (cairo_t * cr, const char * utf8);
 
@@ -544,7 +556,11 @@ cairo_matrix_t * cairo_get_matrix (cairo_t *cr)
 
 cairo_surface_t * cairo_get_target (cairo_t *cr);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 cairo_surface_t * cairo_get_group_target (cairo_t *cr);
+
+#endif
 
 cairo_path_t * cairo_copy_path (cairo_t *cr);
 

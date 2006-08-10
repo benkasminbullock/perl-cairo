@@ -55,4 +55,10 @@ $pat->set_matrix ($matrix);
 isa_ok ($pat->get_matrix, 'Cairo::Matrix');
 
 is ($pat->status, 'success');
-is ($pat->get_type, 'radial');
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
+	is ($pat->get_type, 'radial');
+}

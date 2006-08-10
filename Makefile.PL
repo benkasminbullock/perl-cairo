@@ -12,7 +12,7 @@ use ExtUtils::MakeMaker;
 use MakeHelper;
 
 my %extreqs = (
-	'cairo' => '1.2.0',
+	'cairo' => '1.0.0',
 );
 
 # Unfortunately we already need these prereqs for writing the Makefile ...
@@ -51,12 +51,7 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg;
-eval { %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}"); };
-if ($@) {
-	warn $@;
-        die "*** please use Cairo 0.03 to work with cairo 1.0.x\n";
-}
+my %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}");
 
 my %backend_macros = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
@@ -96,7 +91,6 @@ my %enums = (
 		CAIRO_EXTEND_NONE
 		CAIRO_EXTEND_REPEAT
 		CAIRO_EXTEND_REFLECT
-		CAIRO_EXTEND_PAD
 	/],
 	cairo_fill_rule_t => [qw/
 		CAIRO_FILL_RULE_
@@ -118,13 +112,6 @@ my %enums = (
 		CAIRO_FONT_SLANT_ITALIC
 		CAIRO_FONT_SLANT_OBLIQUE
 	/],
-	cairo_font_type_t => [qw/
-		CAIRO_FONT_TYPE_
-		CAIRO_FONT_TYPE_TOY
-		CAIRO_FONT_TYPE_FT
-		CAIRO_FONT_TYPE_WIN32
-		CAIRO_FONT_TYPE_ATSUI
-	/],
 	cairo_font_weight_t => [qw/
 		CAIRO_FONT_WEIGHT_
 		CAIRO_FONT_WEIGHT_NORMAL
@@ -136,7 +123,6 @@ my %enums = (
 		CAIRO_FORMAT_RGB24
 		CAIRO_FORMAT_A8
 		CAIRO_FORMAT_A1
-		CAIRO_FORMAT_RGB16_565
 	/],
 	cairo_hint_metrics_t => [qw/
 		CAIRO_HINT_METRICS_
@@ -188,13 +174,6 @@ my %enums = (
 		CAIRO_PATH_CURVE_TO
 		CAIRO_PATH_CLOSE_PATH
 	/],
-	cairo_pattern_type_t => [qw/
-		CAIRO_PATTERN_TYPE_
-		CAIRO_PATTERN_TYPE_SOLID
-		CAIRO_PATTERN_TYPE_SURFACE
-		CAIRO_PATTERN_TYPE_LINEAR
-		CAIRO_PATTERN_TYPE_RADIAL
-	/],
 	cairo_status_t => [qw/
 		CAIRO_STATUS_
 		CAIRO_STATUS_SUCCESS
@@ -217,7 +196,6 @@ my %enums = (
 		CAIRO_STATUS_INVALID_VISUAL
 		CAIRO_STATUS_FILE_NOT_FOUND
 		CAIRO_STATUS_INVALID_DASH
-		CAIRO_STATUS_INVALID_DSC_COMMENT
 	/],
 	cairo_subpixel_order_t => [qw/
 		CAIRO_SUBPIXEL_ORDER_
@@ -227,7 +205,40 @@ my %enums = (
 		CAIRO_SUBPIXEL_ORDER_VRGB
 		CAIRO_SUBPIXEL_ORDER_VBGR
 	/],
-	cairo_surface_type_t => [qw/
+);
+
+my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
+
+if ($have_cairo_1_2) {
+	my %new = (
+		cairo_extend_t => [qw/CAIRO_EXTEND_PAD/],
+		cairo_format_t => [qw/CAIRO_FORMAT_RGB16_565/],
+		cairo_status_t => [qw/CAIRO_STATUS_INVALID_DSC_COMMENT/],
+	);
+
+	foreach my $enum (keys %new) {
+		foreach my $value (@{$new{$enum}}) {
+			push @{$enums{$enum}}, $value;
+		}
+	}
+
+	$enums{cairo_font_type_t} = [qw/
+		CAIRO_FONT_TYPE_
+		CAIRO_FONT_TYPE_TOY
+		CAIRO_FONT_TYPE_FT
+		CAIRO_FONT_TYPE_WIN32
+		CAIRO_FONT_TYPE_ATSUI
+	/];
+
+	$enums{cairo_pattern_type_t} = [qw/
+		CAIRO_PATTERN_TYPE_
+		CAIRO_PATTERN_TYPE_SOLID
+		CAIRO_PATTERN_TYPE_SURFACE
+		CAIRO_PATTERN_TYPE_LINEAR
+		CAIRO_PATTERN_TYPE_RADIAL
+	/];
+
+	$enums{cairo_surface_type_t} = [qw/
 		CAIRO_SURFACE_TYPE_
 		CAIRO_SURFACE_TYPE_IMAGE
 		CAIRO_SURFACE_TYPE_PDF
@@ -240,13 +251,22 @@ my %enums = (
 		CAIRO_SURFACE_TYPE_BEOS
 		CAIRO_SURFACE_TYPE_DIRECTFB
 		CAIRO_SURFACE_TYPE_SVG
-	/],
-	cairo_svg_version_t => [qw/
+	/];
+
+	$enums{cairo_svg_version_t} = [qw/
 		CAIRO_SVG_VERSION_
 		CAIRO_SVG_VERSION_1_1
 		CAIRO_SVG_VERSION_1_2
-	/],
-);
+	/];
+} else {
+	# We need to create empty enum entries for new types so that typemaps
+	# are generated for them.  xsubpp demands typemaps even if the code is
+	# #if'd out.
+	$enums{cairo_font_type_t} = [];
+	$enums{cairo_pattern_type_t} = [];
+	$enums{cairo_surface_type_t} = [];
+	$enums{cairo_svg_version_t} = [];
+}
 
 MakeHelper::do_enums (\%enums);
 

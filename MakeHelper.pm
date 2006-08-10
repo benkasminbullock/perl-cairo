@@ -345,8 +345,30 @@ EOS
 	{
 		my $name = name($_);
 		my @enum_values = @{$enums{$_}};
+
+		# Create stub converters to make xsubpp happy even if the
+		# current cairo doesn't have this type
+		unless (@enum_values) {
+			print ENUMS <<"EOS";
+int
+cairo_${name}_from_sv (SV * $name)
+{
+	return 0;
+}
+
+SV *
+cairo_${name}_to_sv (int val)
+{
+	return &PL_sv_undef;
+}
+
+EOS
+
+			# Skip to next enum value
+			next;
+		}
+
 		my $value_list = join ", ", map { canonicalize($_, $enum_values[0]) } @enum_values[1..$#enum_values];
-		
 		my $tree_from = if_tree_from (@enum_values);
 		my $tree_to = if_tree_to (@enum_values);
 

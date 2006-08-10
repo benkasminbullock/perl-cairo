@@ -12,6 +12,7 @@
 static const char *
 get_package (cairo_pattern_t *pattern)
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 	cairo_pattern_type_t type;
 	const char *package;
 
@@ -40,6 +41,10 @@ get_package (cairo_pattern_t *pattern)
 	}
 
 	return package;
+#else
+	const char *package = cairo_perl_package_table_lookup (pattern);
+	return package ? package : "Cairo::Pattern";
+#endif
 }
 
 SV *
@@ -72,35 +77,50 @@ cairo_matrix_t * cairo_pattern_get_matrix (cairo_pattern_t * pattern);
 
 cairo_status_t cairo_pattern_status (cairo_pattern_t *pattern);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 cairo_pattern_type_t cairo_pattern_get_type (cairo_pattern_t *pattern);
+
+#endif
 
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SolidPattern	PREFIX = cairo_pattern_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::SolidPattern", "Cairo::Pattern");
+	cairo_perl_set_isa ("Cairo::SolidPattern", "Cairo::Pattern");
 
 # cairo_pattern_t* cairo_pattern_create_rgb (double red, double green, double blue);
 cairo_pattern_t_noinc * cairo_pattern_create_rgb (class, double red, double green, double blue)
     C_ARGS:
 	red, green, blue
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::SolidPattern");
+#endif
 
 # cairo_pattern_t* cairo_pattern_create_rgba (double red, double green, double blue, double alpha);
 cairo_pattern_t_noinc * cairo_pattern_create_rgba (class, double red, double green, double blue, double alpha)
     C_ARGS:
 	red, green, blue, alpha
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::SolidPattern");
+#endif
 
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SurfacePattern	PREFIX = cairo_pattern_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::SurfacePattern", "Cairo::Pattern");
+	cairo_perl_set_isa ("Cairo::SurfacePattern", "Cairo::Pattern");
 
 cairo_pattern_t_noinc * create (class, cairo_surface_t * surface);
     CODE:
 	RETVAL = cairo_pattern_create_for_surface (surface);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::SurfacePattern");
+#endif
     OUTPUT:
 	RETVAL
 
@@ -117,7 +137,7 @@ cairo_filter_t cairo_pattern_get_filter (cairo_pattern_t * pattern);
 MODULE = Cairo::Pattern	PACKAGE = Cairo::Gradient	PREFIX = cairo_pattern_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::Gradient", "Cairo::Pattern");
+	cairo_perl_set_isa ("Cairo::Gradient", "Cairo::Pattern");
 
 void cairo_pattern_add_color_stop_rgb (cairo_pattern_t *pattern, double offset, double red, double green, double blue);
 
@@ -128,11 +148,14 @@ void cairo_pattern_add_color_stop_rgba (cairo_pattern_t *pattern, double offset,
 MODULE = Cairo::Pattern	PACKAGE = Cairo::LinearGradient	PREFIX = cairo_pattern_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::LinearGradient", "Cairo::Gradient");
+	cairo_perl_set_isa ("Cairo::LinearGradient", "Cairo::Gradient");
 
 cairo_pattern_t_noinc * create (class, double x0, double y0, double x1, double y1);
     CODE:
 	RETVAL = cairo_pattern_create_linear (x0, y0, x1, y1);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::LinearGradient");
+#endif
     OUTPUT:
 	RETVAL
 
@@ -141,10 +164,13 @@ cairo_pattern_t_noinc * create (class, double x0, double y0, double x1, double y
 MODULE = Cairo::Pattern	PACKAGE = Cairo::RadialGradient	PREFIX = cairo_pattern_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::RadialGradient", "Cairo::Gradient");
+	cairo_perl_set_isa ("Cairo::RadialGradient", "Cairo::Gradient");
 
 cairo_pattern_t_noinc * create (class, double cx0, double cy0, double radius0, double cx1, double cy1, double radius1);
     CODE:
 	RETVAL = cairo_pattern_create_radial (cx0, cy0, radius0, cx1, cy1, radius1);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::RadialGradient");
+#endif
     OUTPUT:
 	RETVAL

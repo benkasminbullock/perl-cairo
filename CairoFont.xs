@@ -13,7 +13,11 @@ MODULE = Cairo::Font	PACKAGE = Cairo::FontFace	PREFIX = cairo_font_face_
 
 cairo_status_t cairo_font_face_status (cairo_font_face_t * font);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 cairo_font_type_t cairo_font_face_get_type (cairo_font_face_t *font_face);
+
+#endif
 
 void DESTROY (cairo_font_face_t * font)
     CODE:
@@ -30,7 +34,11 @@ cairo_scaled_font_t_noinc * cairo_scaled_font_create (class, cairo_font_face_t *
 
 cairo_status_t cairo_scaled_font_status (cairo_scaled_font_t *scaled_font);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 cairo_font_type_t cairo_scaled_font_get_type (cairo_scaled_font_t *scaled_font);
+
+#endif
 
 ##cairo_status_t cairo_scaled_font_extents (cairo_scaled_font_t *scaled_font, cairo_font_extents_t *extents);
 cairo_font_extents_t * cairo_scaled_font_extents (cairo_scaled_font_t *scaled_font)
@@ -42,6 +50,8 @@ cairo_font_extents_t * cairo_scaled_font_extents (cairo_scaled_font_t *scaled_fo
     OUTPUT:
 	RETVAL
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 ##void cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8, cairo_text_extents_t *extents);
 cairo_text_extents_t * cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8)
     PREINIT:
@@ -51,6 +61,8 @@ cairo_text_extents_t * cairo_scaled_font_text_extents (cairo_scaled_font_t *scal
 	RETVAL = &extents;
     OUTPUT:
 	RETVAL
+
+#endif
 
 ##void cairo_scaled_font_glyph_extents (cairo_scaled_font_t *scaled_font, cairo_glyph_t *glyphs, int num_glyphs, cairo_text_extents_t *extents);
 cairo_text_extents_t * cairo_scaled_font_glyph_extents (cairo_scaled_font_t *scaled_font, ...)
@@ -68,6 +80,8 @@ cairo_text_extents_t * cairo_scaled_font_glyph_extents (cairo_scaled_font_t *sca
 	free (glyphs);
     OUTPUT:
 	RETVAL
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 
 cairo_font_face_t * cairo_scaled_font_get_font_face (cairo_scaled_font_t *scaled_font);
 
@@ -98,6 +112,8 @@ cairo_font_options_t * cairo_scaled_font_get_font_options (cairo_scaled_font_t *
 	cairo_scaled_font_get_font_options (scaled_font, RETVAL);
     OUTPUT:
 	RETVAL
+
+#endif
 
 void DESTROY (cairo_scaled_font_t * font)
     CODE:

@@ -9,9 +9,58 @@
 #include <cairo-perl.h>
 #include <cairo-perl-private.h>
 
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+
+static HV *pointer_to_package = NULL;
+
+/* A hex character represents four bits in the address of a pointer, so we'll
+ * need BITS_PER_LONG/4 characters.  That's sizeof (long) * 2.  Add 2 for the
+ * "0x" part.  Add 1 for the trailing \0.  Reasoning courtesy of Robert Love.
+ */
+#define MAX_KEY_LENGTH ((sizeof(long) * 2) + 2 + 1)
+
+/* This stuff is also used in CairoPattern.xs, hence no static on the
+ * functions.
+ */
+
+void
+cairo_perl_package_table_insert (void *pointer, const char *package)
+{
+	char key[MAX_KEY_LENGTH];
+
+	if (!pointer_to_package) {
+		pointer_to_package = newHV ();
+	}
+
+	sprintf (key, "%p", pointer);
+	hv_store (pointer_to_package, key, strlen (key), newSVpv (package, PL_na), 0);
+}
+
+const char *
+cairo_perl_package_table_lookup (void *pointer)
+{
+	char key[MAX_KEY_LENGTH];
+	SV **sv;
+
+	if (!pointer_to_package) {
+		return NULL;
+	}
+
+	sprintf (key, "%p", pointer);
+	sv = hv_fetch (pointer_to_package, key, strlen (key), 0);
+	if (sv && SvOK (*sv)) {
+		return SvPV_nolen (*sv);
+	}
+
+	return NULL;
+}
+
+#endif
+
 static const char *
 get_package (cairo_surface_t *surface)
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 	cairo_surface_type_t type;
 	const char *package;
 
@@ -50,6 +99,10 @@ get_package (cairo_surface_t *surface)
 	}
 
 	return package;
+#else
+	const char *package = cairo_perl_package_table_lookup (surface);
+	return package ? package : "Cairo::Surface";
+#endif
 }
 
 SV *
@@ -196,24 +249,25 @@ void DESTROY (cairo_surface_t * surface);
 	cairo_surface_destroy (surface);
 
 cairo_surface_t_noinc * cairo_surface_create_similar (cairo_surface_t * other, cairo_content_t content, int width, int height);
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+    {
+	const char *package = cairo_perl_package_table_lookup (other);
+	cairo_perl_package_table_insert (RETVAL, package ? package : "Cairo::Surface");
+    }
+#endif
 
 cairo_status_t cairo_surface_status (cairo_surface_t *surface);
 
 void cairo_surface_set_device_offset (cairo_surface_t *surface, double x_offset, double y_offset);
 
-##void cairo_surface_get_device_offset (cairo_surface_t *surface, double *x_offset, double *y_offset);
-void
-cairo_surface_get_device_offset (cairo_surface_t *surface)
-    PREINIT:
-	double x_offset;
-	double y_offset;
-    PPCODE:
-	cairo_surface_get_device_offset (surface, &x_offset, &y_offset);
-	EXTEND (sp, 2);
-	PUSHs (sv_2mortal (newSVnv (x_offset)));
-	PUSHs (sv_2mortal (newSVnv (y_offset)));
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
+void cairo_surface_get_device_offset (cairo_surface_t *surface, OUTLIST double x_offset, OUTLIST double y_offset);
 
 void cairo_surface_set_fallback_resolution (cairo_surface_t *surface, double x_pixels_per_inch, double y_pixels_per_inch);
+
+#endif
 
 ##void cairo_surface_get_font_options (cairo_surface_t *surface, cairo_font_options_t *options);
 cairo_font_options_t * cairo_surface_get_font_options (cairo_surface_t *surface)
@@ -229,9 +283,13 @@ void cairo_surface_mark_dirty (cairo_surface_t *surface);
 
 void cairo_surface_mark_dirty_rectangle (cairo_surface_t *surface, int x, int y, int width, int height);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 cairo_surface_type_t cairo_surface_get_type (cairo_surface_t *surface);
 
 cairo_content_t cairo_surface_get_content (cairo_surface_t *surface);
+
+#endif
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 
@@ -258,17 +316,27 @@ cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=
 MODULE = Cairo::Surface	PACKAGE = Cairo::ImageSurface	PREFIX = cairo_image_surface_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::ImageSurface", "Cairo::Surface");
+	cairo_perl_set_isa ("Cairo::ImageSurface", "Cairo::Surface");
 
 ##cairo_surface_t * cairo_image_surface_create (cairo_format_t format, int width, int height);
 cairo_surface_t_noinc * cairo_image_surface_create (class, cairo_format_t format, int width, int height)
     C_ARGS:
 	format, width, height
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::ImageSurface");
+#endif
 
 ##cairo_surface_t * cairo_image_surface_create_for_data (unsigned char *data, cairo_format_t format, int width, int height, int stride);
 cairo_surface_t_noinc * cairo_image_surface_create_for_data (class, unsigned char *data, cairo_format_t format, int width, int height, int stride)
     C_ARGS:
 	data, format, width, height, stride
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::ImageSurface");
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 
 # unsigned char * cairo_image_surface_get_data (cairo_surface_t *surface);
 SV *
@@ -283,11 +351,17 @@ cairo_image_surface_get_data (cairo_surface_t *surface)
 
 cairo_format_t cairo_image_surface_get_format (cairo_surface_t *surface);
 
+#endif
+
 int cairo_image_surface_get_width (cairo_surface_t *surface);
 
 int cairo_image_surface_get_height (cairo_surface_t *surface);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 int cairo_image_surface_get_stride (cairo_surface_t *surface);
+
+#endif
 
 #ifdef CAIRO_HAS_PNG_FUNCTIONS
 
@@ -295,6 +369,10 @@ int cairo_image_surface_get_stride (cairo_surface_t *surface);
 cairo_surface_t_noinc * cairo_image_surface_create_from_png (class, const char *filename)
     C_ARGS:
 	filename
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::ImageSurface");
+#endif
 
 ##cairo_surface_t * cairo_image_surface_create_from_png_stream (cairo_read_func_t read_func, void *closure);
 cairo_surface_t_noinc *
@@ -306,6 +384,9 @@ cairo_image_surface_create_from_png_stream (class, SV *func, SV *data=NULL)
 	RETVAL = cairo_image_surface_create_from_png_stream (
 			read_func_marshaller, callback);
 	cairo_perl_callback_free (callback);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::ImageSurface");
+#endif
     OUTPUT:
 	RETVAL
 
@@ -318,12 +399,16 @@ cairo_image_surface_create_from_png_stream (class, SV *func, SV *data=NULL)
 MODULE = Cairo::Surface	PACKAGE = Cairo::PdfSurface	PREFIX = cairo_pdf_surface_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::PdfSurface", "Cairo::Surface");
+	cairo_perl_set_isa ("Cairo::PdfSurface", "Cairo::Surface");
 
 ##cairo_surface_t * cairo_pdf_surface_create (const char *filename, double width_in_points, double height_in_points);
 cairo_surface_t_noinc * cairo_pdf_surface_create (class, const char *filename, double width_in_points, double height_in_points)
     C_ARGS:
 	filename, width_in_points, height_in_points
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::PdfSurface");
+#endif
 
 ##cairo_surface_t * cairo_pdf_surface_create_for_stream (cairo_write_func_t write_func, void *closure, double width_in_points, double height_in_points);
 cairo_surface_t_noinc *
@@ -339,6 +424,9 @@ cairo_pdf_surface_create_for_stream (class, SV *func, SV *data, double width_in_
 	cairo_surface_set_user_data (
 		RETVAL, (const cairo_user_data_key_t *) &callback, callback,
 		(cairo_destroy_func_t) cairo_perl_callback_free);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::PdfSurface");
+#endif
     OUTPUT:
 	RETVAL
 
@@ -353,12 +441,16 @@ void cairo_pdf_surface_set_size (cairo_surface_t *surface, double width_in_point
 MODULE = Cairo::Surface	PACKAGE = Cairo::PsSurface	PREFIX = cairo_ps_surface_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::PsSurface", "Cairo::Surface");
+	cairo_perl_set_isa ("Cairo::PsSurface", "Cairo::Surface");
 
 ##cairo_surface_t * cairo_ps_surface_create (const char *filename, double width_in_points, double height_in_points);
 cairo_surface_t_noinc * cairo_ps_surface_create (class, const char *filename, double width_in_points, double height_in_points)
     C_ARGS:
 	filename, width_in_points, height_in_points
+    POSTCALL:
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::PsSurface");
+#endif
 
 ##cairo_surface_t * cairo_ps_surface_create_for_stream (cairo_write_func_t write_func, void *closure, double width_in_points, double height_in_points);
 cairo_surface_t_noinc *
@@ -374,6 +466,9 @@ cairo_ps_surface_create_for_stream (class, SV *func, SV *data, double width_in_p
 	cairo_surface_set_user_data (
 		RETVAL, (const cairo_user_data_key_t *) &callback, callback,
 		(cairo_destroy_func_t) cairo_perl_callback_free);
+#if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_perl_package_table_insert (RETVAL, "Cairo::PsSurface");
+#endif
     OUTPUT:
 	RETVAL
 
@@ -389,12 +484,15 @@ void cairo_ps_surface_dsc_begin_page_setup (cairo_surface_t *surface);
 
 # --------------------------------------------------------------------------- #
 
+# The SVG surface doesn't need the special package treatment because it didn't
+# exist in cairo 1.0.
+
 #ifdef CAIRO_HAS_SVG_SURFACE
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::SvgSurface	PREFIX = cairo_svg_surface_
 
 BOOT:
-	cair_perl_set_isa ("Cairo::SvgSurface", "Cairo::Surface");
+	cairo_perl_set_isa ("Cairo::SvgSurface", "Cairo::Surface");
 
 # cairo_surface_t * cairo_svg_surface_create (const char *filename, double width_in_points, double height_in_points);
 cairo_surface_t_noinc *
