@@ -141,7 +141,12 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PdfSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf->set_size (23, 42);
+	SKIP: {
+		skip 'new stuff', 0
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
+		$surf->set_size (23, 42);
+	}
 
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::ImageSurface');
@@ -167,11 +172,16 @@ SKIP: {
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
-	$surf->set_size (23, 42);
+	SKIP: {
+		skip 'new stuff', 0
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
 
-	$surf->dsc_comment("Bla?");
-	$surf->dsc_begin_setup;
-	$surf->dsc_begin_page_setup;
+		$surf->set_size (23, 42);
+
+		$surf->dsc_comment("Bla?");
+		$surf->dsc_begin_setup;
+		$surf->dsc_begin_page_setup;
+	}
 
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::ImageSurface');

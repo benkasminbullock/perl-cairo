@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2004-2005 by the cairo perl team (see the file README)
+ * Copyright (c) 2004-2006 by the cairo perl team (see the file README)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
@@ -430,7 +430,11 @@ cairo_pdf_surface_create_for_stream (class, SV *func, SV *data, double width_in_
     OUTPUT:
 	RETVAL
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
 void cairo_pdf_surface_set_size (cairo_surface_t *surface, double width_in_points, double height_in_points);
+
+#endif
 
 #endif
 
@@ -472,13 +476,17 @@ cairo_ps_surface_create_for_stream (class, SV *func, SV *data, double width_in_p
     OUTPUT:
 	RETVAL
 
-void cairo_ps_surface_set_size (cairo_surface_t	*surface, double width_in_points, double height_in_points);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+
+void cairo_ps_surface_set_size (cairo_surface_t *surface, double width_in_points, double height_in_points);
 
 void cairo_ps_surface_dsc_comment (cairo_surface_t *surface, const char *comment);
 
 void cairo_ps_surface_dsc_begin_setup (cairo_surface_t *surface);
 
 void cairo_ps_surface_dsc_begin_page_setup (cairo_surface_t *surface);
+
+#endif
 
 #endif
 
