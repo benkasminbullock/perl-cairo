@@ -1,5 +1,12 @@
 2006-08-11	tsch
 
+	* examples/png-streams.pl: New example that demonstrates how to
+	use the PNG stream functions.
+
+	* t/CairoSurface.t: Whitespace fix.
+
+2006-08-11	tsch
+
 	* CairoSurface.xs: Patch from Yaakov S puts version guards around
 	a few PDF and PS functions that appeared in 1.2.0.
 

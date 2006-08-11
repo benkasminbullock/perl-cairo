@@ -110,7 +110,7 @@ SKIP: {
 		my ($closure, $length) = @_;
 		my $buffer;
 
-		if ($length != sysread($fh, $buffer, $length)) {
+		if ($length != sysread ($fh, $buffer, $length)) {
 			die 'no-memory';
 		}
 
