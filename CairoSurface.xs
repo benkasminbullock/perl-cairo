@@ -227,10 +227,8 @@ read_func_marshaller (void *closure,
 	if (SvTRUE (ERRSV)) {
 		status = SvCairoStatus (ERRSV);
 	} else {
-		STRLEN n_a;
-		char *retval;
-		retval = POPpx;
-		memcpy (data, retval, n_a);
+		SV *retval = POPs;
+		memcpy (data, SvPV_nolen (retval), sv_len (retval));
 	}
 
 	PUTBACK;

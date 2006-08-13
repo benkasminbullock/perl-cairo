@@ -1,3 +1,9 @@
+2006-08-13	tsch
+
+	* CairoSurface.xs (read_func_marshaller): Use POPs, SvPV, and
+	sv_len instead of POPpx to avoid problems on perl 5.8.8 reported
+	by Joe Smith and Alexey Tourbin.
+
 2006-08-11	tsch
 
 	* examples/png-streams.pl: New example that demonstrates how to
