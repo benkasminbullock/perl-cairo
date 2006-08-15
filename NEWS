@@ -1,3 +1,11 @@
+Overview of changes in Cairo 0.92
+=================================
+
+* Fix compilation and tests with cairo 1.0.x when the PDF and/or PS backend are
+  enabled.  [Yaakov S]
+* Fix a problem in the PNG stream stuff that occured with perl 5.8.8.
+* Add an example that demonstrates the PNG stream stuff.
+
 Overview of changes in Cairo 0.91
 =================================
 
