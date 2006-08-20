@@ -246,13 +246,15 @@ EOS
 		my $mangled = mangle ($type);
 		my $name = name ($type);
 
+		next unless @{$enums{$type}};
+
 		if (exists $enum_guards{$type}) {
 			print HEADER "#ifdef $enum_guards{$type}\n";
 		}
 
 		print HEADER <<"EOS";
-$type cairo_${name}_from_sv (SV * $name);
-SV * cairo_${name}_to_sv ($type val);
+int cairo_${name}_from_sv (SV * $name);
+SV * cairo_${name}_to_sv (int val);
 #define Sv$mangled(sv)		(cairo_${name}_from_sv (sv))
 #define newSV$mangled(val)	(cairo_${name}_to_sv (val))
 EOS
@@ -355,27 +357,7 @@ EOS
 		my $name = name($type);
 		my @enum_values = @{$enums{$type}};
 
-		# Create stub converters to make xsubpp happy even if the
-		# current cairo doesn't have this type
-		unless (@enum_values) {
-			print ENUMS <<"EOS";
-int
-cairo_${name}_from_sv (SV * $name)
-{
-	return 0;
-}
-
-SV *
-cairo_${name}_to_sv (int val)
-{
-	return &PL_sv_undef;
-}
-
-EOS
-
-			# Skip to next enum value
-			next;
-		}
+		next unless @enum_values;
 
 		my $value_list = join ", ", map { canonicalize($type, $enum_values[0]) } @enum_values[1..$#enum_values];
 		my $tree_from = if_tree_from (@enum_values);
@@ -386,7 +368,7 @@ EOS
 		}
 
 		print ENUMS <<"EOS";
-$type
+int
 cairo_${name}_from_sv (SV * $name)
 {
 	char * str = SvPV_nolen ($name);
@@ -398,7 +380,7 @@ cairo_${name}_from_sv (SV * $name)
 }
 
 SV *
-cairo_${name}_to_sv ($type val)
+cairo_${name}_to_sv (int val)
 {
 	$tree_to
 	warn ("unknown $type value %d encountered", val);
