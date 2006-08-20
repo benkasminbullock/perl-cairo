@@ -1,3 +1,10 @@
+2006-08-20	tsch
+
+	* MakeHelper.pm: Add the infrastructure necessary to support
+	protecting the enum related things with #ifdef, if needed.  Also
+	use the real enum types for the enum converters, instead of just
+	int.
+
 2006-08-15	tsch
 
 	* Cairo.pm, MANIFEST, NEWS, README: Beta release 0.92.

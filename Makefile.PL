@@ -53,7 +53,7 @@ $MakeHelper::autogen_dir = $autogen_dir;
 
 my %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}");
 
-my %backend_macros = (
+my %backend_guards = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
 	'cairo_ps_surface_t'  => 'CAIRO_HAS_PS_SURFACE',
 	'cairo_svg_surface_t' => 'CAIRO_HAS_SVG_SURFACE',
@@ -268,7 +268,11 @@ if ($have_cairo_1_2) {
 	$enums{cairo_svg_version_t} = [];
 }
 
-MakeHelper::do_enums (\%enums);
+my %enum_guards = (
+	cairo_svg_version_t => $backend_guards{cairo_svg_surface_t},
+);
+
+MakeHelper::do_enums (\%enums, \%enum_guards);
 
 my @xs_files = <*.xs>;
 
@@ -278,7 +282,7 @@ MakeHelper::write_boot (
 );
 
 my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums,
-                                        \%backend_macros);
+                                        \%backend_guards, \%enum_guards);
 push @typemaps, 'cairo-perl.typemap';
 
 my $dep = ExtUtils::Depends->new ('Cairo');
