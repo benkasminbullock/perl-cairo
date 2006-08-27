@@ -1,3 +1,7 @@
+2006-08-27	tsch
+
+	* Makefile.PL: Make EU::MM export our symbols on Win32.
+
 2006-08-20	tsch
 
 	* MakeHelper.pm: Revert the last commit which used real enum types
