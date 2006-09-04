@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '0.92';
+our $VERSION = '1.00';
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
@@ -58,6 +58,9 @@ supports multiple output targets, including PNG, PDF and SVG.  Cairo produces
 identical output on all those targets.
 
 =head1 API DOCUMENTATION
+
+Note that this listing still lacks entries for I<Cairo::Surface>s and some
+utility methods.
 
 =head2 Drawing
 

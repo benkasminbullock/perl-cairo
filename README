@@ -1,9 +1,10 @@
-Cairo version 0.92
+Cairo version 1.00
 ==================
 
 Perl bindings to the cairo graphics library (http://www.cairographics.org).
 
 INSTALLATION
+------------
 
 To install this module type the following:
 
@@ -34,6 +35,7 @@ ways:
     use lib '/some/other/place/lib/perl5/site_perl';
 
 DEPENDENCIES
+------------
 
 This module requires these other modules and libraries:
 
@@ -44,7 +46,14 @@ In order to build it from source, you'll also need
   ExtUtils::PkgConfig (perl module)
   ExtUtils::Depends (perl module)
 
+BUG REPORTS
+-----------
+
+Please report bugs to the gnome-perl product in GNOME's Bugzilla:
+<http://bugzilla.gnome.org/enter_bug.cgi?product=gnome-perl>
+
 COPYRIGHT AND LICENSE
+---------------------
 
 Copyright (C) 2004-2006 by the cairo perl team
 

@@ -1,3 +1,9 @@
+Overview of changes in Cairo 1.00
+=================================
+
+* Improve compilation compatibility with cairo 1.0.x.
+* Export public symbols on win32.
+
 Overview of changes in Cairo 0.92
 =================================
 
