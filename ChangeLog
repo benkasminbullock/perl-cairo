@@ -1,5 +1,9 @@
 2006-09-24	tsch
 
+	* Cairo.pm, NEWS: Stable release 1.01.
+
+2006-09-24	tsch
+
 	* t/CairoSurface.t: Skip the create_for_stream test for ps and pdf
 	surfaces if cairo < 1.2.0.  Earlier versions didn't handle errors
 	correctly and thus caused too many tests.  Also partly revert the
