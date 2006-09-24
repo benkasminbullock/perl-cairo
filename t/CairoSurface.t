@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 58;
+use Test::More tests => 60;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -134,7 +134,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 7
+	skip 'pdf surface', 8
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -151,20 +151,34 @@ SKIP: {
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
 
+	# create_similar actually returns an image surface at the moment, but
+	# the compatibility layer has no way of knowing this and thus turns it
+	# into a pdf surface.
+	if (Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0)) {
+		isa_ok ($surf, 'Cairo::ImageSurface');
+	} else {
+		isa_ok ($surf, 'Cairo::PdfSurface');
+	}
+
 	unlink 'tmp.pdf';
 
-	$surf = Cairo::PdfSurface->create_for_stream (sub {
-		my ($closure, $data) = @_;
-		is ($closure, 'blub');
-		like ($data, qr/PDF/);
-		die 'write-error';
-	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::PdfSurface');
-	isa_ok ($surf, 'Cairo::Surface');
+	SKIP: {
+		skip 'create_for_stream on pdf surfaces', 4
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
+		$surf = Cairo::PdfSurface->create_for_stream (sub {
+			my ($closure, $data) = @_;
+			is ($closure, 'blub');
+			like ($data, qr/PDF/);
+			die 'write-error';
+		}, 'blub', IMG_WIDTH, IMG_HEIGHT);
+		isa_ok ($surf, 'Cairo::PdfSurface');
+		isa_ok ($surf, 'Cairo::Surface');
+	}
 }
 
 SKIP: {
-	skip 'ps surface', 7
+	skip 'ps surface', 8
 		unless Cairo::HAS_PS_SURFACE;
 
 	my $surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
@@ -185,16 +199,31 @@ SKIP: {
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
 
+	# create_similar actually returns an image surface at the moment, but
+	# the compatibility layer has no way of knowing this and thus turns it
+	# into a ps surface.
+	if (Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0)) {
+		isa_ok ($surf, 'Cairo::ImageSurface');
+	} else {
+		isa_ok ($surf, 'Cairo::PsSurface');
+	}
+
 	unlink 'tmp.ps';
 
-	$surf = Cairo::PsSurface->create_for_stream (sub {
-		my ($closure, $data) = @_;
-		is ($closure, 'blub');
-		like ($data, qr/PS/);
-		die 'write-error';
-	}, 'blub', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::PsSurface');
-	isa_ok ($surf, 'Cairo::Surface');
+
+	SKIP: {
+		skip 'create_for_stream on ps surfaces', 4
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
+		$surf = Cairo::PsSurface->create_for_stream (sub {
+			my ($closure, $data) = @_;
+			is ($closure, 'blub');
+			like ($data, qr/PS/);
+			die 'write-error';
+		}, 'blub', IMG_WIDTH, IMG_HEIGHT);
+		isa_ok ($surf, 'Cairo::PsSurface');
+		isa_ok ($surf, 'Cairo::Surface');
+	}
 }
 
 SKIP: {

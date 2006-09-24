@@ -1,5 +1,13 @@
 2006-09-24	tsch
 
+	* t/CairoSurface.t: Skip the create_for_stream test for ps and pdf
+	surfaces if cairo < 1.2.0.  Earlier versions didn't handle errors
+	correctly and thus caused too many tests.  Also partly revert the
+	previous change and instead do a conditional type check on
+	surfaces create with create_similar.
+
+2006-09-24	tsch
+
 	* t/CairoSurface.t: Don't check the specific type of similar
 	surfaces created from PS and PDF surfaces; it's not reliable.
 
