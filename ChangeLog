@@ -1,3 +1,10 @@
+2006-09-24	tsch
+
+	* t/CairoSurface.t: Don't check the specific type of similar
+	surfaces created from PS and PDF surfaces; it's not reliable.
+
+	* xs/CairoSurface.xs: Cosmetical changes.
+
 2006-09-04	tsch
 
 	* Cairo.pm, NEWS, README: Stable release 1.00.

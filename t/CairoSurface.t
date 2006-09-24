@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 60;
+use Test::More tests => 58;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -134,7 +134,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 8
+	skip 'pdf surface', 7
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -149,7 +149,6 @@ SKIP: {
 	}
 
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.pdf';
@@ -165,7 +164,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'ps surface', 8
+	skip 'ps surface', 7
 		unless Cairo::HAS_PS_SURFACE;
 
 	my $surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
@@ -184,7 +183,6 @@ SKIP: {
 	}
 
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
-	isa_ok ($surf, 'Cairo::ImageSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.ps';
