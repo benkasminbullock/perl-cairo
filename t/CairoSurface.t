@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 60;
+use Test::More tests => 62;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -49,6 +49,15 @@ SKIP: {
 $surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
+
+# Test that the enum wrappers differentiate between color and color-alpha.
+# Duh!
+{
+	my $tmp = $surf->create_similar ('color-alpha', IMG_WIDTH, IMG_HEIGHT);
+	is ($tmp->get_content, 'color-alpha');
+	$tmp = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+	is ($tmp->get_content, 'color');
+}
 
 $surf->set_device_offset (23, 42);
 

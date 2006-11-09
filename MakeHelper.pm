@@ -306,7 +306,10 @@ sub do_enums
 
 		my $full = shift @enums;
 		my $name = canonicalize($full, $prefix);
-		my $len = length ($name);
+
+		# +1 so that strncmp also looks at the trailing \0, and discerns
+		# 'color' and 'color-alpha', for example.
+		my $len = length ($name) + 1;
 
 		my $str = <<"EOS";
 	if (strncmp (str, "$name", $len) == 0)
