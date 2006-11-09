@@ -1,5 +1,22 @@
 2006-11-09	tsch
 
+	* Cairo.xs, cairo-perl-private.h: Export cairo_perl_alloc_temp
+	privately.
+
+	* Cairo.xs: Remove the DOUBLES_ macros and inline them.  They were
+	used only in one place.
+
+	* Cairo.xs, t/Cairo.t: Wrap cairo_get_dash.
+
+	* CairoPattern.xs, cairo-perl-private.h, t/CairoPattern.t: Wrap
+	cairo_pattern_get_rgba, cairo_pattern_get_surface,
+	cairo_pattern_get_color_stop_rgba, cairo_pattern_get_points, and
+	cairo_pattern_get_circles.
+
+	* Makefile.PL: Support new cairo_status_t values.
+
+2006-11-09	tsch
+
 	* Cairo.pm, NEWS, README: Stable release 1.02.
 
 2006-11-09	tsch

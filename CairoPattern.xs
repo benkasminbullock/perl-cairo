@@ -108,6 +108,24 @@ cairo_pattern_t_noinc * cairo_pattern_create_rgba (class, double red, double gre
 	cairo_perl_package_table_insert (RETVAL, "Cairo::SolidPattern");
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_pattern_get_rgba (cairo_pattern_t *pattern, double *red, double *green, double *blue, double *alpha);
+void cairo_pattern_get_rgba (cairo_pattern_t *pattern)
+    PREINIT:
+	cairo_status_t status;
+	double red, green, blue, alpha;
+    PPCODE:
+	status = cairo_pattern_get_rgba (pattern, &red, &green, &blue, &alpha);
+	CAIRO_PERL_CHECK_STATUS (status);
+	EXTEND (sp, 4);
+	PUSHs (sv_2mortal (newSVnv (red)));
+	PUSHs (sv_2mortal (newSVnv (green)));
+	PUSHs (sv_2mortal (newSVnv (blue)));
+	PUSHs (sv_2mortal (newSVnv (alpha)));
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::SurfacePattern	PREFIX = cairo_pattern_
@@ -132,6 +150,20 @@ void cairo_pattern_set_filter (cairo_pattern_t * pattern, cairo_filter_t filter)
 
 cairo_filter_t cairo_pattern_get_filter (cairo_pattern_t * pattern);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_pattern_get_surface (cairo_pattern_t *pattern, cairo_surface_t **surface);
+cairo_surface_t * cairo_pattern_get_surface (cairo_pattern_t *pattern)
+    PREINIT:
+	cairo_status_t status;
+    CODE:
+	status = cairo_pattern_get_surface (pattern, &RETVAL);
+	CAIRO_PERL_CHECK_STATUS (status);
+    OUTPUT:
+	RETVAL
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::Gradient	PREFIX = cairo_pattern_
@@ -142,6 +174,34 @@ BOOT:
 void cairo_pattern_add_color_stop_rgb (cairo_pattern_t *pattern, double offset, double red, double green, double blue);
 
 void cairo_pattern_add_color_stop_rgba (cairo_pattern_t *pattern, double offset, double red, double green, double blue, double alpha);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_pattern_get_color_stop_count (cairo_pattern_t *pattern, int *count);
+## cairo_status_t cairo_pattern_get_color_stop_rgba (cairo_pattern_t *pattern, int index, double *offset, double *red, double *green, double *blue, double *alpha);
+void cairo_pattern_get_color_stops (cairo_pattern_t *pattern)
+    PREINIT:
+	cairo_status_t status;
+	int count, i;
+	double offset, red, green, blue, alpha;
+    PPCODE:
+	status = cairo_pattern_get_color_stop_count (pattern, &count);
+	CAIRO_PERL_CHECK_STATUS (status);
+	EXTEND (sp, count);
+	for (i = 0; i < count; i++) {
+		AV *av;
+		status = cairo_pattern_get_color_stop_rgba (pattern, i, &offset, &red, &green, &blue, &alpha);
+		CAIRO_PERL_CHECK_STATUS (status);
+		av = newAV ();
+		av_push (av, newSVnv (offset));
+		av_push (av, newSVnv (red));
+		av_push (av, newSVnv (green));
+		av_push (av, newSVnv (blue));
+		av_push (av, newSVnv (alpha));
+		PUSHs (sv_2mortal (newRV_noinc ((SV *) av)));
+	}
+
+#endif
 
 # --------------------------------------------------------------------------- #
 
@@ -159,6 +219,24 @@ cairo_pattern_t_noinc * create (class, double x0, double y0, double x1, double y
     OUTPUT:
 	RETVAL
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_pattern_get_linear_points (cairo_pattern_t *pattern, double *x0, double *y0, double *x1, double *y1);
+void cairo_pattern_get_points (cairo_pattern_t *pattern)
+    PREINIT:
+	cairo_status_t status;
+	double x0, y0, x1, y1;
+    PPCODE:
+	status = cairo_pattern_get_linear_points (pattern, &x0, &y0, &x1, &y1);
+	CAIRO_PERL_CHECK_STATUS (status);
+	EXTEND (sp, 4);
+	PUSHs (sv_2mortal (newSVnv (x0)));
+	PUSHs (sv_2mortal (newSVnv (y0)));
+	PUSHs (sv_2mortal (newSVnv (x1)));
+	PUSHs (sv_2mortal (newSVnv (y1)));
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Pattern	PACKAGE = Cairo::RadialGradient	PREFIX = cairo_pattern_
@@ -174,3 +252,23 @@ cairo_pattern_t_noinc * create (class, double cx0, double cy0, double radius0, d
 #endif
     OUTPUT:
 	RETVAL
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_pattern_get_radial_circles (cairo_pattern_t *pattern, double *x0, double *y0, double *r0, double *x1, double *y1, double *r1)
+void cairo_pattern_get_circles (cairo_pattern_t *pattern)
+    PREINIT:
+	cairo_status_t status;
+	double x0, y0, r0, x1, y1, r1;
+    PPCODE:
+	status = cairo_pattern_get_radial_circles (pattern, &x0, &y0, &r0, &x1, &y1, &r1);
+	CAIRO_PERL_CHECK_STATUS (status);
+	EXTEND (sp, 6);
+	PUSHs (sv_2mortal (newSVnv (x0)));
+	PUSHs (sv_2mortal (newSVnv (y0)));
+	PUSHs (sv_2mortal (newSVnv (r0)));
+	PUSHs (sv_2mortal (newSVnv (x1)));
+	PUSHs (sv_2mortal (newSVnv (y1)));
+	PUSHs (sv_2mortal (newSVnv (r1)));
+
+#endif

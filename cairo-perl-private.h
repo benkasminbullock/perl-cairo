@@ -10,6 +10,8 @@
 #ifndef _CAIRO_PERL_PRIVATE_H_
 #define _CAIRO_PERL_PRIVATE_H_
 
+void * cairo_perl_alloc_temp (int nbytes);
+
 void cairo_perl_set_isa (const char * child_package, const char * parent_package);
 
 cairo_matrix_t * cairo_perl_copy_matrix (cairo_matrix_t *matrix);
@@ -21,5 +23,12 @@ void cairo_perl_package_table_insert (void *pointer, const char *package);
 const char * cairo_perl_package_table_lookup (void *pointer);
 
 #endif
+
+#define CAIRO_PERL_CHECK_STATUS(status)				\
+	if (CAIRO_STATUS_SUCCESS != status) {			\
+		SV *errsv = get_sv ("@", TRUE);			\
+		sv_setsv (errsv, newSVCairoStatus (status));	\
+		croak (Nullch);					\
+	}
 
 #endif /* _CAIRO_PERL_PRIVATE_H_ */

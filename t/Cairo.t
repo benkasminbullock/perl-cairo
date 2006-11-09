@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 56;
+use Test::More tests => 60;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -77,6 +77,22 @@ $cr->set_line_join ('miter');
 is ($cr->get_line_join, 'miter');
 
 $cr->set_dash (0, 2, 4, 6, 4, 2);
+$cr->set_dash (0);
+
+SKIP: {
+	skip 'new stuff', 4
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 5); # FIXME: 1.4
+
+	$cr->set_dash (0.5, 2.3, 4.5, 6.7, 4.5, 2.3);
+	my ($offset, @dashes) = $cr->get_dash;
+	is ($offset, 0.5);
+	is_deeply (\@dashes, [2.3, 4.5, 6.7, 4.5, 2.3]);
+
+	$cr->set_dash (0);
+	($offset, @dashes) = $cr->get_dash;
+	is ($offset, 0);
+	is_deeply (\@dashes, []);
+}
 
 $cr->set_miter_limit (2.2);
 is ($cr->get_miter_limit, 2.2);

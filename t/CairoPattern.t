@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 17;
+use Test::More tests => 25;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -60,5 +60,33 @@ SKIP: {
 	skip 'new stuff', 1
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
 
+	my $pat = Cairo::RadialGradient->create (1, 2, 3, 4, 5, 6);
 	is ($pat->get_type, 'radial');
+}
+
+SKIP: {
+	skip 'new stuff', 8,
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 5); # FIXME: 1.4
+
+	my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
+	my ($r, $g, $b, $a) = $pat->get_rgba;
+	is ($r, 1.0);
+	is ($g, 0.0);
+	is ($b, 0.0);
+	is ($a, 1.0);
+
+	my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
+	$pat = Cairo::SurfacePattern->create ($surf);
+	isa_ok ($pat->get_surface, 'Cairo::ImageSurface');
+
+	$pat = Cairo::LinearGradient->create (1, 2, 3, 4);
+	$pat->add_color_stop_rgba (0.25, 1, 0, 1, 0);
+	$pat->add_color_stop_rgba (0.75, 0, 1, 0, 1);
+	is_deeply ([$pat->get_color_stops], [[0.25, 1, 0, 1, 0], [0.75, 0, 1, 0, 1]]);
+
+	$pat = Cairo::LinearGradient->create (1.5, 2.5, 3.5, 4.5);
+	is_deeply ([$pat->get_points], [1.5, 2.5, 3.5, 4.5]);
+
+	$pat = Cairo::RadialGradient->create (1.5, 2.5, 3.5, 4.5, 5.5, 6.5);
+	is_deeply ([$pat->get_circles], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]);
 }

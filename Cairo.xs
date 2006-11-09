@@ -29,23 +29,6 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 
 /* ------------------------------------------------------------------------- */
 
-#define DOUBLES_DECLARE	\
-	int i, n; double * pts;
-#define DOUBLES_SLURP_FROM_STACK(first)				\
-	n = (items - first);					\
-	pts = (double*)malloc (sizeof (double) * n);		\
-	if (!pts)						\
-		croak ("malloc failure for (%d) elements", n);	\
-	for (i = first ; i < items ; i++) {			\
-		pts[i-first] = SvIV (ST (i));			\
-	}
-#define DOUBLES_LEN	n
-#define DOUBLES_ARRAY	pts
-#define DOUBLES_CLEANUP	\
-	free (pts);
-
-/* ------------------------------------------------------------------------- */
-
 /* Copied from Glib/GType.xs. */
 void
 cairo_perl_set_isa (const char *child_package,
@@ -169,8 +152,8 @@ newSVCairoTextExtents (cairo_text_extents_t * extents)
 /* ------------------------------------------------------------------------- */
 
 /* taken from Glib/Glib.xs */
-static void *
-alloc_temp (int nbytes)
+void *
+cairo_perl_alloc_temp (int nbytes)
 {
 	dTHR;
 	SV * s;
@@ -217,7 +200,7 @@ SvCairoGlyph (SV * sv)
 		croak ("cairo_glyph_t must be a hash reference");
 
 	hv = (HV *) SvRV (sv);
-	glyph = alloc_temp (sizeof (cairo_glyph_t));
+	glyph = cairo_perl_alloc_temp (sizeof (cairo_glyph_t));
 
 	value = hv_fetch (hv, "index", 5, 0);
 	if (value && SvOK (*value))
@@ -328,14 +311,27 @@ void cairo_set_line_cap (cairo_t * cr, cairo_line_cap_t line_cap);
 void cairo_set_line_join (cairo_t * cr, cairo_line_join_t line_join);
 
 ##void cairo_set_dash (cairo_t * cr, double * dashes, int ndash, double offset);
-void cairo_set_dash (cairo_t * cr, double offset, dash1, ...)
+void cairo_set_dash (cairo_t * cr, double offset, ...)
     PREINIT:
-	DOUBLES_DECLARE
+	int i, n;
+	double *pts;
     CODE:
-	DOUBLES_SLURP_FROM_STACK (2)
-	cairo_set_dash (cr, DOUBLES_ARRAY, DOUBLES_LEN, offset);
+#define FIRST 2
+	n = (items - FIRST);
+	if (n == 0) {
+		pts = NULL;
+	} else {
+		pts = malloc (sizeof (double) * n);
+		if (!pts)
+			croak ("malloc failure for (%d) elements", n);
+		for (i = FIRST ; i < items ; i++)
+			pts[i - FIRST] = SvNV (ST (i));
+	}
+#undef FIRST
+	cairo_set_dash (cr, pts, n, offset);
     CLEANUP:
-	DOUBLES_CLEANUP
+	if (pts)
+		free (pts);
 
 void cairo_set_miter_limit (cairo_t * cr, double limit);
 
@@ -543,6 +539,35 @@ cairo_line_cap_t cairo_get_line_cap (cairo_t *cr);
 cairo_line_join_t cairo_get_line_join (cairo_t *cr);
 
 double cairo_get_miter_limit (cairo_t *cr);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+## cairo_status_t cairo_get_dash_count (cairo_t *cr, int *count);
+## cairo_status_t cairo_get_dash (cairo_t *cr, double *dashes, double *offset);
+void cairo_get_dash (cairo_t *cr)
+    PREINIT:
+	cairo_status_t status;
+	int count, i;
+	double *dashes, offset;
+    PPCODE:
+	status = cairo_get_dash_count (cr, &count);
+	CAIRO_PERL_CHECK_STATUS (status);
+	if (count == 0) {
+		dashes = NULL;
+	} else {
+		dashes = malloc (sizeof (double) * count);
+		if (!dashes)
+			croak ("malloc failure for (%d) elements", count);
+	}
+	status = cairo_get_dash (cr, dashes, &offset);
+	CAIRO_PERL_CHECK_STATUS (status);
+	EXTEND (sp, count + 1);
+	PUSHs (sv_2mortal (newSVnv (offset)));
+	for (i = 0; i < count; i++)
+		PUSHs (sv_2mortal (newSVnv (dashes[i])));
+	free (dashes);
+
+#endif
 
 ##void cairo_get_matrix (cairo_t *cr, cairo_matrix_t *matrix);
 cairo_matrix_t * cairo_get_matrix (cairo_t *cr)
