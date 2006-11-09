@@ -1,3 +1,9 @@
+Overview of changes in Cairo 1.02
+=================================
+
+* Fix a bug that caused the content type value 'content-alpha' to be
+  interpreted as just 'content'.
+
 Overview of changes in Cairo 1.01
 =================================
 

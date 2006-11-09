@@ -1,5 +1,9 @@
 2006-11-09	tsch
 
+	* Cairo.pm, NEWS, README: Stable release 1.01.
+
+2006-11-09	tsch
+
 	* MakeHelper.pm, CairoSurface.t: When comparing enum values, look
 	at length+1, not just length, bytes to discern string pairs like
 	'color' and 'color-alpha'.  Duh!  Many thanks to Martijn van Beers
