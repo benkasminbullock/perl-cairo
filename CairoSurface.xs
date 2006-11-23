@@ -343,9 +343,12 @@ SV *
 cairo_image_surface_get_data (cairo_surface_t *surface)
     PREINIT:
 	unsigned char *data;
+	int height, stride;
     CODE:
 	data = cairo_image_surface_get_data (surface);
-	RETVAL = data ? newSVpv ((char *) data, 0) : &PL_sv_undef;
+	height = cairo_image_surface_get_height (surface);
+	stride = cairo_image_surface_get_stride (surface);
+	RETVAL = data ? newSVpv ((char *) data, height * stride) : &PL_sv_undef;
     OUTPUT:
 	RETVAL
 

@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 62;
+use Test::More tests => 64;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -33,17 +33,29 @@ SKIP: {
 is ($surf->get_width, IMG_WIDTH);
 is ($surf->get_height, IMG_HEIGHT);
 
-$surf = Cairo::ImageSurface->create_for_data ('Urgs!', 'rgb24',
-                                              IMG_WIDTH, IMG_HEIGHT, 23);
-isa_ok ($surf, 'Cairo::ImageSurface');
-isa_ok ($surf, 'Cairo::Surface');
+{
+	my $data = pack ('CCCC', 0, 0, 0, 0);
+	my $surf = Cairo::ImageSurface->create_for_data (
+	             $data, 'argb32', 1, 1, 4);
+	isa_ok ($surf, 'Cairo::ImageSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 
-SKIP: {
-	skip 'new stuff', 2
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+	SKIP: {
+		skip 'new stuff', 4
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
 
-	is ($surf->get_data, 'Urgs!');
-	is ($surf->get_stride, 23);
+		is ($surf->get_data, $data);
+		is ($surf->get_stride, 4);
+
+		# Change the image data and make sure $data gets updated accordingly.
+		my $cr = Cairo::Context->create ($surf);
+		$cr->set_source_rgba (1.0, 0, 0, 1.0);
+		$cr->rectangle (0, 0, 1, 1);
+		$cr->fill;
+
+		is ($surf->get_data, $data);
+		is ($surf->get_data, pack ('CCCC', 0, 0, 255, 255));
+	}
 }
 
 $surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
@@ -51,8 +63,10 @@ isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
 
 # Test that the enum wrappers differentiate between color and color-alpha.
-# Duh!
-{
+SKIP: {
+	skip 'content tests', 2
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
 	my $tmp = $surf->create_similar ('color-alpha', IMG_WIDTH, IMG_HEIGHT);
 	is ($tmp->get_content, 'color-alpha');
 	$tmp = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);

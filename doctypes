@@ -1,0 +1,2 @@
+cairo_t			Cairo::Context
+cairo_font_options_t	Cairo::FontOptions

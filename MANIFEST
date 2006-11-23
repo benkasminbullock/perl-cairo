@@ -17,6 +17,7 @@ TODO
 cairo-perl-private.h
 cairo-perl.h
 cairo-perl.typemap
+doctypes
 examples/png-streams.pl
 examples/png/README
 examples/png/bevels.pl

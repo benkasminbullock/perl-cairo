@@ -313,6 +313,7 @@ $dep->add_typemaps (@typemaps);
 
 $dep->install (qw(cairo-perl.h
                   cairo-perl.typemap
+                  doctypes
                   build/cairo-perl-auto.h
                   build/cairo-perl-auto.typemap));
 $dep->save_config ('build/IFiles.pm');

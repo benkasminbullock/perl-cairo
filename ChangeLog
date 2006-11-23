@@ -1,3 +1,13 @@
+2006-11-23	tsch
+
+	* CairoSurface.xs, t/CairoSurface.t: Make
+	Cairo::ImageSurface::get_data usable by specifying the buffer
+	length.
+
+	* MANIFEST, Makefile.PL, doctypes: Describe our types.
+
+	* NEWS: Merge from stable-1-0.
+
 2006-11-09	tsch
 
 	* Cairo.xs, cairo-perl-private.h: Export cairo_perl_alloc_temp
