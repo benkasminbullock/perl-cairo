@@ -1,3 +1,13 @@
+Overview of changes in Cairo 1.030
+==================================
+
+* Add support for new API:
+  - cairo_get_dash, cairo_copy_clip_rectangles, and cairo_clip_extents.
+  - cairo_pattern_get_rgba, cairo_pattern_get_surface,
+    cairo_pattern_get_color_stop_rgba, cairo_pattern_get_points, and
+    cairo_pattern_get_circles.
+* Make Cairo::ImageSurface::get_data usable.
+
 Overview of changes in Cairo 1.021
 ==================================
 

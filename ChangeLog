@@ -1,5 +1,9 @@
 2006-12-28	tsch
 
+	* Cairo.pm, NEWS, README: Unstable release 1.030.
+
+2006-12-28	tsch
+
 	* Cairo.xs, cairo-perl.h, t/Cairo.t: Wrap and test
 	cairo_copy_clip_rectangles and cairo_clip_extents.
 
