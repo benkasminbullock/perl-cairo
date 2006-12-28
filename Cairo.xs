@@ -87,7 +87,7 @@ cairo_struct_to_sv (void *object, const char *package)
 /* ------------------------------------------------------------------------- */
 
 SV *
-newSVCairoFontExtents (cairo_font_extents_t * extents)
+newSVCairoFontExtents (cairo_font_extents_t *extents)
 {
 	HV *hv;
 	double value;
@@ -118,7 +118,7 @@ newSVCairoFontExtents (cairo_font_extents_t * extents)
 /* ------------------------------------------------------------------------- */
 
 SV *
-newSVCairoTextExtents (cairo_text_extents_t * extents)
+newSVCairoTextExtents (cairo_text_extents_t *extents)
 {
 	HV *hv;
 	double value;
@@ -166,7 +166,7 @@ cairo_perl_alloc_temp (int nbytes)
 }
 
 SV *
-newSVCairoGlyph (cairo_glyph_t * glyph)
+newSVCairoGlyph (cairo_glyph_t *glyph)
 {
 	HV *hv;
 	unsigned long index;
@@ -190,7 +190,7 @@ newSVCairoGlyph (cairo_glyph_t * glyph)
 }
 
 cairo_glyph_t *
-SvCairoGlyph (SV * sv)
+SvCairoGlyph (SV *sv)
 {
 	HV *hv;
 	SV **value;
@@ -216,6 +216,30 @@ SvCairoGlyph (SV * sv)
 
 	return glyph;
 }
+
+/* ------------------------------------------------------------------------- */
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+SV *
+newSVCairoRectangle (cairo_rectangle_t *rectangle)
+{
+	HV *hv;
+
+	if (!rectangle)
+		return &PL_sv_undef;
+
+	hv = newHV ();
+
+	hv_store (hv, "x", 1, newSVnv (rectangle->x), 0);
+	hv_store (hv, "y", 1, newSVnv (rectangle->y), 0);
+	hv_store (hv, "width", 5, newSVnv (rectangle->width), 0);
+	hv_store (hv, "height", 6, newSVnv (rectangle->height), 0);
+
+	return newRV_noinc ((SV *) hv);
+}
+
+#endif
 
 /* ------------------------------------------------------------------------- */
 
@@ -414,6 +438,25 @@ void cairo_fill_extents (cairo_t * cr, OUTLIST double x1, OUTLIST double y1, OUT
 void cairo_clip (cairo_t * cr);
 
 void cairo_clip_preserve (cairo_t *cr);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+##cairo_rectangle_list_t * cairo_copy_clip_rectangles (cairo_t *cr);
+void cairo_copy_clip_rectangles (cairo_t *cr)
+    PREINIT:
+	cairo_rectangle_list_t *list;
+	int i;
+    PPCODE:
+	list = cairo_copy_clip_rectangles (cr);
+	CAIRO_PERL_CHECK_STATUS (list->status);
+	EXTEND (sp, list->num_rectangles);
+	for (i = 0; i < list->num_rectangles; i++)
+		PUSHs (sv_2mortal (newSVCairoRectangle (&(list->rectangles[i]))));
+	cairo_rectangle_list_destroy (list);
+
+void cairo_clip_extents (cairo_t *cr, OUTLIST double x1, OUTLIST double y1, OUTLIST double x2, OUTLIST double y2);
+
+#endif
 
 void cairo_reset_clip (cairo_t *cr);
 

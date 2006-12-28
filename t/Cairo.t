@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 60;
+use Test::More tests => 67;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -158,6 +158,26 @@ is (@ext, 4);
 $cr->clip;
 $cr->clip_preserve;
 $cr->reset_clip;
+
+SKIP: {
+	skip 'new stuff', 7
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 3, 0); # FIXME: 1.4
+
+	$cr->rectangle (0, 0, 128, 128);
+	$cr->clip;
+
+	my @extents = $cr->clip_extents;
+	is (@extents, 4);
+	is ($extents[0], 0);
+	is ($extents[1], 0);
+	is ($extents[2], 128);
+	is ($extents[3], 128);
+
+	my @list = $cr->copy_clip_rectangles;
+	is (@list, 1);
+	is_deeply ($list[0], { x => 0, y => 0, width => 128, height => 128 });
+}
+
 $cr->select_font_face ('Sans', 'normal', 'normal');
 $cr->set_font_size (12);
 

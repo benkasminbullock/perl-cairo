@@ -46,15 +46,21 @@ SV *cairo_struct_to_sv (void *object, const char *package);
 /*
  * custom struct handling
  */
-SV * newSVCairoFontExtents (cairo_font_extents_t * extents);
+SV * newSVCairoFontExtents (cairo_font_extents_t *extents);
 
-SV * newSVCairoTextExtents (cairo_text_extents_t * extents);
+SV * newSVCairoTextExtents (cairo_text_extents_t *extents);
 
-SV * newSVCairoGlyph (cairo_glyph_t * glyph);
-cairo_glyph_t * SvCairoGlyph (SV * sv);
+SV * newSVCairoGlyph (cairo_glyph_t *glyph);
+cairo_glyph_t * SvCairoGlyph (SV *sv);
 
-SV * newSVCairoPath (cairo_path_t * path);
-cairo_path_t * SvCairoPath (SV * sv);
+SV * newSVCairoPath (cairo_path_t *path);
+cairo_path_t * SvCairoPath (SV *sv);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+
+SV * newSVCairoRectangle (cairo_rectangle_t *rectangle);
+
+#endif
 
 /*
  * special treatment for surfaces
