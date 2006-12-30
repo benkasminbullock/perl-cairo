@@ -362,7 +362,7 @@ EOS
 
 		next unless @enum_values;
 
-		my $value_list = join ", ", map { canonicalize($type, $enum_values[0]) } @enum_values[1..$#enum_values];
+		my $value_list = join ", ", map { canonicalize($_, $enum_values[0]) } @enum_values[1..$#enum_values];
 		my $tree_from = if_tree_from (@enum_values);
 		my $tree_to = if_tree_to (@enum_values);
 
