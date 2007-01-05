@@ -1,3 +1,7 @@
+2007-01-05	tsch
+
+	* t/CairoSurface.t: Fix an endianness problem.
+
 2006-12-30	tsch
 
 	* MakeHelper.pm: Fix the valid-value lists in enum error messages.

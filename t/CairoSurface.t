@@ -9,6 +9,8 @@
 use strict;
 use warnings;
 
+use Config; # for byteorder
+
 use Test::More tests => 64;
 
 use constant {
@@ -54,7 +56,15 @@ is ($surf->get_height, IMG_HEIGHT);
 		$cr->fill;
 
 		is ($surf->get_data, $data);
-		is ($surf->get_data, pack ('CCCC', 0, 0, 255, 255));
+
+		my $bo = $Config{byteorder}+1;
+		if ($bo == 1234) {
+			is ($surf->get_data, pack ('CCCC', 0, 0, 255, 255));
+		} elsif ($bo == 4321) {
+			is ($surf->get_data, pack ('CCCC', 255, 255, 0, 0));
+		} else {
+			ok (1, 'Skipping get_data test; unknown endianness');
+		}
 	}
 }
 
