@@ -441,13 +441,13 @@ void cairo_clip_preserve (cairo_t *cr);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
 
-##cairo_rectangle_list_t * cairo_copy_clip_rectangles (cairo_t *cr);
-void cairo_copy_clip_rectangles (cairo_t *cr)
+##cairo_rectangle_list_t * cairo_copy_clip_rectangle_list (cairo_t *cr);
+void cairo_copy_clip_rectangle_list (cairo_t *cr)
     PREINIT:
 	cairo_rectangle_list_t *list;
 	int i;
     PPCODE:
-	list = cairo_copy_clip_rectangles (cr);
+	list = cairo_copy_clip_rectangle_list (cr);
 	CAIRO_PERL_CHECK_STATUS (list->status);
 	EXTEND (sp, list->num_rectangles);
 	for (i = 0; i < list->num_rectangles; i++)

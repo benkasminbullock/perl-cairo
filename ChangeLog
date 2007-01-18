@@ -1,3 +1,8 @@
+2007-01-18	tsch
+
+	* t/Cairo.t, Cairo.xs: Track upstream API improvement:
+	cairo_copy_clip_rectangles -> cairo_copy_clip_rectangle_list.
+
 2007-01-05	tsch
 
 	* t/CairoSurface.t: Fix an endianness problem.

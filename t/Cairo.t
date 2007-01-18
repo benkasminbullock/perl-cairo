@@ -173,7 +173,7 @@ SKIP: {
 	is ($extents[2], 128);
 	is ($extents[3], 128);
 
-	my @list = $cr->copy_clip_rectangles;
+	my @list = $cr->copy_clip_rectangle_list;
 	is (@list, 1);
 	is_deeply ($list[0], { x => 0, y => 0, width => 128, height => 128 });
 }
