@@ -1,3 +1,10 @@
+Overview of changes in Cairo 1.031
+==================================
+
+* Track upstream API improvements.
+* Fix enum error messages to display the correct list of allowed values.
+* Fix a endianness-related test failure.
+
 Overview of changes in Cairo 1.030
 ==================================
 

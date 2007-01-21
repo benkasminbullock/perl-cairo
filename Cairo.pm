@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '1.030';
+our $VERSION = '1.031';
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
@@ -1064,6 +1064,6 @@ Contains the reference manual
 
 =head1 COPYRIGHT
 
-Copyright (C) 2004-2006 by the cairo perl team
+Copyright (C) 2004-2007 by the cairo perl team
 
 =cut

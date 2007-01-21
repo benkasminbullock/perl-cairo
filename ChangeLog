@@ -1,5 +1,9 @@
 2007-01-21	tsch
 
+	* Cairo.pm, NEWS, README: Unstable release 1.031.
+
+2007-01-21	tsch
+
 	* Cairo.xs: Track upstream API change: cairo_get_dash_count
 	returns the count directly; cairo_get_dash_count and
 	cairo_get_dash don't return a status anymore.
