@@ -1,3 +1,9 @@
+2007-01-21	tsch
+
+	* Cairo.xs: Track upstream API change: cairo_get_dash_count
+	returns the count directly; cairo_get_dash_count and
+	cairo_get_dash don't return a status anymore.
+
 2007-01-18	tsch
 
 	* t/Cairo.t, Cairo.xs: Track upstream API improvement:

@@ -585,16 +585,14 @@ double cairo_get_miter_limit (cairo_t *cr);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
 
-## cairo_status_t cairo_get_dash_count (cairo_t *cr, int *count);
-## cairo_status_t cairo_get_dash (cairo_t *cr, double *dashes, double *offset);
+## int cairo_get_dash_count (cairo_t *cr);
+## void cairo_get_dash (cairo_t *cr, double *dashes, double *offset);
 void cairo_get_dash (cairo_t *cr)
     PREINIT:
-	cairo_status_t status;
 	int count, i;
 	double *dashes, offset;
     PPCODE:
-	status = cairo_get_dash_count (cr, &count);
-	CAIRO_PERL_CHECK_STATUS (status);
+	count = cairo_get_dash_count (cr);
 	if (count == 0) {
 		dashes = NULL;
 	} else {
@@ -602,8 +600,7 @@ void cairo_get_dash (cairo_t *cr)
 		if (!dashes)
 			croak ("malloc failure for (%d) elements", count);
 	}
-	status = cairo_get_dash (cr, dashes, &offset);
-	CAIRO_PERL_CHECK_STATUS (status);
+	cairo_get_dash (cr, dashes, &offset);
 	EXTEND (sp, count + 1);
 	PUSHs (sv_2mortal (newSVnv (offset)));
 	for (i = 0; i < count; i++)
