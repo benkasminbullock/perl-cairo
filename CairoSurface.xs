@@ -257,6 +257,8 @@ cairo_surface_t_noinc * cairo_surface_create_similar (cairo_surface_t * other, c
     }
 #endif
 
+void cairo_surface_finish (cairo_surface_t *surface);
+
 cairo_status_t cairo_surface_status (cairo_surface_t *surface);
 
 void cairo_surface_set_device_offset (cairo_surface_t *surface, double x_offset, double y_offset);

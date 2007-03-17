@@ -492,6 +492,12 @@ void cairo_set_scaled_font (cairo_t *cr, const cairo_scaled_font_t *scaled_font)
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
+
+cairo_scaled_font_t * cairo_get_scaled_font (cairo_t *cr);
+
+#endif
+
 void cairo_show_text (cairo_t * cr, const char * utf8);
 
 ##void cairo_show_glyphs (cairo_t * cr, cairo_glyph_t * glyphs, int num_glyphs);

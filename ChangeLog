@@ -1,3 +1,20 @@
+2007-03-17	tsch
+
+	* Cairo.xs
+	* t/Cairo.t: Wrap cairo_get_scaled_font.
+
+	* CairoSurface.xs
+	* t/CairoSurface.t: Re-add the binding for cairo_surface_finish.
+	It was orignally removed because its effect can also be achieved
+	by destroying the surface or letting it go out of scope.  But
+	Oleksandr Alex Protasenko convinced me that it's still a good idea
+	to have it anyway, mainly for paginated surfaces like PDF and PS
+	which defer rendering as long as they can.  With $surf->finish you
+	can more clearly express what you're intending to do than with
+	$surf = undef.
+
+	* examples/png-streams.pl: Fix indention.
+
 2007-01-21	tsch
 
 	* Cairo.pm, NEWS, README: Unstable release 1.031.

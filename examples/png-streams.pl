@@ -18,7 +18,7 @@ my $surface = Cairo::ImageSurface->create_from_png_stream (sub {
   my $buffer;
 
   if ($length != sysread ($rfh, $buffer, $length)) {
-  	die 'read-error';
+    die 'read-error';
   }
 
   return $buffer;

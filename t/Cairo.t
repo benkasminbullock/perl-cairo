@@ -9,7 +9,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -231,6 +231,13 @@ SKIP: {
 	my $ctm = Cairo::Matrix->init_identity;
 	my $font = Cairo::ScaledFont->create ($face, $matrix, $ctm, $options);
 	$cr->set_scaled_font ($font);
+}
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0);
+
+	isa_ok ($cr->get_scaled_font, 'Cairo::ScaledFont');
 }
 
 isa_ok ($cr->get_source, 'Cairo::Pattern');

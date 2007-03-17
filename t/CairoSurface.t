@@ -68,6 +68,8 @@ is ($surf->get_height, IMG_HEIGHT);
 	}
 }
 
+$surf->finish;
+
 $surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
