@@ -210,7 +210,7 @@ my %enums = (
 # --------------------------------------------------------------------------- #
 
 my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
-my $have_cairo_1_4 = ExtUtils::PkgConfig->atleast_version("cairo", "1.3.0"); # FIXME: 1.4
+my $have_cairo_1_4 = ExtUtils::PkgConfig->atleast_version("cairo", "1.4.0");
 
 if ($have_cairo_1_2) {
 	my %new = (

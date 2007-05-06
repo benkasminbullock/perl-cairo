@@ -1,3 +1,15 @@
+2007-05-06	tsch
+
+	* Cairo.xs
+	* CairoPattern.xs
+	* Makefile.PL
+	* cairo-perl.h
+	* t/Cairo.t
+	* t/CairoPattern.t: Use 1.4.0 in version checks.
+
+	* Cairo.xs: If CAIRO_PERL_DEBUG is true, call
+	cairo_debug_reset_static_data at exit.
+
 2007-03-17	tsch
 
 	* Cairo.xs

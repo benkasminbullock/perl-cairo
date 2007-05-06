@@ -219,7 +219,7 @@ SvCairoGlyph (SV *sv)
 
 /* ------------------------------------------------------------------------- */
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 
 SV *
 newSVCairoRectangle (cairo_rectangle_t *rectangle)
@@ -244,6 +244,12 @@ newSVCairoRectangle (cairo_rectangle_t *rectangle)
 /* ------------------------------------------------------------------------- */
 
 MODULE = Cairo	PACKAGE = Cairo	PREFIX = cairo_
+
+BOOT:
+#include "cairo-perl-boot.xsh"
+#if CAIRO_PERL_DEBUG
+	call_atexit ((ATEXIT_t) cairo_debug_reset_static_data, NULL);
+#endif
 
 int VERSION (class=NULL)
     CODE:
@@ -284,9 +290,6 @@ const char* cairo_version_string (class=NULL)
 # ---------------------------------------------------------------------------- #
 
 MODULE = Cairo	PACKAGE = Cairo::Context	PREFIX = cairo_
-
-BOOT:
-#include "cairo-perl-boot.xsh"
 
 cairo_t_noinc * cairo_create (class, cairo_surface_t * target);
     C_ARGS:
@@ -439,7 +442,7 @@ void cairo_clip (cairo_t * cr);
 
 void cairo_clip_preserve (cairo_t *cr);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 
 ##cairo_rectangle_list_t * cairo_copy_clip_rectangle_list (cairo_t *cr);
 void cairo_copy_clip_rectangle_list (cairo_t *cr)
@@ -589,7 +592,7 @@ cairo_line_join_t cairo_get_line_join (cairo_t *cr);
 
 double cairo_get_miter_limit (cairo_t *cr);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 
 ## int cairo_get_dash_count (cairo_t *cr);
 ## void cairo_get_dash (cairo_t *cr, double *dashes, double *offset);

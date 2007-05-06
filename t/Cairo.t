@@ -81,7 +81,7 @@ $cr->set_dash (0);
 
 SKIP: {
 	skip 'new stuff', 4
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 5); # FIXME: 1.4
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0);
 
 	$cr->set_dash (0.5, 2.3, 4.5, 6.7, 4.5, 2.3);
 	my ($offset, @dashes) = $cr->get_dash;
@@ -161,7 +161,7 @@ $cr->reset_clip;
 
 SKIP: {
 	skip 'new stuff', 7
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 3, 0); # FIXME: 1.4
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0);
 
 	$cr->rectangle (0, 0, 128, 128);
 	$cr->clip;

@@ -56,7 +56,7 @@ cairo_glyph_t * SvCairoGlyph (SV *sv);
 SV * newSVCairoPath (cairo_path_t *path);
 cairo_path_t * SvCairoPath (SV *sv);
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 3, 0) /* FIXME: 1.4 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 
 SV * newSVCairoRectangle (cairo_rectangle_t *rectangle);
 

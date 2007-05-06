@@ -66,7 +66,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new stuff', 8,
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 5); # FIXME: 1.4
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0);
 
 	my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
 	my ($r, $g, $b, $a) = $pat->get_rgba;
