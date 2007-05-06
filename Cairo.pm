@@ -93,9 +93,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =head4 $surface = $cr->get_target
 
-=head4 $cr->push_group
+=head4 $cr->push_group [1.2]
 
-=head4 $cr->push_group_with_content ($content)
+=head4 $cr->push_group_with_content ($content) [1.2]
 
 =over
 
@@ -103,11 +103,11 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $pattern = $cr->pop_group
+=head4 $pattern = $cr->pop_group [1.2]
 
-=head4 $cr->pop_group_to_source
+=head4 $cr->pop_group_to_source [1.2]
 
-=head4 $surface = $cr->get_group_target
+=head4 $surface = $cr->get_group_target [1.2]
 
 =head4 $cr->set_source_rgb ($red, $green, $blue)
 
@@ -217,13 +217,15 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =head4 $width = $cr->get_line_width
 
-=head4 $cr->set_miter_limit ($ limit)
+=head4 $cr->set_miter_limit ($limit)
 
 =over
 
 =item $limit: double
 
 =back
+
+=head4 ($offset, @dashes) = $cr->get_dash [1.4]
 
 =head4 $limit = $cr->get_miter_limit
 
@@ -250,6 +252,10 @@ C<$cr-E<gt>restore> to restore to the saved state.
 =head4 $cr->clip
 
 =head4 $cr->clip_preserve
+
+=head4 ($x1, $y1, $x2, $y2) = $cr->clip_extents [1.4]
+
+=head4 @rectangles = $cr->copy_clip_rectangle_list [1.4]
 
 =head4 $cr->reset_clip
 
@@ -391,7 +397,7 @@ C<$cr-E<gt>close_path>.
 
 =head4 $cr->new_path
 
-=head4 $cr->new_sub_path
+=head4 $cr->new_sub_path [1.2]
 
 =head4 $cr->close_path
 
@@ -541,7 +547,7 @@ C<$cr-E<gt>close_path>.
 
 =head4 $status = $pattern->status
 
-=head4 $type = $pattern->get_type
+=head4 $type = $pattern->get_type [1.2]
 
 =head4 $pattern->set_matrix ($matrix)
 
@@ -579,7 +585,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $matrix = $pattern->get_matrix
+=head4 ($r, $g, $b, $a) = $pattern->get_rgba [1.4]
 
 =head4 $pattern = Cairo::SurfacePattern->create ($surface)
 
@@ -609,6 +615,8 @@ C<$cr-E<gt>close_path>.
 
 =head4 $filter = $pattern->get_filter
 
+=head4 $surface = $pattern->get_surface [1.4]
+
 =head4 $pattern = Cairo::LinearGradient->create ($x0, $y0, $x1, $y1)
 
 =over
@@ -622,6 +630,8 @@ C<$cr-E<gt>close_path>.
 =item $y1: double
 
 =back
+
+=head4 ($x0, $y0, $x1, $y1) = $pattern->get_points [1.4]
 
 =head4 $pattern = Cairo::RadialGradient->create ($cx0, $cy0, $radius0, $cx1, $cy1, $radius1)
 
@@ -640,6 +650,8 @@ C<$cr-E<gt>close_path>.
 =item $radius1: double
 
 =back
+
+=head4 ($x0, $y0, $r0, $x1, $y1, $r1) = $pattern->get_circles [1.4]
 
 =head4 $pattern->add_color_stop_rgb (double offset, double red, double green, double blue)
 
@@ -670,6 +682,11 @@ C<$cr-E<gt>close_path>.
 =item $alpha: double
 
 =back
+
+=head4 @stops = $pattern->get_color_stops [1.4]
+
+A color stop is represented as an array reference with five elements: offset,
+red, green, blue, and alpha.
 
 =cut
 
@@ -818,13 +835,15 @@ I<x> and I<y>.  Example:
 
 =head4 $options = $cr->get_font_options
 
-=head4 $cr->set_scaled_font ($scaled_font)
+=head4 $cr->set_scaled_font ($scaled_font) [1.2]
 
 =over
 
 =item $scaled_font: I<Cairo::ScaledFont>
 
 =back
+
+=head4 $scaled_font = $cr->get_scaled_font [1.4]
 
 =head4 $cr->show_text ($utf8)
 
@@ -888,7 +907,7 @@ I<x> and I<y>.  Example:
 
 =head4 $status = $font_face->status
 
-=head4 $type = $font_face->get_type
+=head4 $type = $font_face->get_type [1.2]
 
 =cut
 
@@ -914,7 +933,7 @@ I<x> and I<y>.  Example:
 
 =head4 $extents = $scaled_font->extents
 
-=head4 $extents = $scaled_font->text_extents ($utf8)
+=head4 $extents = $scaled_font->text_extents ($utf8) [1.2]
 
 =over
 
@@ -930,15 +949,15 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $font_face = $scaled_font->get_font_face
+=head4 $font_face = $scaled_font->get_font_face [1.2]
 
-=head4 $options = $scaled_font->get_font_options
+=head4 $options = $scaled_font->get_font_options [1.2]
 
-=head4 $font_matrix = $scaled_font->get_font_matrix
+=head4 $font_matrix = $scaled_font->get_font_matrix [1.2]
 
-=head4 $ctm = $scaled_font->get_ctm
+=head4 $ctm = $scaled_font->get_ctm [1.2]
 
-=head4 $type = $scaled_font->get_type
+=head4 $type = $scaled_font->get_type [1.2]
 
 =cut
 

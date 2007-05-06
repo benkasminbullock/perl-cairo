@@ -1,5 +1,10 @@
 2007-05-06	tsch
 
+	* Cairo.pm: Document new API.  Mark functions that were added
+	after cairo 1.0.
+
+2007-05-06	tsch
+
 	* Cairo.xs
 	* CairoPattern.xs
 	* Makefile.PL
