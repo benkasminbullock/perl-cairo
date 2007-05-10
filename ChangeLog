@@ -1,5 +1,9 @@
 2007-05-10	tsch
 
+	* Cairo.pm, NEWS, README: Stable release 1.400.
+
+2007-05-10	tsch
+
 	* t/CairoSurface.t: For now, skip tests that make cairo crash.
 
 2007-05-06	tsch
