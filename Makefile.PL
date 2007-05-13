@@ -47,6 +47,9 @@ while ((my $module, my $version) = each(%prereqs)) {
 	eval "use $module $version; 1" or die $@;
 }
 
+# Add this now since it's not required to generate a Makefile.
+$prereqs{'Test::Number::Delta'} = 1.00;
+
 my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;

@@ -1,3 +1,9 @@
+2007-05-13	tsch
+
+	* Makefile.PL, README, t/Cairo.t, t/CairoPattern.t: Use
+	Test::Number::Delta to make floating point number comparisons more
+	reliable.
+
 2007-05-10	tsch
 
 	* Cairo.pm, NEWS, README: Stable release 1.040.

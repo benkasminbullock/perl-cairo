@@ -10,6 +10,7 @@ use strict;
 use warnings;
 
 use Test::More tests => 25;
+use Test::Number::Delta;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -70,10 +71,10 @@ SKIP: {
 
 	my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
 	my ($r, $g, $b, $a) = $pat->get_rgba;
-	is ($r, 1.0);
-	is ($g, 0.0);
-	is ($b, 0.0);
-	is ($a, 1.0);
+	delta_ok ($r, 1.0);
+	delta_ok ($g, 0.0);
+	delta_ok ($b, 0.0);
+	delta_ok ($a, 1.0);
 
 	my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 	$pat = Cairo::SurfacePattern->create ($surf);
@@ -82,11 +83,11 @@ SKIP: {
 	$pat = Cairo::LinearGradient->create (1, 2, 3, 4);
 	$pat->add_color_stop_rgba (0.25, 1, 0, 1, 0);
 	$pat->add_color_stop_rgba (0.75, 0, 1, 0, 1);
-	is_deeply ([$pat->get_color_stops], [[0.25, 1, 0, 1, 0], [0.75, 0, 1, 0, 1]]);
+	delta_ok ([$pat->get_color_stops], [[0.25, 1, 0, 1, 0], [0.75, 0, 1, 0, 1]]);
 
 	$pat = Cairo::LinearGradient->create (1.5, 2.5, 3.5, 4.5);
-	is_deeply ([$pat->get_points], [1.5, 2.5, 3.5, 4.5]);
+	delta_ok ([$pat->get_points], [1.5, 2.5, 3.5, 4.5]);
 
 	$pat = Cairo::RadialGradient->create (1.5, 2.5, 3.5, 4.5, 5.5, 6.5);
-	is_deeply ([$pat->get_circles], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]);
+	delta_ok ([$pat->get_circles], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]);
 }

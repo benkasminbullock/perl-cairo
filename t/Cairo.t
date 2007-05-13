@@ -10,6 +10,7 @@ use strict;
 use warnings;
 
 use Test::More tests => 68;
+use Test::Number::Delta;
 
 use constant {
 	IMG_WIDTH => 256,
@@ -59,7 +60,7 @@ $cr->set_source ($pat);
 $cr->set_source_surface ($surf, 23, 42);
 
 $cr->set_tolerance (0.75);
-is ($cr->get_tolerance, 0.75);
+delta_ok ($cr->get_tolerance, 0.75);
 
 $cr->set_antialias ('subpixel');
 is ($cr->get_antialias, 'subpixel');
@@ -86,7 +87,7 @@ SKIP: {
 	$cr->set_dash (0.5, 2.3, 4.5, 6.7, 4.5, 2.3);
 	my ($offset, @dashes) = $cr->get_dash;
 	is ($offset, 0.5);
-	is_deeply (\@dashes, [2.3, 4.5, 6.7, 4.5, 2.3]);
+	delta_ok (\@dashes, [2.3, 4.5, 6.7, 4.5, 2.3]);
 
 	$cr->set_dash (0);
 	($offset, @dashes) = $cr->get_dash;
@@ -95,7 +96,7 @@ SKIP: {
 }
 
 $cr->set_miter_limit (2.2);
-is ($cr->get_miter_limit, 2.2);
+delta_ok ($cr->get_miter_limit, 2.2);
 
 $cr->translate (2.2, 3.3);
 $cr->scale (2.2, 3.3);
