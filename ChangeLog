@@ -1,5 +1,9 @@
 2007-05-27	tsch
 
+	* Cairo.pm, NEWS, README: Stable release 1.041.
+
+2007-05-27	tsch
+
 	* t/CairoSurface.t: Use proper version checks to decide when to
 	skip the create_for_stream tests.
 

@@ -1,3 +1,8 @@
+Overview of changes in Cairo 1.041
+==================================
+
+* Use Test::Numer::Delta to make floating point tests more reliable.
+
 Overview of changes in Cairo 1.040
 ==================================
 
