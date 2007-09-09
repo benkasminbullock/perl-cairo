@@ -1,3 +1,8 @@
+2007-09-09	tsch
+
+	* cairo-perl.typemap: Add const char * for backwards
+	compatibility.
+
 2007-08-13	tsch
 
 	* doctypes: Add missing type names.
