@@ -1,5 +1,11 @@
 2007-09-27	tsch
 
+	* Cairo.pm
+	* NEWS
+	* README: Stable release 1.042.
+
+2007-09-27	tsch
+
 	* Makefile.PL: Make missing prerequisites fatal.
 
 2007-09-09	tsch
