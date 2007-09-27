@@ -341,6 +341,7 @@ WriteMakefile (
 	VERSION_FROM  => 'Cairo.pm',
 	ABSTRACT_FROM => 'Cairo.pm',
 	PREREQ_PM     => \%prereqs,
+	PREREQ_FATAL  => 1,
 	XSPROTOARG    => '-noprototypes',
 	FUNCLIST      => \@exports,
 	DL_FUNCS      => { Cairo=> [] },

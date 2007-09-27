@@ -1,3 +1,7 @@
+2007-09-27	tsch
+
+	* Makefile.PL: Make missing prerequisites fatal.
+
 2007-09-09	tsch
 
 	* cairo-perl.typemap: Add const char * for backwards
