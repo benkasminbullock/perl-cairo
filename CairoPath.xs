@@ -8,6 +8,8 @@
 
 #include <cairo-perl.h>
 
+#include "ppport.h"
+
 SV *
 newSVCairoPath (cairo_path_t * path)
 {

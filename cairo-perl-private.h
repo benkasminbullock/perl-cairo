@@ -10,6 +10,8 @@
 #ifndef _CAIRO_PERL_PRIVATE_H_
 #define _CAIRO_PERL_PRIVATE_H_
 
+#include "ppport.h"
+
 void * cairo_perl_alloc_temp (int nbytes);
 
 void cairo_perl_set_isa (const char * child_package, const char * parent_package);

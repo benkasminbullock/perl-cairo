@@ -9,6 +9,9 @@
 #include <cairo-perl.h>
 #include <cairo-perl-private.h>
 
+#define NEED_sv_2pv_flags
+#include "ppport.h"
+
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
 
 static HV *pointer_to_package = NULL;

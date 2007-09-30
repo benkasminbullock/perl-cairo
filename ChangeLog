@@ -1,3 +1,15 @@
+2007-09-30	tsch
+
+	* ppport.h
+	* Cairo.xs
+	* CairoPath.xs
+	* CairoPattern.xs
+	* CairoSurface.xs
+	* MANIFEST
+	* cairo-perl-private.h
+	* cairo-perl.h: Add and use the portability header ppport.h from
+	Devel::PPPort to hopefully fix compilation on older perls.
+
 2007-09-27	tsch
 
 	* Cairo.pm

@@ -10,6 +10,9 @@
 #include <cairo-perl.h>
 #include <cairo-perl-private.h>
 
+#define NEED_newRV_noinc_GLOBAL
+#include "ppport.h"
+
 /* ------------------------------------------------------------------------- */
 
 static void

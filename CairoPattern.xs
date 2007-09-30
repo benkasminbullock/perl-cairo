@@ -9,6 +9,8 @@
 #include <cairo-perl.h>
 #include <cairo-perl-private.h>
 
+#include "ppport.h"
+
 static const char *
 get_package (cairo_pattern_t *pattern)
 {
