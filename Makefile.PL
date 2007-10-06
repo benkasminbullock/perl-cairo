@@ -6,6 +6,8 @@
 # $Header$
 #
 
+require v5.6.0;
+
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
