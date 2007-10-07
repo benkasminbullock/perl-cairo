@@ -1,5 +1,8 @@
 2007-10-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Makefile.PL: Make EU::MM output configure_requires and no_index
+	information when generating META.yml.
+
 	* t/CairoSurface.t (PNG surface tests): Since exceptions are
 	actually propagated now, throw the same kind of exception we test
 	for.

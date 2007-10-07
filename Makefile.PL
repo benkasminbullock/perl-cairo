@@ -347,7 +347,18 @@ WriteMakefile (
 	XSPROTOARG    => '-noprototypes',
 	FUNCLIST      => \@exports,
 	DL_FUNCS      => { Cairo=> [] },
+
 	$dep->get_makefile_vars,
+
+	EXTRA_META => qq(
+configure_requires:
+    ExtUtils::Depends: $prereqs{'ExtUtils::Depends'}
+    ExtUtils::PkgConfig: $prereqs{'ExtUtils::PkgConfig'}
+
+no_index:
+    file:
+    - MakeHelper.pm
+),
 );
 
 sub MY::postamble
