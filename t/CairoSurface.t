@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #
 # Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
@@ -126,14 +127,14 @@ SKIP: {
 		my ($closure, $data) = @_;
 		is ($closure, 'blub');
 		like ($data, qr/PNG/);
-		die 'write-error';
+		die 'no-memory';
 	}, 'blub'), 'no-memory');
 
 	is ($surf->write_to_png_stream (sub {
 		my ($closure, $data) = @_;
 		is ($closure, undef);
 		like ($data, qr/PNG/);
-		die 'write-error';
+		die 'no-memory';
 	}), 'no-memory');
 
 	$surf = Cairo::ImageSurface->create_from_png ('tmp.png');

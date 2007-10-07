@@ -1,3 +1,9 @@
+2007-10-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/CairoSurface.t (PNG surface tests): Since exceptions are
+	actually propagated now, throw the same kind of exception we test
+	for.
+
 2007-10-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Makefile.PL: Require perl >= 5.6.0 for some features we use,
