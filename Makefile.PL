@@ -6,7 +6,7 @@
 # $Header$
 #
 
-require v5.6.0;
+BEGIN { require 5.006; }
 
 use strict;
 use warnings;
@@ -343,7 +343,6 @@ WriteMakefile (
 	VERSION_FROM  => 'Cairo.pm',
 	ABSTRACT_FROM => 'Cairo.pm',
 	PREREQ_PM     => \%prereqs,
-	PREREQ_FATAL  => 1,
 	XSPROTOARG    => '-noprototypes',
 	FUNCLIST      => \@exports,
 	DL_FUNCS      => { Cairo=> [] },
@@ -354,6 +353,9 @@ WriteMakefile (
 configure_requires:
     ExtUtils::Depends: $prereqs{'ExtUtils::Depends'}
     ExtUtils::PkgConfig: $prereqs{'ExtUtils::PkgConfig'}
+
+build_requires:
+    Test::Number::Delta: $prereqs{'Test::Number::Delta'}
 
 no_index:
     file:

@@ -1,3 +1,13 @@
+2007-10-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Use BEGIN { require 5.006; } instead of require
+	v5.6.0.  Make missing Test::Number::Delta non-fatal; add it to the
+	build_requires META.yml field.
+
+	* t/Cairo.t
+	* t/CairoPattern.t: Copy with Test::Number::Delta being
+	unavailable.
+
 2007-10-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Makefile.PL: Make EU::MM output configure_requires and no_index
