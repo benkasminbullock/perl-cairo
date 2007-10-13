@@ -1,3 +1,9 @@
+2007-10-14  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Cairo.pm
+	* NEWS
+	* README: Release 1.043.
+
 2007-10-13  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Makefile.PL: Use BEGIN { require 5.006; } instead of require
