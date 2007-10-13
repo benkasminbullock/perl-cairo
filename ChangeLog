@@ -5,7 +5,7 @@
 	build_requires META.yml field.
 
 	* t/Cairo.t
-	* t/CairoPattern.t: Copy with Test::Number::Delta being
+	* t/CairoPattern.t: Cope with Test::Number::Delta being
 	unavailable.
 
 2007-10-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
