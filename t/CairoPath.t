@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #
 # Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
@@ -12,10 +13,8 @@ use Cairo;
 
 use Test::More tests => 4;
 
-use constant {
-	IMG_WIDTH => 256,
-	IMG_HEIGHT => 256,
-};
+use constant IMG_WIDTH => 256;
+use constant IMG_HEIGHT => 256;
 
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 my $cr = Cairo::Context->create ($surf);

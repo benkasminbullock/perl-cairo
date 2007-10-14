@@ -14,10 +14,8 @@ use Config; # for byteorder
 
 use Test::More tests => 64;
 
-use constant {
-	IMG_WIDTH => 256,
-	IMG_HEIGHT => 256,
-};
+use constant IMG_WIDTH => 256;
+use constant IMG_HEIGHT => 256;
 
 use Cairo;
 

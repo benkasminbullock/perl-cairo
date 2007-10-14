@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 #
 # Copyright (c) 2004-2005 by the cairo perl team (see the file README)
 #
