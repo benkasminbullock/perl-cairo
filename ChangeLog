@@ -1,3 +1,10 @@
+2007-10-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/Cairo.t
+	* t/CairoPattern.t: When Test::Number::Delta is not available,
+	skip the relevant tests instead of faking passes.  (Suggested by
+	Aristotle Pagaltzis)
+
 2007-10-14  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/Cairo.t
