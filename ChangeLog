@@ -1,3 +1,8 @@
+2007-10-24  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/CairoFont.t: Really don't use the hash-ref variant of the
+	constant pragma this time.
+
 2007-10-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/Cairo.t
