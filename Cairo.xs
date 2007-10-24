@@ -685,6 +685,17 @@ HAS_SVG_SURFACE ()
 	RETVAL
 
 bool
+HAS_FT_FONT ()
+    CODE:
+#ifdef CAIRO_HAS_FT_FONT
+	RETVAL = TRUE;
+#else
+	RETVAL = FALSE;
+#endif
+    OUTPUT:
+	RETVAL
+
+bool
 HAS_PNG_FUNCTIONS ()
     CODE:
 #ifdef CAIRO_HAS_PNG_FUNCTIONS

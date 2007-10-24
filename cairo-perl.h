@@ -32,6 +32,10 @@
 # include <cairo-svg.h>
 #endif
 
+#if CAIRO_HAS_FT_FONT
+# include <cairo-ft.h>
+#endif
+
 #include <cairo-perl-auto.h>
 
 /*

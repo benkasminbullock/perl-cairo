@@ -3,6 +3,18 @@
 	* t/CairoFont.t: Really don't use the hash-ref variant of the
 	constant pragma this time.
 
+	* Cairo.pm
+	* Cairo.xs
+	* CairoFt.xs
+	* Makefile.PL
+	* cairo-perl.h
+	* cairo-perl.typemap
+	* examples/freetype-font.pl
+	* t/CairoFt.t: Add support for part of cairo's FreeType
+	integration API.  Currently, that's just
+	Cairo::FtFontFace::create, which lets you create a cairo font face
+	from a FreeType font face.
+
 2007-10-18  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/Cairo.t

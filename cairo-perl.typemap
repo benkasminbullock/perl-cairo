@@ -19,6 +19,9 @@ cairo_text_extents_t *	T_CAIRO_TEXT_EXTENTS
 cairo_glyph_t *		T_CAIRO_GLYPH
 cairo_path_t *		T_CAIRO_PATH
 
+FT_Face			T_FT_FACE
+
+
 INPUT
 
 T_CAIRO_GLYPH
@@ -26,6 +29,13 @@ T_CAIRO_GLYPH
 
 T_CAIRO_PATH
 	$var = SvCairoPath ($arg);
+
+T_FT_FACE
+	if (sv_isobject ($arg) && sv_derived_from ($arg, \"Font::FreeType::Face\")) {
+		$var = ($type) SvIV ((SV *) SvRV ($arg));
+	} else {
+		croak(\"$var is not of type Font::FreeType::Face\");
+	}
 
 OUTPUT
 

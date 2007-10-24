@@ -1031,6 +1031,35 @@ I<x> and I<y>.  Example:
 
 # --------------------------------------------------------------------------- #
 
+=head3 FreeType Fonts -- Font support for FreeType
+
+If your cairo library supports it, the FreeType integration allows you to load
+font faces from font files.  You can query for this capability with
+C<Cairo::HAS_FT_FONT>.  To actually use this, you'll need the L<Font::FreeType>
+module.
+
+=head4 my $face = Cairo::FtFontFace->create ($ft_face, $load_flags=0)
+
+=over
+
+=item $ft_face: I<Font::FreeType::Face>
+
+=item $load_flags: integer
+
+=back
+
+This method allows you to create a I<Cairo::FontFace> from a
+I<Font::FreeType::Face>.  To obtain the latter, you can for example load it
+from a file:
+
+  my $file = '/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf';
+  my $ft_face = Font::FreeType->new->face ($file);
+  my $face = Cairo::FtFontFace->create ($ft_face);
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
 =head2 Utilities
 
 =head3 Version Information -- Run-time and compile-time version checks.

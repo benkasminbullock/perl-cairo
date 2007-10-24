@@ -297,7 +297,23 @@ my %enum_guards = (
 
 MakeHelper::do_enums (\%enums, \%enum_guards);
 
-my @xs_files = <*.xs>;
+my @xs_files = qw(
+	Cairo.xs
+	CairoFont.xs
+	CairoMatrix.xs
+	CairoPath.xs
+	CairoPattern.xs
+	CairoSurface.xs
+);
+
+my $have_cairo_ft = !system qw(pkg-config --exists --silence-errors cairo-ft);
+if ($have_cairo_ft) {
+	print "Compiling Cairo with FreeType support\n";
+	push @xs_files, 'CairoFt.xs';
+	my %ft_cfg = ExtUtils::PkgConfig->find ('cairo-ft');
+	$cairo_cfg{cflags} .= ' '.$ft_cfg{cflags};
+	$cairo_cfg{libs} .= ' '.$ft_cfg{libs};
+}
 
 MakeHelper::write_boot (
 	xs_files => \@xs_files,
