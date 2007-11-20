@@ -4,12 +4,14 @@ cairo-perl.typemap
 Cairo.pm
 Cairo.xs
 CairoFont.xs
+CairoFt.xs
 CairoMatrix.xs
 CairoPath.xs
 CairoPattern.xs
 CairoSurface.xs
 ChangeLog
 doctypes
+examples/freetype-font.pl
 examples/png-streams.pl
 examples/png/bevels.pl
 examples/png/caps_joins.pl
@@ -33,6 +35,7 @@ ppport.h
 README
 t/Cairo.t
 t/CairoFont.t
+t/CairoFt.t
 t/CairoMatrix.t
 t/CairoPath.t
 t/CairoPattern.t
