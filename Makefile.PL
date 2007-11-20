@@ -340,18 +340,20 @@ $dep->install (qw(cairo-perl.h
 $dep->save_config ('build/IFiles.pm');
 
 my @exports = qw(
+	cairo_font_type_from_sv
+	cairo_font_type_to_sv
 	cairo_object_from_sv
 	cairo_object_to_sv
+	cairo_pattern_to_sv
 	cairo_struct_from_sv
 	cairo_struct_to_sv
-	newSVCairoFontExtents
-	newSVCairoTextExtents
-	newSVCairoGlyph
-	SvCairoGlyph
-	newSVCairoPath
-	SvCairoPath
 	cairo_surface_to_sv
-	cairo_pattern_to_sv
+	newSVCairoFontExtents
+	newSVCairoGlyph
+	newSVCairoPath
+	newSVCairoTextExtents
+	SvCairoGlyph
+	SvCairoPath
 );
 
 WriteMakefile (

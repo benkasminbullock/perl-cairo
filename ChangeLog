@@ -1,3 +1,8 @@
+2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Update the list of exported symbols.  (Reported by
+	spicy jack)
+
 2007-10-24  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/CairoFont.t: Really don't use the hash-ref variant of the
