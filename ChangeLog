@@ -1,5 +1,10 @@
 2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm
+	* NEWS: Unstable release 1.050.
+
+2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Cairo.pm: Add entries for the various surfaces to the API
 	listing.
 

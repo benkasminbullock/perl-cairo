@@ -1,3 +1,10 @@
+Overview of changes in Cairo 1.050
+==================================
+
+* Provide Cairo::FtFontFace::create which can be used with Font::FreeType.
+* Add entries for the various kinds of surfaces to the API listing.
+* Fix some test suite and build issues.
+
 Overview of changes in Cairo 1.043
 ==================================
 
