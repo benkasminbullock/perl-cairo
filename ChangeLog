@@ -1,5 +1,8 @@
 2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm: Add entries for the various surfaces to the API
+	listing.
+
 	* Makefile.PL: Update the list of exported symbols.  (Reported by
 	spicy jack)
 

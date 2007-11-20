@@ -1060,6 +1060,330 @@ from a file:
 
 # --------------------------------------------------------------------------- #
 
+=head2 Surfaces
+
+=head3 I<Cairo::Surface> -- Base class for surfaces
+
+=head4 $new = $old->create_similar ($content, $width, $height)
+
+=over
+
+=item $content: I<Cairo::Content>
+
+=item $width: integer
+
+=item $height: integer
+
+=back
+
+=head4 $status = $surface->status
+
+=head4 $surface->finish
+
+=head4 $surface->flush
+
+=head4 $font_options = $surface->get_font_options
+
+=head4 $content = $surface->get_content [1.2]
+
+=head4 $surface->mark_dirty
+
+=head4 $surface->mark_dirty_rectangle ($x, $y, $width, $height)
+
+=over
+
+=item $x: integer
+
+=item $y: integer
+
+=item $width: integer
+
+=item $height: integer
+
+=back
+
+=head4 $surface->set_device_offset ($x_offset, $y_offset)
+
+=over
+
+=item $x_offset: integer
+
+=item $y_offset: integer
+
+=back
+
+=head4 ($x_offset, $y_offset) = $surface->get_device_offset [1.2]
+
+=head4 $surface->set_fallback_resolution ($x_pixels_per_inch, $y_pixels_per_inch) [1.2]
+
+=over
+
+=item $x_pixels_per_inch: double
+
+=item $y_pixels_per_inch: double
+
+=back
+
+=head4 $type = $surface->get_type [1.2]
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 Image Surfaces -- Rendering to memory buffers
+
+=head4 $surface = Cairo::ImageSurface->create ($format, $width, $height)
+
+=over
+
+=item $format: I<Cairo::Format>
+
+=item $width: integer
+
+=item $height: integer
+
+=back
+
+=head4 $surface = Cairo::ImageSurface->create_for_data ($data, $format, $width, $height, $stride)
+
+=over
+
+=item $data: image data
+
+=item $format: I<Cairo::Format>
+
+=item $width: integer
+
+=item $height: integer
+
+=item $stride: integer
+
+=back
+
+=head4 $data = $surface->get_data [1.2]
+
+=head4 $format = $surface->get_format [1.2]
+
+=head4 $width = $surface->get_width
+
+=head4 $height = $surface->get_height
+
+=head4 $stride = $surface->get_stride [1.2]
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 PDF Surfaces -- Rendering PDF documents
+
+=head4 $surface = Cairo::PdfSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $filename: string
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface = Cairo::PdfSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $callback: L<Cairo::WriteFunc>
+
+=item $callback_data: scalar
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface->set_size ($width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 PNG Support -- Reading and writing PNG images
+
+=head4 $surface = Cairo::ImageSurface->create_from_png ($filename)
+
+=over
+
+=item $filename: string
+
+=back
+
+=head4 Cairo::ReadFunc: $data = sub { my ($callback_data, $length) = @_; }
+
+=over
+
+=item $data: binary image data, of length $length
+
+=item $callback_data: scalar, user data
+
+=item $length: integer, bytes to read
+
+=back
+
+=head4 $surface = Cairo::ImageSurface->create_from_png_stream ($callback, $callback_data)
+
+=over
+
+=item $callback: L<Cairo::ReadFunc>
+
+=item $callback_data: scalar
+
+=back
+
+=head4 $status = $surface->write_to_png ($filename)
+
+=over
+
+=item $filename: string
+
+=back
+
+=head4 Cairo::WriteFunc: sub { my ($callback_data, $data) = @_; }
+
+=over
+
+=item $callback_data: scalar, user data
+
+=item $data: binary image data, to be written
+
+=back
+
+=head4 $status = $surface->write_to_png_stream ($callback, $callback_data)
+
+=over
+
+=item $callback: L<Cairo::WriteFunc>
+
+=item $callback_data: scalar
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 PostScript Surfaces -- Rendering PostScript documents
+
+=head4 $surface = Cairo::PsSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $filename: string
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface = Cairo::PsSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $callback: L<Cairo::WriteFunc>
+
+=item $callback_data: scalar
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface->set_size ($width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface->dsc_begin_setup [1.2]
+
+=head4 $surface->dsc_begin_page_setup [1.2]
+
+=head4 $surface->dsc_comment ($comment) [1.2]
+
+=over
+
+=item $comment: string
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 SVG Surfaces -- Rendering SVG documents
+
+=head4 $surface = Cairo::SvgSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $filename: string
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface = Cairo::SvgSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+
+=over
+
+=item $callback: L<Cairo::WriteFunc>
+
+=item $callback_data: scalar
+
+=item $width_in_points: double
+
+=item $height_in_points: double
+
+=back
+
+=head4 $surface->restrict_to_version ($version) [1.2]
+
+=over
+
+=item $version: I<Cairo::SvgVersion>
+
+=back
+
+=head4 @versions = $surface->get_versions [1.2]
+
+=head4 $string = $surface->version_to_string ($version) [1.2]
+
+=over
+
+=item $version: I<Cairo::SvgVersion>
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
 =head2 Utilities
 
 =head3 Version Information -- Run-time and compile-time version checks.
