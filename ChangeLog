@@ -7,6 +7,10 @@
 	calloc/malloc/free as the latter aren't safe on some platforms,
 	notably Win32.  Patch by T.J. Ferraro.
 
+	* t/CairoSurface.t: Mark the isa_ok test for PDF surfaces returned
+	by create_similar() as TODO, since the returned surface's type is
+	not reliable at this point.
+
 2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.pm

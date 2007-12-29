@@ -187,11 +187,12 @@ SKIP: {
 
 	# create_similar actually returns an image surface at the moment, but
 	# the compatibility layer has no way of knowing this and thus turns it
-	# into a pdf surface.
-	if (Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0)) {
+	# into a pdf surface.  Recently, it also started returning meta
+	# surfaces whose type is internal, so the bindings have no other choice
+	# but represent them as plain surfaces.  Thus, mark this TODO for now.
+	TODO: {
+		local $TODO = 'create_similar returns surfaces whose type is not predictable';
 		isa_ok ($surf, 'Cairo::ImageSurface');
-	} else {
-		isa_ok ($surf, 'Cairo::PdfSurface');
 	}
 
 	unlink 'tmp.pdf';
