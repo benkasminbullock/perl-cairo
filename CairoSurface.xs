@@ -142,7 +142,7 @@ cairo_perl_callback_new (SV *func, SV *data)
 {
 	CairoPerlCallback *callback;
 
-	callback = calloc (sizeof (CairoPerlCallback), 1);
+	Newz (0, callback, 1, CairoPerlCallback);
 
 	callback->func = newSVsv (func);
 	if (data)
@@ -161,7 +161,7 @@ cairo_perl_callback_free (CairoPerlCallback *callback)
 	SvREFCNT_dec (callback->func);
 	if (callback->data)
 		SvREFCNT_dec (callback->data);
-	free (callback);
+	Safefree (callback);
 }
 
 /* -------------------------------------------------------------------------- */

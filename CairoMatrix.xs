@@ -11,7 +11,8 @@
 cairo_matrix_t *
 cairo_perl_copy_matrix (cairo_matrix_t *src)
 {
-	cairo_matrix_t *dst = malloc (sizeof (cairo_matrix_t));
+	cairo_matrix_t *dst;
+	New (0, dst, 1, cairo_matrix_t);
 
 	dst->xx = src->xx;
 	dst->xy = src->xy;
@@ -101,4 +102,4 @@ void cairo_matrix_transform_point (cairo_matrix_t * matrix, IN_OUTLIST double x,
 
 void DESTROY (cairo_matrix_t * matrix)
     CODE:
-	free (matrix);
+	Safefree (matrix);

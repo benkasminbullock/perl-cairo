@@ -40,11 +40,11 @@ cairo_perl_set_isa (const char *child_package,
 	char *child_isa_full;
 	AV *isa;
 
-	child_isa_full = malloc (strlen (child_package) + 5 + 1);
+	New (0, child_isa_full, strlen(child_package) + 5 + 1, char);
 	child_isa_full = strcpy (child_isa_full, child_package);
 	child_isa_full = strcat (child_isa_full, "::ISA");
 	isa = get_av (child_isa_full, TRUE); /* create on demand */
-	free (child_isa_full);
+	Safefree (child_isa_full);
 
 	av_push (isa, newSVpv (parent_package, 0));
 }
@@ -351,7 +351,7 @@ void cairo_set_dash (cairo_t * cr, double offset, ...)
 	if (n == 0) {
 		pts = NULL;
 	} else {
-		pts = malloc (sizeof (double) * n);
+		New (0, pts, n, double);
 		if (!pts)
 			croak ("malloc failure for (%d) elements", n);
 		for (i = FIRST ; i < items ; i++)
@@ -361,7 +361,7 @@ void cairo_set_dash (cairo_t * cr, double offset, ...)
 	cairo_set_dash (cr, pts, n, offset);
     CLEANUP:
 	if (pts)
-		free (pts);
+		Safefree (pts);
 
 void cairo_set_miter_limit (cairo_t * cr, double limit);
 
@@ -513,11 +513,11 @@ void cairo_show_glyphs (cairo_t * cr, ...)
 	int num_glyphs, i;
     CODE:
 	num_glyphs = items - 1;
-	glyphs = calloc (sizeof (cairo_glyph_t), num_glyphs);
+	Newz (0, glyphs, num_glyphs, cairo_glyph_t);
 	for (i = 1; i < items; i++)
 		glyphs[i - 1] = *SvCairoGlyph (ST (i));
 	cairo_show_glyphs (cr, glyphs, num_glyphs);
-	free (glyphs);
+	Safefree (glyphs);
 
 cairo_font_face_t * cairo_get_font_face (cairo_t *cr);
 
@@ -551,12 +551,12 @@ cairo_text_extents_t * cairo_glyph_extents (cairo_t * cr, ...)
 	int num_glyphs, i;
     CODE:
 	num_glyphs = items - 1;
-	glyphs = calloc (sizeof (cairo_glyph_t), num_glyphs);
+	Newz (0, glyphs, num_glyphs, cairo_glyph_t);
 	for (i = 1; i < items; i++)
 		glyphs[i - 1] = *SvCairoGlyph (ST (i));
 	cairo_glyph_extents (cr, glyphs, num_glyphs, &extents);
 	RETVAL = &extents;
-	free (glyphs);
+	Safefree (glyphs);
     OUTPUT:
 	RETVAL
 
@@ -569,11 +569,11 @@ void cairo_glyph_path (cairo_t * cr, ...)
 	int num_glyphs, i;
     CODE:
 	num_glyphs = items - 1;
-	glyphs = calloc (sizeof (cairo_glyph_t), num_glyphs);
+	Newz (0, glyphs, num_glyphs, cairo_glyph_t);
 	for (i = 1; i < items; i++)
 		glyphs[i - 1] = *SvCairoGlyph (ST (i));
 	cairo_glyph_path (cr, glyphs, num_glyphs);
-	free (glyphs);
+	Safefree (glyphs);
 
 cairo_operator_t cairo_get_operator (cairo_t *cr);
 
@@ -608,7 +608,7 @@ void cairo_get_dash (cairo_t *cr)
 	if (count == 0) {
 		dashes = NULL;
 	} else {
-		dashes = malloc (sizeof (double) * count);
+		New (0, dashes, count, double);
 		if (!dashes)
 			croak ("malloc failure for (%d) elements", count);
 	}
@@ -617,7 +617,7 @@ void cairo_get_dash (cairo_t *cr)
 	PUSHs (sv_2mortal (newSVnv (offset)));
 	for (i = 0; i < count; i++)
 		PUSHs (sv_2mortal (newSVnv (dashes[i])));
-	free (dashes);
+	Safefree (dashes);
 
 #endif
 

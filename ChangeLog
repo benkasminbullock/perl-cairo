@@ -1,3 +1,12 @@
+2007-12-29  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Cairo.xs
+	* CairoFont.xs
+	* CairoMatrix.xs
+	* CairoSurface.xs: Use perl's New*/Safefree facilities instead of
+	calloc/malloc/free as the latter aren't safe on some platforms,
+	notably Win32.  Patch by T.J. Ferraro.
+
 2007-11-20  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.pm
