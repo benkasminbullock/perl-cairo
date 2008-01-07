@@ -275,6 +275,9 @@ SKIP: {
 		skip 'new stuff', 7
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 2); # FIXME: 1.6
 
+		$surf->restrict_to_level ('2');
+		$surf->restrict_to_level ('3');
+
 		my @levels = Cairo::PsSurface::get_levels();
 		ok (scalar @levels > 0);
 		is ($levels[0], '2');
