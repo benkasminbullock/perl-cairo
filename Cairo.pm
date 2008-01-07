@@ -14,7 +14,7 @@ use DynaLoader;
 
 our @ISA = qw/DynaLoader/;
 
-our $VERSION = '1.050';
+our $VERSION = '1.051';
 
 sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
@@ -49,7 +49,7 @@ Cairo - Perl interface to the cairo library
 
   $cr->show_page;
 
-  $surface->write_to_png ("output.png");
+  $surface->write_to_png ('output.png');
 
 =head1 ABSTRACT
 
@@ -1126,6 +1126,22 @@ from a file:
 
 =head4 $type = $surface->get_type [1.2]
 
+=head4 $status = $surface->copy_page [1.6]
+
+=over
+
+=item $status: I<Cairo::Status>
+
+=back
+
+=head4 $status = $surface->show_page [1.6]
+
+=over
+
+=item $status: I<Cairo::Status>
+
+=back
+
 =cut
 
 # --------------------------------------------------------------------------- #
@@ -1330,6 +1346,34 @@ from a file:
 
 =back
 
+=head4 $surface->restrict_to_level ($level) [1.6]
+
+=over
+
+=item $level: I<Cairo::PsLevel>
+
+=back
+
+=head4 @levels = Cairo::PsSurface::get_levels [1.6]
+
+=head4 $string = Cairo::PsSurface::level_to_string ($level) [1.6]
+
+=over
+
+=item $level: I<Cairo::PsLevel>
+
+=back
+
+=head4 $surface->set_eps ($eps) [1.6]
+
+=over
+
+=item $eps: boolean
+
+=back
+
+=head4 $eps = $surface->get_eps [1.6]
+
 =cut
 
 # --------------------------------------------------------------------------- #
@@ -1370,9 +1414,9 @@ from a file:
 
 =back
 
-=head4 @versions = $surface->get_versions [1.2]
+=head4 @versions = Cairo::SvgSurface::get_versions [1.2]
 
-=head4 $string = $surface->version_to_string ($version) [1.2]
+=head4 $string = Cairo::SvgSurface::version_to_string ($version) [1.2]
 
 =over
 
