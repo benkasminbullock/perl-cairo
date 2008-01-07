@@ -1,7 +1,23 @@
+Overview of changes in Cairo 1.051
+==================================
+
+* Fix memory allocation errors on win32.  [T.J. Ferraro]
+* Wrap new API:
+  - cairo_surface_copy_page and cairo_surface_show_page
+  - cairo_ps_surface_restrict_to_level, cairo_ps_get_levels, and
+    cairo_ps_level_to_string
+  - cairo_ps_surface_set_eps and cairo_ps_surface_get_eps
+
 Overview of changes in Cairo 1.050
 ==================================
 
 * Provide Cairo::FtFontFace::create which can be used with Font::FreeType.
+* Add entries for the various kinds of surfaces to the API listing.
+* Fix some test suite and build issues.
+
+Overview of changes in Cairo 1.044
+==================================
+
 * Add entries for the various kinds of surfaces to the API listing.
 * Fix some test suite and build issues.
 
