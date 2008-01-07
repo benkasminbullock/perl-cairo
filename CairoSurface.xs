@@ -504,6 +504,40 @@ void cairo_ps_surface_dsc_begin_page_setup (cairo_surface_t *surface);
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 2) /* FIXME: 1.6 */
+
+void cairo_ps_surface_restrict_to_level (cairo_surface_t *surface, cairo_ps_level_t level);
+
+# void cairo_ps_get_levels (cairo_ps_level_t const **levels, int *num_levels);
+void
+cairo_ps_surface_get_levels (class=NULL)
+    PREINIT:
+	cairo_ps_level_t const *levels = NULL;
+	int num_levels = 0, i;
+    PPCODE:
+	PERL_UNUSED_VAR (ax);
+	cairo_ps_get_levels (&levels, &num_levels);
+	EXTEND (sp, num_levels);
+	for (i = 0; i < num_levels; i++)
+		PUSHs (sv_2mortal (newSVCairoPsLevel (levels[i])));
+
+# const char * cairo_ps_level_to_string (cairo_ps_level_t level);
+const char *
+cairo_ps_surface_level_to_string (...)
+    CODE:
+	if (items == 1) {
+		RETVAL = cairo_ps_level_to_string (SvCairoPsLevel (ST (0)));
+	} else if (items == 2) {
+		RETVAL = cairo_ps_level_to_string (SvCairoPsLevel (ST (1)));
+	} else {
+		RETVAL = NULL;
+		croak ("Usage: Cairo::PsSurface::level_to_string (level) or Cairo::PsSurface->level_to_string (level)");
+	}
+    OUTPUT:
+	RETVAL
+
+#endif
+
 #endif
 
 # --------------------------------------------------------------------------- #

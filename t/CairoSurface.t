@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 66;
+use Test::More tests => 72;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -221,7 +221,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'ps surface', 8
+	skip 'ps surface', 14
 		unless Cairo::HAS_PS_SURFACE;
 
 	my $surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
@@ -253,7 +253,6 @@ SKIP: {
 
 	unlink 'tmp.ps';
 
-
 	SKIP: {
 		skip 'create_for_stream on ps surfaces', 4
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
@@ -270,6 +269,22 @@ SKIP: {
 		}, 'blub', IMG_WIDTH, IMG_HEIGHT);
 		isa_ok ($surf, 'Cairo::PsSurface');
 		isa_ok ($surf, 'Cairo::Surface');
+	}
+
+	SKIP: {
+		skip 'new stuff', 6
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 2); # FIXME: 1.6
+
+		my @levels = Cairo::PsSurface::get_levels();
+		ok (scalar @levels > 0);
+		is ($levels[0], '2');
+
+		@levels = Cairo::PsSurface->get_levels();
+		ok (scalar @levels > 0);
+		is ($levels[0], '2');
+
+		like (Cairo::PsSurface::level_to_string('2'), qr/2/);
+		like (Cairo::PsSurface->level_to_string('3'), qr/3/);
 	}
 }
 
