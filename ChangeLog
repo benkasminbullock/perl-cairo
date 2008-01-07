@@ -4,6 +4,7 @@
 	* t/CairoSurface.t: Wrap cairo_surface_copy_page and
 	cairo_surface_show_page.
 
+	* Makefile.PL
 	* CairoSurface.xs
 	* t/CairoSurface.t: Wrap cairo_ps_surface_restrict_to_level,
 	cairo_ps_get_levels, and cairo_ps_level_to_string.
