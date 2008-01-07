@@ -9,6 +9,10 @@
 	* t/CairoSurface.t: Wrap cairo_ps_surface_restrict_to_level,
 	cairo_ps_get_levels, and cairo_ps_level_to_string.
 
+	* CairoSurface.xs
+	* t/CairoSurface.t: Wrap cairo_ps_surface_set_eps and
+	cairo_ps_surface_get_eps.
+
 2007-12-29  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.xs

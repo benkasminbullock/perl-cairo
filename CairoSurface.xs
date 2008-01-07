@@ -536,6 +536,10 @@ cairo_ps_surface_level_to_string (...)
     OUTPUT:
 	RETVAL
 
+void cairo_ps_surface_set_eps (cairo_surface_t *surface, cairo_bool_t eps);
+
+cairo_bool_t cairo_ps_surface_get_eps (cairo_surface_t *surface);
+
 #endif
 
 #endif
