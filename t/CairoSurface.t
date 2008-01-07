@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 64;
+use Test::More tests => 66;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -104,6 +104,14 @@ isa_ok ($surf->get_font_options, 'Cairo::FontOptions');
 $surf->mark_dirty;
 $surf->mark_dirty_rectangle (10, 10, 10, 10);
 $surf->flush;
+
+SKIP: {
+	skip 'new stuff', 2
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 2); # FIXME: 1.6
+
+	is ($surf->copy_page, 'success');
+	is ($surf->show_page, 'success');
+}
 
 sub clear {
 	if (Cairo::VERSION() < Cairo::VERSION_ENCODE (1, 2, 0)) {

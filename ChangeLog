@@ -1,3 +1,9 @@
+2008-01-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* CairoSurface.xs
+	* t/CairoSurface.t: Wrap cairo_surface_copy_page and
+	cairo_surface_show_page.
+
 2007-12-29  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.xs

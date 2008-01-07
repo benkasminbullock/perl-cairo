@@ -316,6 +316,14 @@ cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE (1, 5, 2) /* FIXME: 1.6 */
+
+cairo_status_t cairo_surface_copy_page (cairo_surface_t *surface);
+
+cairo_status_t cairo_surface_show_page (cairo_surface_t *surface);
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::ImageSurface	PREFIX = cairo_image_surface_
