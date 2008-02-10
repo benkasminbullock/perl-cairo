@@ -10,46 +10,80 @@
 
 #include "ppport.h"
 
+#define MY_MAGIC_SIG 0xCAFE /* Let's hope this is unique enough */
+
+static MAGIC *
+cairo_perl_mg_find (SV *sv, int type)
+{
+	if (sv) {
+		MAGIC *mg;
+		for (mg = SvMAGIC (sv); mg; mg = mg->mg_moremagic) {
+			if (mg->mg_type == type && mg->mg_private == MY_MAGIC_SIG)
+				return mg;
+		}
+	}
+	return 0;
+}
+
 SV *
 newSVCairoPath (cairo_path_t * path)
 {
-	AV * av, * dummy;
+	AV * av;
 	SV * tie;
 	HV * stash;
+	MAGIC * mg;
 
 	av = newAV ();
-	dummy = newAV ();
 
-	tie = newRV_noinc ((SV *) dummy);
+	/* Create a tied reference. */
+	tie = newRV_noinc ((SV *) av);
 	stash = gv_stashpv ("Cairo::Path", TRUE);
 	sv_bless (tie, stash);
+	sv_magic ((SV *) av, tie, PERL_MAGIC_tied, Nullch, 0);
 
-	/* Both the dummy and the real array need to have the path stored in
-	 * the ext slot.  SvCairoPath looks for it in the real array.
-	 * FETCHSIZE and FETCH look for it in the dummy. */
-	sv_magic ((SV *) dummy, 0, PERL_MAGIC_ext, (const char *) path, 0);
+	/* Associate the array with the original path via magic. */
 	sv_magic ((SV *) av, 0, PERL_MAGIC_ext, (const char *) path, 0);
-	sv_magic ((SV *) av, tie, PERL_MAGIC_tied, "", 0);
 
-	return newRV_noinc ((SV *) av);
+	mg = mg_find ((SV *) av, PERL_MAGIC_ext);
+
+	/* Mark the mg as belonging to us. */
+	mg->mg_private = MY_MAGIC_SIG;
+
+#if PERL_REVISION <= 5 && PERL_VERSION <= 6
+	/* perl 5.6.x doesn't actually set mg_ptr when namlen == 0, so do it
+	 * now. */
+	mg->mg_ptr = (char *) path;
+#endif /* 5.6.x */
+
+	return tie;
 }
 
 cairo_path_t *
 SvCairoPath (SV * sv)
 {
 	MAGIC * mg;
-	if (!sv || !SvROK (sv) || !(mg = mg_find (SvRV (sv), PERL_MAGIC_ext)))
+	if (!sv || !SvROK (sv) || !(mg = cairo_perl_mg_find (SvRV (sv), PERL_MAGIC_ext)))
 		return NULL;
 	return (cairo_path_t *) mg->mg_ptr;
 }
 
 MODULE = Cairo::Path	PACKAGE = Cairo::Path
 
-void DESTROY (cairo_path_t * path)
+void DESTROY (SV * sv)
+    PREINIT:
+	cairo_path_t *path;
     CODE:
-	cairo_path_destroy (path);
+	path = SvCairoPath (sv);
+	if (path) {
+#if PERL_REVISION <= 5 && PERL_VERSION <= 6
+		/* Unset mg_ptr to prevent perl 5.6.x from trying to free it again. */
+		MAGIC *mg = cairo_perl_mg_find (SvRV (sv), PERL_MAGIC_ext);
+		mg->mg_ptr = NULL;
+#endif /* 5.6.x */
+		cairo_path_destroy (path);
+	}
 
-IV FETCHSIZE (cairo_path_t * path, i_do_not_care_what_this_undocumented_second_argument_is)
+IV FETCHSIZE (cairo_path_t * path)
     PREINIT:
 	int i;
     CODE:

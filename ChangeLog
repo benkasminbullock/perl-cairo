@@ -1,3 +1,9 @@
+2008-02-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* CairoPath.xs: Fix the tied interface for paths on perl 5.6,
+	whose magic support was slightly broken.  Also cleanup the tie
+	code a bit.
+
 2008-01-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.pm
