@@ -1,5 +1,10 @@
 2008-02-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* CairoSurface.xs
+	* t/CairoSurface.t: Wrap cairo_format_stride_for_width.  Adapt to
+	API changes: cairo_surface_copy_page and cairo_surface_show_page
+	don't return cairo_status_t anymore.
+
 	* CairoPath.xs: Fix the tied interface for paths on perl 5.6,
 	whose magic support was slightly broken.  Also cleanup the tie
 	code a bit.
