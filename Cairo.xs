@@ -413,6 +413,12 @@ void cairo_rectangle (cairo_t * cr, double x, double y, double width, double hei
 
 void cairo_close_path (cairo_t * cr);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 8) /* FIXME: 1.6 */
+
+void cairo_path_extents (cairo_t *cr, OUTLIST double x1, OUTLIST double y1, OUTLIST double x2, OUTLIST double y2);
+
+#endif
+
 void cairo_paint (cairo_t *cr);
 
 void cairo_paint_with_alpha (cairo_t *cr, double alpha);

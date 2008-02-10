@@ -1,5 +1,8 @@
 2008-02-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.xs
+	* t/Cairo.t: Wrap cairo_path_extents.
+
 	* CairoSurface.xs
 	* t/CairoSurface.t: Wrap cairo_format_stride_for_width.  Adapt to
 	API changes: cairo_surface_copy_page and cairo_surface_show_page

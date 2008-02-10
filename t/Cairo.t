@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 68;
+use Test::More tests => 72;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -138,6 +138,16 @@ $cr->rel_line_to (8.8, 9.9);
 $cr->rel_curve_to (9.9, 0.0, 1.1, 2.2, 3.3, 4.4);
 $cr->rectangle (0.0, 1.1, 2.2, 3.3);
 $cr->close_path;
+
+SKIP: {
+	skip 'new stuff', 4
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 8);
+
+	my ($x1, $y1, $x2, $y2) = $cr->path_extents;
+	foreach ($x1, $y1, $x2, $y2) {
+		ok (defined $_);
+	}
+}
 
 $cr->paint;
 $cr->paint_with_alpha (0.5);
