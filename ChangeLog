@@ -1,3 +1,8 @@
+2008-02-12  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Cairo.pm
+	* NEWS: Unstable release 1.052.
+
 2008-02-10  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.xs

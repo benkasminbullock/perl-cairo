@@ -1,3 +1,13 @@
+Overview of changes in Cairo 1.052
+==================================
+
+* Adapt to API changes: cairo_surface_copy_page and cairo_surface_show_page
+  don't return cairo_status_t anymore.
+* Wrap new API:
+  - cairo_path_extents
+  - cairo_format_stride_for_width
+* Fix the tied interface for paths on perl 5.6.
+
 Overview of changes in Cairo 1.051
 ==================================
 
@@ -14,6 +24,11 @@ Overview of changes in Cairo 1.050
 * Provide Cairo::FtFontFace::create which can be used with Font::FreeType.
 * Add entries for the various kinds of surfaces to the API listing.
 * Fix some test suite and build issues.
+
+Overview of changes in Cairo 1.045
+==================================
+
+* Fix memory allocation errors on win32.  [T.J. Ferraro]
 
 Overview of changes in Cairo 1.044
 ==================================
