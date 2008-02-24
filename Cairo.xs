@@ -589,6 +589,12 @@ double cairo_get_tolerance (cairo_t *cr);
 
 cairo_antialias_t cairo_get_antialias (cairo_t *cr);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 10) /* FIXME: 1.6 */
+
+cairo_bool_t cairo_has_current_point (cairo_t *cr);
+
+#endif
+
 void cairo_get_current_point (cairo_t *cr, OUTLIST double x, OUTLIST double y);
 
 cairo_fill_rule_t cairo_get_fill_rule (cairo_t *cr);

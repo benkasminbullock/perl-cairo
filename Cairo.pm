@@ -393,6 +393,8 @@ C<$cr-E<gt>close_path>.
 
 =back
 
+=head4 $bool = $cr->has_current_point [1.6]
+
 =head4 ($x, $y) = $cr->get_current_point
 
 =head4 $cr->new_path

@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 72;
+use Test::More tests => 73;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -255,6 +255,13 @@ SKIP: {
 }
 
 isa_ok ($cr->get_source, 'Cairo::Pattern');
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 10); # FIXME: 1.6
+
+	ok ($cr->has_current_point);
+}
 
 my @pnt = $cr->get_current_point;
 is (@pnt, 2);
