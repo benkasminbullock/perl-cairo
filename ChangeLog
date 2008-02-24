@@ -1,6 +1,11 @@
 2008-02-24  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.pm
+	* NEWS: Unstable release 1.053.
+
+2008-02-24  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Cairo.pm
 	* Cairo.xs
 	* t/Cairo.t: Wrap cairo_has_current_point.
 
