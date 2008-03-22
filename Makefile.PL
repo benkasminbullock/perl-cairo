@@ -56,7 +56,12 @@ my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
 
-my %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}");
+my %cairo_cfg;
+eval { %cairo_cfg = ExtUtils::PkgConfig->find ("cairo >= $extreqs{cairo}"); };
+if ($@ ne '') {
+	warn $@;
+	exit 0;
+}
 
 my %backend_guards = (
 	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
