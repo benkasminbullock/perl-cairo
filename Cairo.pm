@@ -403,6 +403,8 @@ C<$cr-E<gt>close_path>.
 
 =head4 $cr->close_path
 
+=head4 ($x1, $y1, $x2, $y2) = $cr->path_extents [1.6]
+
 =head4 $cr->arc ($xc, $yc, $radius, $angle1, $angle2)
 
 =over
@@ -1449,6 +1451,16 @@ from a file:
 =item $minor: integer
 
 =item $micro: integer
+
+=back
+
+=head4 $stride = Cairo::Format::stride_for_width ($format, $width) [1.6]
+
+=over
+
+=item $format: I<Cairo::Format>
+
+=item $width: integer
 
 =back
 
