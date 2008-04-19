@@ -1,5 +1,10 @@
 2008-04-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm
+	* NEWS: Stable release 1.060.
+
+2008-04-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Cairo.pm: Add documentation for new API.
 
 2008-03-22  Torsten Schoenfeld  <kaffeetisch@gmx.de>

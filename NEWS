@@ -1,3 +1,23 @@
+Overview of changes in Cairo 1.060
+==================================
+
+Since 1.04x
+-----------
+* Wrap new API:
+  - cairo_has_current_point
+  - cairo_path_extents
+  - cairo_format_stride_for_width
+  - cairo_surface_copy_page and cairo_surface_show_page
+  - cairo_ps_surface_restrict_to_level, cairo_ps_get_levels, and
+    cairo_ps_level_to_string
+  - cairo_ps_surface_set_eps and cairo_ps_surface_get_eps
+* Provide Cairo::FtFontFace::create which can be used with Font::FreeType.
+* Complete the API listing POD.
+
+Since 1.053
+-----------
+* Document new API.
+
 Overview of changes in Cairo 1.053
 ==================================
 
