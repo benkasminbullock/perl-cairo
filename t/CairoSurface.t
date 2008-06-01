@@ -229,6 +229,10 @@ SKIP: {
 		unless Cairo::HAS_PS_SURFACE;
 
 	my $surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
+
+	skip 'create returned no ps surface', 15
+		unless defined $surf && $surf->isa ('Cairo::PsSurface');
+
 	isa_ok ($surf, 'Cairo::PsSurface');
 	isa_ok ($surf, 'Cairo::Surface');
 

@@ -1,3 +1,9 @@
+2008-06-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* t/CairoSurface.t: Cairo::PsSurface->create can under certain
+	conditions apparently return a surface that is not a PS surface.
+	Handle this gracefully.  (RT #33871)
+
 2008-04-19  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Cairo.pm
