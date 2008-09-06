@@ -1,3 +1,8 @@
+2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Support the enum value CAIRO_FONT_TYPE_QUARTZ.  (RT
+	#34681)
+
 2008-06-01  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* t/CairoSurface.t: Cairo::PsSurface->create can under certain

@@ -286,6 +286,8 @@ if ($have_cairo_1_4) {
 	my %new = (
 		cairo_status_t => [qw/CAIRO_STATUS_INVALID_INDEX
 		                      CAIRO_STATUS_CLIP_NOT_REPRESENTABLE/],
+
+		cairo_font_type_t => [qw/CAIRO_FONT_TYPE_QUARTZ/],
 	);
 
 	foreach my $enum (keys %new) {
