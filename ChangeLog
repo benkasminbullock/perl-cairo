@@ -1,5 +1,8 @@
 2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm: Mention http://cairographics.org/manual/ in the API
+	documentation section.  Fix a POD error.
+
 	* Makefile.PL: Support the enum value CAIRO_FONT_TYPE_QUARTZ.  (RT
 	#34681)
 

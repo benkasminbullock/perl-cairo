@@ -59,8 +59,8 @@ identical output on all those targets.
 
 =head1 API DOCUMENTATION
 
-Note that this listing still lacks entries for I<Cairo::Surface>s and some
-utility methods.
+This is a listing of the API Cairo provides.  For more verbose information,
+refer to the cairo manual at L<http://cairographics.org/manual/>.
 
 =head2 Drawing
 
@@ -69,7 +69,7 @@ utility methods.
 I<Cairo::Context> is the main object used when drawing with Cairo. To draw with
 Cairo, you create a I<Cairo::Context>, set the target surface, and drawing
 options for the I<Cairo::Context>, create shapes with methods like
-C<$cr->move_to> and C<$cr-E<gt>line_to>, and then draw shapes with
+C<$cr-E<gt>move_to> and C<$cr-E<gt>line_to>, and then draw shapes with
 C<$cr-E<gt>stroke> or C<$cr-E<gt>fill>.
 
 I<Cairo::Context>'s can be pushed to a stack via C<$cr-E<gt>save>. They may
