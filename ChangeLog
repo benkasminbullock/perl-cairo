@@ -1,5 +1,8 @@
 2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* README: Fix the dependency versions for EU::Depends and
+	EU::PkgConfig.
+
 	* Cairo.pm: Mention http://cairographics.org/manual/ in the API
 	documentation section.  Fix a POD error.
 

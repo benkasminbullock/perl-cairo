@@ -43,8 +43,8 @@ This module requires these other modules and libraries:
 
 In order to build it from source, you'll also need
 
-  ExtUtils::PkgConfig >= 0.2
-  ExtUtils::Depends   >= 1.0
+  ExtUtils::Depends   >= 0.2
+  ExtUtils::PkgConfig >= 1.0
   Test::Number::Delta >= 1.0
 
 BUG REPORTS
