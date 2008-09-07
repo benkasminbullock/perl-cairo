@@ -1,3 +1,9 @@
+2008-09-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: When prompting for auto-installing dependencies,
+	default to 'no' so that automatic testers with CPANPLUS.pm don't
+	end up invoking CPAN.pm.  (RT #38286)
+
 2008-09-06  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* README: Fix the dependency versions for EU::Depends and
