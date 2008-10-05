@@ -1,5 +1,10 @@
 2008-10-05  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* MakeHelper.pm: Use the correct enum type instead of int for the
+	enum converters.
+
+2008-10-05  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Cairo.pm:
 	* Cairo.xs:
 	* CairoFont.xs:

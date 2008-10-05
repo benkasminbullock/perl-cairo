@@ -253,8 +253,8 @@ EOS
 		}
 
 		print HEADER <<"EOS";
-int cairo_${name}_from_sv (SV * $name);
-SV * cairo_${name}_to_sv (int val);
+$type cairo_${name}_from_sv (SV * $name);
+SV * cairo_${name}_to_sv ($type val);
 #define Sv$mangled(sv)		(cairo_${name}_from_sv (sv))
 #define newSV$mangled(val)	(cairo_${name}_to_sv (val))
 EOS
@@ -371,7 +371,7 @@ EOS
 		}
 
 		print ENUMS <<"EOS";
-int
+$type
 cairo_${name}_from_sv (SV * $name)
 {
 	char * str = SvPV_nolen ($name);
@@ -383,7 +383,7 @@ cairo_${name}_from_sv (SV * $name)
 }
 
 SV *
-cairo_${name}_to_sv (int val)
+cairo_${name}_to_sv ($type val)
 {
 	$tree_to
 	warn ("unknown $type value %d encountered", val);
