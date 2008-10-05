@@ -2,7 +2,7 @@
 # this is all hacky etc. it works so it's gonna stay for now. it is not and
 # should not be installed.
 #
-# $Header$
+# $Id$
 #
 
 package MakeHelper;

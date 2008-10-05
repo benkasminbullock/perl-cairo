@@ -1,3 +1,28 @@
+2008-10-05  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Cairo.pm:
+	* Cairo.xs:
+	* CairoFont.xs:
+	* CairoFt.xs:
+	* CairoMatrix.xs:
+	* CairoPath.xs:
+	* CairoPattern.xs:
+	* CairoSurface.xs:
+	* MakeHelper.pm:
+	* Makefile.PL:
+	* cairo-perl-private.h:
+	* cairo-perl.h:
+	* cairo-perl.typemap:
+	* examples/simple.pl:
+	* t/Cairo.t:
+	* t/CairoFont.t:
+	* t/CairoFt.t:
+	* t/CairoMatrix.t:
+	* t/CairoPath.t:
+	* t/CairoPattern.t:
+	* t/CairoSurface.t: In preparation of the move to SVN, use the Id
+	keyword in place of Header.
+
 2008-09-07  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Makefile.PL: When prompting for auto-installing dependencies,
