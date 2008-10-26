@@ -1,3 +1,8 @@
+2008-10-26  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: CAIRO_FONT_TYPE_QUARTZ was introduced in cairo 1.6,
+	not 1.4.
+
 2008-10-05  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* MakeHelper.pm: Use the correct enum type instead of int for the
