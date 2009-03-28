@@ -49,9 +49,6 @@ while ((my $module, my $version) = each(%prereqs)) {
 	eval "use $module $version; 1" or die $@;
 }
 
-# Add this now since it's not required to generate a Makefile.
-$prereqs{'Test::Number::Delta'} = 1.00;
-
 my $autogen_dir = 'build';
 mkdir $autogen_dir unless (-d $autogen_dir);
 $MakeHelper::autogen_dir = $autogen_dir;
@@ -394,18 +391,15 @@ WriteMakefile (
 
 	$dep->get_makefile_vars,
 
-	EXTRA_META => qq(
-configure_requires:
-    ExtUtils::Depends: $prereqs{'ExtUtils::Depends'}
-    ExtUtils::PkgConfig: $prereqs{'ExtUtils::PkgConfig'}
-
-build_requires:
-    Test::Number::Delta: $prereqs{'Test::Number::Delta'}
-
-no_index:
-    file:
-    - MakeHelper.pm
-),
+	META_MERGE => {
+		configure_requires => \%prereqs,
+		build_requires => {
+			'Test::Number::Delta' => 1.0,
+		},
+		no_index => {
+			files => [qw/MakeHelper.pm/],
+		},
+        },
 );
 
 sub MY::postamble

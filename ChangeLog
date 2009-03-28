@@ -1,3 +1,7 @@
+2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
+	* Makefile.PL: Use EU::MM's META_MERGE instead of EXTRA_META.
+
 2008-10-26  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* Makefile.PL: CAIRO_FONT_TYPE_QUARTZ was introduced in cairo 1.6,
