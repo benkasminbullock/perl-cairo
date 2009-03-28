@@ -1,5 +1,14 @@
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm → lib/Cairo.pm (moved)
+	* MakeHelper.pm → inc/MakeHelper.pm (moved)
+	* MANIFEST
+	* Makefile.PL: Move the two modules into their own folders to make
+	it clear that the one is the real thing while the other is just
+	build helper code.
+
+2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Cairo.xs (cairo_object_from_sv, cairo_struct_from_sv): Hush two
 	compiler warnings.
 

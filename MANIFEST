@@ -1,7 +1,6 @@
 cairo-perl-private.h
 cairo-perl.h
 cairo-perl.typemap
-Cairo.pm
 Cairo.xs
 CairoFont.xs
 CairoFt.xs
@@ -25,9 +24,10 @@ examples/png/stars.pl
 examples/png/text-rotate.pl
 examples/png/text.pl
 examples/simple.pl
+inc/MakeHelper.pm
+lib/Cairo.pm
 LICENSE
 Makefile.PL
-MakeHelper.pm
 MANIFEST
 MANIFEST.SKIP
 NEWS

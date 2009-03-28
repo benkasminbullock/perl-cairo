@@ -11,7 +11,8 @@ BEGIN { require 5.006; }
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
-use MakeHelper;
+
+require './inc/MakeHelper.pm';
 
 my %extreqs = (
 	'cairo' => '1.0.0',
@@ -353,7 +354,7 @@ $dep->set_inc ('-I. -I'.$autogen_dir.' '.$cairo_cfg{cflags});
 $dep->set_libs ($cairo_cfg{libs});
 $dep->add_xs (@xs_files);
 $dep->add_c ('cairo-perl-enums.c');
-$dep->add_pm ('Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm');
+$dep->add_pm ('lib/Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm');
 $dep->add_typemaps (@typemaps);
 
 $dep->install (qw(cairo-perl.h
@@ -382,8 +383,8 @@ my @exports = qw(
 
 WriteMakefile (
 	NAME          => 'Cairo',
-	VERSION_FROM  => 'Cairo.pm',
-	ABSTRACT_FROM => 'Cairo.pm',
+	VERSION_FROM  => 'lib/Cairo.pm',
+	ABSTRACT_FROM => 'lib/Cairo.pm',
 	PREREQ_PM     => \%prereqs,
 	XSPROTOARG    => '-noprototypes',
 	FUNCLIST      => \@exports,
@@ -397,7 +398,7 @@ WriteMakefile (
 			'Test::Number::Delta' => 1.0,
 		},
 		no_index => {
-			files => [qw/MakeHelper.pm/],
+			files => [qw(inc/MakeHelper.pm)],
 		},
         },
 );
