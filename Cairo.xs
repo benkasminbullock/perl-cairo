@@ -55,7 +55,7 @@ void *
 cairo_object_from_sv (SV *sv, const char *package)
 {
 	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
-		croak("Cannot convert scalar 0x%x to an object of type %s",
+		croak("Cannot convert scalar %p to an object of type %s",
 		      sv, package);
 	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
 }
@@ -74,7 +74,7 @@ void *
 cairo_struct_from_sv (SV *sv, const char *package)
 {
 	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
-		croak("Cannot convert scalar 0x%x to a struct of type %s",
+		croak("Cannot convert scalar %p to a struct of type %s",
 		      sv, package);
 	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
 }
