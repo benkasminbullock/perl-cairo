@@ -1,5 +1,11 @@
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* NEWS
+	* README
+	* lib/Cairo.pm: Stable release 1.061.
+
+2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Cairo.pm → lib/Cairo.pm (moved)
 	* MakeHelper.pm → inc/MakeHelper.pm (moved)
 	* MANIFEST

@@ -1,3 +1,11 @@
+Overview of changes in Cairo 1.061
+==================================
+
+* Support the enum value CAIRO_FONT_TYPE_QUARTZ.
+* Improve the documentation slightly.
+* Fix a few test failures.
+* Fix a few build issues.
+
 Overview of changes in Cairo 1.060
 ==================================
 
