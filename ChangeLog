@@ -1,5 +1,11 @@
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* Cairo.pm: In the POD, use =item instead of =head4 for methods so
+	that not every single method shows up in a table of contents.
+	Also fix two other small POD glitches.
+
+2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* MANIFEST.SKIP: Update for SVN.
 
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>

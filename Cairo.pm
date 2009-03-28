@@ -75,9 +75,10 @@ C<$cr-E<gt>stroke> or C<$cr-E<gt>fill>.
 I<Cairo::Context>'s can be pushed to a stack via C<$cr-E<gt>save>. They may
 then safely be changed, without loosing the current state. Use
 C<$cr-E<gt>restore> to restore to the saved state.
+
 =over
 
-=head4 $cr = Cairo::Context->create ($surface)
+=item $cr = Cairo::Context->create ($surface)
 
 =over
 
@@ -85,17 +86,17 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr-E<gt>save
+=item $cr-E<gt>save
 
-=head4 $cr->restore
+=item $cr->restore
 
-=head4 $status = $cr->status
+=item $status = $cr->status
 
-=head4 $surface = $cr->get_target
+=item $surface = $cr->get_target
 
-=head4 $cr->push_group [1.2]
+=item $cr->push_group [1.2]
 
-=head4 $cr->push_group_with_content ($content) [1.2]
+=item $cr->push_group_with_content ($content) [1.2]
 
 =over
 
@@ -103,13 +104,13 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $pattern = $cr->pop_group [1.2]
+=item $pattern = $cr->pop_group [1.2]
 
-=head4 $cr->pop_group_to_source [1.2]
+=item $cr->pop_group_to_source [1.2]
 
-=head4 $surface = $cr->get_group_target [1.2]
+=item $surface = $cr->get_group_target [1.2]
 
-=head4 $cr->set_source_rgb ($red, $green, $blue)
+=item $cr->set_source_rgb ($red, $green, $blue)
 
 =over
 
@@ -121,7 +122,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->set_source_rgba ($red, $green, $blue, $alpha)
+=item $cr->set_source_rgba ($red, $green, $blue, $alpha)
 
 =over
 
@@ -135,7 +136,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->set_source ($source)
+=item $cr->set_source ($source)
 
 =over
 
@@ -143,7 +144,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->set_source_surface ($surface, $x, $y)
+=item $cr->set_source_surface ($surface, $x, $y)
 
 =over
 
@@ -155,9 +156,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $source = $cr->get_source
+=item $source = $cr->get_source
 
-=head4 $cr->set_antialias ($antialias)
+=item $cr->set_antialias ($antialias)
 
 =over
 
@@ -165,9 +166,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $antialias = $cr->get_antialias
+=item $antialias = $cr->get_antialias
 
-=head4 $cr->set_dash ($offset, ...)
+=item $cr->set_dash ($offset, ...)
 
 =over
 
@@ -177,7 +178,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->set_fill_rule ($fill_rule)
+=item $cr->set_fill_rule ($fill_rule)
 
 =over
 
@@ -185,9 +186,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $fill_rule = $cr->get_fill_rule
+=item $fill_rule = $cr->get_fill_rule
 
-=head4 $cr->set_line_cap ($line_cap)
+=item $cr->set_line_cap ($line_cap)
 
 =over
 
@@ -195,9 +196,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $line_cap = $cr->get_line_cap
+=item $line_cap = $cr->get_line_cap
 
-=head4 $cr->set_line_join ($line_join)
+=item $cr->set_line_join ($line_join)
 
 =over
 
@@ -205,9 +206,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $line_join = $cr->get_line_join
+=item $line_join = $cr->get_line_join
 
-=head4 $cr->set_line_width ($width)
+=item $cr->set_line_width ($width)
 
 =over
 
@@ -215,9 +216,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $width = $cr->get_line_width
+=item $width = $cr->get_line_width
 
-=head4 $cr->set_miter_limit ($limit)
+=item $cr->set_miter_limit ($limit)
 
 =over
 
@@ -225,11 +226,11 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 ($offset, @dashes) = $cr->get_dash [1.4]
+=item ($offset, @dashes) = $cr->get_dash [1.4]
 
-=head4 $limit = $cr->get_miter_limit
+=item $limit = $cr->get_miter_limit
 
-=head4 $cr->set_operator ($op)
+=item $cr->set_operator ($op)
 
 =over
 
@@ -237,9 +238,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $op = $cr->get_operator
+=item $op = $cr->get_operator
 
-=head4 $cr->set_tolerance ($tolerance)
+=item $cr->set_tolerance ($tolerance)
 
 =over
 
@@ -247,25 +248,25 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $tolerance = $cr->get_tolerance
+=item $tolerance = $cr->get_tolerance
 
-=head4 $cr->clip
+=item $cr->clip
 
-=head4 $cr->clip_preserve
+=item $cr->clip_preserve
 
-=head4 ($x1, $y1, $x2, $y2) = $cr->clip_extents [1.4]
+=item ($x1, $y1, $x2, $y2) = $cr->clip_extents [1.4]
 
-=head4 @rectangles = $cr->copy_clip_rectangle_list [1.4]
+=item @rectangles = $cr->copy_clip_rectangle_list [1.4]
 
-=head4 $cr->reset_clip
+=item $cr->reset_clip
 
-=head4 $cr->fill
+=item $cr->fill
 
-=head4 $cr->fill_preserve
+=item $cr->fill_preserve
 
-=head4 ($x1, $y1, $x2, $y2) = $cr->fill_extents
+=item ($x1, $y1, $x2, $y2) = $cr->fill_extents
 
-=head4 $bool = $cr->in_fill ($x, $y)
+=item $bool = $cr->in_fill ($x, $y)
 
 =over
 
@@ -275,7 +276,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->mask ($pattern)
+=item $cr->mask ($pattern)
 
 =over
 
@@ -283,7 +284,7 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->mask_surface ($surface, $surface_x, $surface_y)
+=item $cr->mask_surface ($surface, $surface_x, $surface_y)
 
 =over
 
@@ -295,9 +296,9 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->paint
+=item $cr->paint
 
-=head4 $cr->paint_with_alpha ($alpha)
+=item $cr->paint_with_alpha ($alpha)
 
 =over
 
@@ -305,13 +306,13 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->stroke
+=item $cr->stroke
 
-=head4 $cr->stroke_preserve
+=item $cr->stroke_preserve
 
-=head4 ($x1, $y1, $x2, $y2) = $cr->stroke_extents
+=item ($x1, $y1, $x2, $y2) = $cr->stroke_extents
 
-=head4 $bool = $cr->in_stroke ($x, $y)
+=item $bool = $cr->in_stroke ($x, $y)
 
 =over
 
@@ -321,9 +322,11 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
-=head4 $cr->copy_page
+=item $cr->copy_page
 
-=head4 $cr->show_page
+=item $cr->show_page
+
+=back
 
 =cut
 
@@ -381,11 +384,13 @@ The semantics and ordering of the coordinate values are consistent with
 C<$cr-E<gt>move_to>, C<$cr-E<gt>line_to>, C<$cr-E<gt>curve_to>, and
 C<$cr-E<gt>close_path>.
 
-=head4 $path = $cr->copy_path
+=over
 
-=head4 $path = $cr->copy_path_flat
+=item $path = $cr->copy_path
 
-=head4 $cr->append_path ($path)
+=item $path = $cr->copy_path_flat
+
+=item $cr->append_path ($path)
 
 =over
 
@@ -393,35 +398,19 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $bool = $cr->has_current_point [1.6]
+=item $bool = $cr->has_current_point [1.6]
 
-=head4 ($x, $y) = $cr->get_current_point
+=item ($x, $y) = $cr->get_current_point
 
-=head4 $cr->new_path
+=item $cr->new_path
 
-=head4 $cr->new_sub_path [1.2]
+=item $cr->new_sub_path [1.2]
 
-=head4 $cr->close_path
+=item $cr->close_path
 
-=head4 ($x1, $y1, $x2, $y2) = $cr->path_extents [1.6]
+=item ($x1, $y1, $x2, $y2) = $cr->path_extents [1.6]
 
-=head4 $cr->arc ($xc, $yc, $radius, $angle1, $angle2)
-
-=over
-
-=item $xc: double
-
-=item $yc: double
-
-=item $radius: double
-
-=item $angle1: double
-
-=item $angle2: double
-
-=back
-
-=head4 $cr->arc_negative ($xc, $yc, $radius, $angle1, $angle2)
+=item $cr->arc ($xc, $yc, $radius, $angle1, $angle2)
 
 =over
 
@@ -437,7 +426,23 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->curve_to ($x1, $y1, $x2, $y2, $x3, $y3)
+=item $cr->arc_negative ($xc, $yc, $radius, $angle1, $angle2)
+
+=over
+
+=item $xc: double
+
+=item $yc: double
+
+=item $radius: double
+
+=item $angle1: double
+
+=item $angle2: double
+
+=back
+
+=item $cr->curve_to ($x1, $y1, $x2, $y2, $x3, $y3)
 
 =over
 
@@ -455,7 +460,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->line_to ($x, $y)
+=item $cr->line_to ($x, $y)
 
 =over
 
@@ -465,7 +470,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->move_to ($x, $y)
+=item $cr->move_to ($x, $y)
 
 =over
 
@@ -475,7 +480,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->rectangle ($x, $y, $width, $height)
+=item $cr->rectangle ($x, $y, $width, $height)
 
 =over
 
@@ -489,7 +494,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->glyph_path (...)
+=item $cr->glyph_path (...)
 
 =over
 
@@ -497,7 +502,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->text_path ($utf8)
+=item $cr->text_path ($utf8)
 
 =over
 
@@ -505,7 +510,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->rel_curve_to ($dx1, $dy1, $dx2, $dy2, $dx3, $dy3)
+=item $cr->rel_curve_to ($dx1, $dy1, $dx2, $dy2, $dx3, $dy3)
 
 =over
 
@@ -523,7 +528,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->rel_line_to ($dx, $dy)
+=item $cr->rel_line_to ($dx, $dy)
 
 =over
 
@@ -533,13 +538,15 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $cr->rel_move_to ($dx, $dy)
+=item $cr->rel_move_to ($dx, $dy)
 
 =over
 
 =item $dx: double
 
 =item $dy: double
+
+=back
 
 =back
 
@@ -549,11 +556,13 @@ C<$cr-E<gt>close_path>.
 
 =head3 Patterns -- Gradients and filtered sources
 
-=head4 $status = $pattern->status
+=over
 
-=head4 $type = $pattern->get_type [1.2]
+=item $status = $pattern->status
 
-=head4 $pattern->set_matrix ($matrix)
+=item $type = $pattern->get_type [1.2]
+
+=item $pattern->set_matrix ($matrix)
 
 =over
 
@@ -561,9 +570,9 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $matrix = $pattern->get_matrix
+=item $matrix = $pattern->get_matrix
 
-=head4 $pattern = Cairo::SolidPattern->create_rgb ($red, $green, $blue)
+=item $pattern = Cairo::SolidPattern->create_rgb ($red, $green, $blue)
 
 =over
 
@@ -575,7 +584,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $pattern = Cairo::SolidPattern->create_rgba ($red, $green, $blue, $alpha)
+=item $pattern = Cairo::SolidPattern->create_rgba ($red, $green, $blue, $alpha)
 
 =over
 
@@ -589,9 +598,9 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 ($r, $g, $b, $a) = $pattern->get_rgba [1.4]
+=item ($r, $g, $b, $a) = $pattern->get_rgba [1.4]
 
-=head4 $pattern = Cairo::SurfacePattern->create ($surface)
+=item $pattern = Cairo::SurfacePattern->create ($surface)
 
 =over
 
@@ -599,7 +608,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $pattern->set_extend ($extend)
+=item $pattern->set_extend ($extend)
 
 =over
 
@@ -607,9 +616,9 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $extend = $pattern->get_extend
+=item $extend = $pattern->get_extend
 
-=head4 $pattern->set_filter ($filter)
+=item $pattern->set_filter ($filter)
 
 =over
 
@@ -617,11 +626,11 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $filter = $pattern->get_filter
+=item $filter = $pattern->get_filter
 
-=head4 $surface = $pattern->get_surface [1.4]
+=item $surface = $pattern->get_surface [1.4]
 
-=head4 $pattern = Cairo::LinearGradient->create ($x0, $y0, $x1, $y1)
+=item $pattern = Cairo::LinearGradient->create ($x0, $y0, $x1, $y1)
 
 =over
 
@@ -635,9 +644,9 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 ($x0, $y0, $x1, $y1) = $pattern->get_points [1.4]
+=item ($x0, $y0, $x1, $y1) = $pattern->get_points [1.4]
 
-=head4 $pattern = Cairo::RadialGradient->create ($cx0, $cy0, $radius0, $cx1, $cy1, $radius1)
+=item $pattern = Cairo::RadialGradient->create ($cx0, $cy0, $radius0, $cx1, $cy1, $radius1)
 
 =over
 
@@ -655,9 +664,9 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 ($x0, $y0, $r0, $x1, $y1, $r1) = $pattern->get_circles [1.4]
+=item ($x0, $y0, $r0, $x1, $y1, $r1) = $pattern->get_circles [1.4]
 
-=head4 $pattern->add_color_stop_rgb (double offset, double red, double green, double blue)
+=item $pattern->add_color_stop_rgb ($offset, $red, $green, $blue)
 
 =over
 
@@ -671,7 +680,7 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 $pattern->add_color_stop_rgba (double offset, double red, double green, double blue, double alpha)
+=item $pattern->add_color_stop_rgba ($offset, $red, $green, $blue, $alpha)
 
 =over
 
@@ -687,10 +696,12 @@ C<$cr-E<gt>close_path>.
 
 =back
 
-=head4 @stops = $pattern->get_color_stops [1.4]
+=item @stops = $pattern->get_color_stops [1.4]
 
 A color stop is represented as an array reference with five elements: offset,
 red, green, blue, and alpha.
+
+=back
 
 =cut
 
@@ -698,7 +709,9 @@ red, green, blue, and alpha.
 
 =head3 Transformations -- Manipulating the current transformation matrix
 
-=head4 $cr->translate ($tx, $ty)
+=over
+
+=item $cr->translate ($tx, $ty)
 
 =over
 
@@ -708,7 +721,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 $cr->scale ($sx, $sy)
+=item $cr->scale ($sx, $sy)
 
 =over
 
@@ -718,7 +731,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 $cr->rotate ($angle)
+=item $cr->rotate ($angle)
 
 =over
 
@@ -726,7 +739,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 $cr->transform ($matrix)
+=item $cr->transform ($matrix)
 
 =over
 
@@ -734,7 +747,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 $cr->set_matrix ($matrix)
+=item $cr->set_matrix ($matrix)
 
 =over
 
@@ -742,11 +755,11 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 $matrix = $cr->get_matrix
+=item $matrix = $cr->get_matrix
 
-=head4 $cr->identity_matrix
+=item $cr->identity_matrix
 
-=head4 ($x, $y) = $cr->user_to_device ($x, $y)
+=item ($x, $y) = $cr->user_to_device ($x, $y)
 
 =over
 
@@ -756,7 +769,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 ($dx, $dy) = $cr->user_to_device_distance ($dx, $dy)
+=item ($dx, $dy) = $cr->user_to_device_distance ($dx, $dy)
 
 =over
 
@@ -766,7 +779,7 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 ($x, $y) = $cr->device_to_user ($x, $y)
+=item ($x, $y) = $cr->device_to_user ($x, $y)
 
 =over
 
@@ -776,13 +789,15 @@ red, green, blue, and alpha.
 
 =back
 
-=head4 ($dx, $dy) = $cr->device_to_user_distance ($dx, $dy)
+=item ($dx, $dy) = $cr->device_to_user_distance ($dx, $dy)
 
 =over
 
 =item $dx: double
 
 =item $dy: double
+
+=back
 
 =back
 
@@ -799,7 +814,9 @@ I<x> and I<y>.  Example:
                 { index => 2, x => 3, y => 4 },
                 { index => 3, x => 4, y => 5 });
 
-=head4 $cr->select_font_face ($family, $slant, $weight)
+=over
+
+=item $cr->select_font_face ($family, $slant, $weight)
 
 =over
 
@@ -811,7 +828,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $cr->set_font_size ($size)
+=item $cr->set_font_size ($size)
 
 =over
 
@@ -819,7 +836,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $cr->set_font_matrix ($matrix)
+=item $cr->set_font_matrix ($matrix)
 
 =over
 
@@ -827,9 +844,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $matrix = $cr->get_font_matrix
+=item $matrix = $cr->get_font_matrix
 
-=head4 $cr->set_font_options ($options)
+=item $cr->set_font_options ($options)
 
 =over
 
@@ -837,9 +854,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $options = $cr->get_font_options
+=item $options = $cr->get_font_options
 
-=head4 $cr->set_scaled_font ($scaled_font) [1.2]
+=item $cr->set_scaled_font ($scaled_font) [1.2]
 
 =over
 
@@ -847,9 +864,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $scaled_font = $cr->get_scaled_font [1.4]
+=item $scaled_font = $cr->get_scaled_font [1.4]
 
-=head4 $cr->show_text ($utf8)
+=item $cr->show_text ($utf8)
 
 =over
 
@@ -857,7 +874,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $cr->show_glyphs (...)
+=item $cr->show_glyphs (...)
 
 =over
 
@@ -865,11 +882,11 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $face = $cr->get_font_face
+=item $face = $cr->get_font_face
 
-=head4 $extents = $cr->font_extents
+=item $extents = $cr->font_extents
 
-=head4 $cr->set_font_face ($font_face)
+=item $cr->set_font_face ($font_face)
 
 =over
 
@@ -877,7 +894,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $cr->set_scaled_font ($scaled_font)
+=item $cr->set_scaled_font ($scaled_font)
 
 =over
 
@@ -885,7 +902,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $extents = $cr->text_extents ($utf8)
+=item $extents = $cr->text_extents ($utf8)
 
 =over
 
@@ -893,11 +910,13 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $extents = $cr->glyph_extents (...)
+=item $extents = $cr->glyph_extents (...)
 
 =over
 
 =item ...: list of glyphs
+
+=back
 
 =back
 
@@ -909,9 +928,13 @@ I<x> and I<y>.  Example:
 
 =head3 Cairo::FontFace -- Base class for fonts
 
-=head4 $status = $font_face->status
+=over
 
-=head4 $type = $font_face->get_type [1.2]
+=item $status = $font_face->status
+
+=item $type = $font_face->get_type [1.2]
+
+=back
 
 =cut
 
@@ -919,7 +942,9 @@ I<x> and I<y>.  Example:
 
 =head3 Scaled Fonts -- Caching metrics for a particular font size
 
-=head4 $scaled_font = Cairo::ScaledFont->create ($font_face, $font_matrix, $ctm, $options)
+=over
+
+=item $scaled_font = Cairo::ScaledFont->create ($font_face, $font_matrix, $ctm, $options)
 
 =over
 
@@ -933,11 +958,11 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $status = $scaled_font->status
+=item $status = $scaled_font->status
 
-=head4 $extents = $scaled_font->extents
+=item $extents = $scaled_font->extents
 
-=head4 $extents = $scaled_font->text_extents ($utf8) [1.2]
+=item $extents = $scaled_font->text_extents ($utf8) [1.2]
 
 =over
 
@@ -945,7 +970,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $extents = $scaled_font->glyph_extents (...)
+=item $extents = $scaled_font->glyph_extents (...)
 
 =over
 
@@ -953,15 +978,17 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $font_face = $scaled_font->get_font_face [1.2]
+=item $font_face = $scaled_font->get_font_face [1.2]
 
-=head4 $options = $scaled_font->get_font_options [1.2]
+=item $options = $scaled_font->get_font_options [1.2]
 
-=head4 $font_matrix = $scaled_font->get_font_matrix [1.2]
+=item $font_matrix = $scaled_font->get_font_matrix [1.2]
 
-=head4 $ctm = $scaled_font->get_ctm [1.2]
+=item $ctm = $scaled_font->get_ctm [1.2]
 
-=head4 $type = $scaled_font->get_type [1.2]
+=item $type = $scaled_font->get_type [1.2]
+
+=back
 
 =cut
 
@@ -969,11 +996,13 @@ I<x> and I<y>.  Example:
 
 =head3 Font Options -- How a font should be rendered
 
-=head4 $font_options = Cairo::FontOptions->create
+=over
 
-=head4 $status = $font_options->status
+=item $font_options = Cairo::FontOptions->create
 
-=head4 $font_options->merge ($other)
+=item $status = $font_options->status
+
+=item $font_options->merge ($other)
 
 =over
 
@@ -981,9 +1010,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $hash = $font_options->hash
+=item $hash = $font_options->hash
 
-=head4 $bools = $font_options->equal ($other)
+=item $bools = $font_options->equal ($other)
 
 =over
 
@@ -991,7 +1020,7 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $font_options->set_antialias ($antialias)
+=item $font_options->set_antialias ($antialias)
 
 =over
 
@@ -999,9 +1028,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $antialias = $font_options->get_antialias
+=item $antialias = $font_options->get_antialias
 
-=head4 $font_options->set_subpixel_order ($subpixel_order)
+=item $font_options->set_subpixel_order ($subpixel_order)
 
 =over
 
@@ -1009,9 +1038,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $subpixel_order = $font_options->get_subpixel_order
+=item $subpixel_order = $font_options->get_subpixel_order
 
-=head4 $font_options->set_hint_style ($hint_style)
+=item $font_options->set_hint_style ($hint_style)
 
 =over
 
@@ -1019,9 +1048,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $hint_style = $font_options->get_hint_style
+=item $hint_style = $font_options->get_hint_style
 
-=head4 $font_options->set_hint_metrics ($hint_metrics)
+=item $font_options->set_hint_metrics ($hint_metrics)
 
 =over
 
@@ -1029,7 +1058,9 @@ I<x> and I<y>.  Example:
 
 =back
 
-=head4 $hint_metrics = $font_options->get_hint_metrics
+=item $hint_metrics = $font_options->get_hint_metrics
+
+=back
 
 =cut
 
@@ -1042,7 +1073,9 @@ font faces from font files.  You can query for this capability with
 C<Cairo::HAS_FT_FONT>.  To actually use this, you'll need the L<Font::FreeType>
 module.
 
-=head4 my $face = Cairo::FtFontFace->create ($ft_face, $load_flags=0)
+=over
+
+=item my $face = Cairo::FtFontFace->create ($ft_face, $load_flags=0)
 
 =over
 
@@ -1060,6 +1093,8 @@ from a file:
   my $ft_face = Font::FreeType->new->face ($file);
   my $face = Cairo::FtFontFace->create ($ft_face);
 
+=back
+
 =cut
 
 # --------------------------------------------------------------------------- #
@@ -1068,7 +1103,9 @@ from a file:
 
 =head3 I<Cairo::Surface> -- Base class for surfaces
 
-=head4 $new = $old->create_similar ($content, $width, $height)
+=over
+
+=item $new = $old->create_similar ($content, $width, $height)
 
 =over
 
@@ -1080,19 +1117,19 @@ from a file:
 
 =back
 
-=head4 $status = $surface->status
+=item $status = $surface->status
 
-=head4 $surface->finish
+=item $surface->finish
 
-=head4 $surface->flush
+=item $surface->flush
 
-=head4 $font_options = $surface->get_font_options
+=item $font_options = $surface->get_font_options
 
-=head4 $content = $surface->get_content [1.2]
+=item $content = $surface->get_content [1.2]
 
-=head4 $surface->mark_dirty
+=item $surface->mark_dirty
 
-=head4 $surface->mark_dirty_rectangle ($x, $y, $width, $height)
+=item $surface->mark_dirty_rectangle ($x, $y, $width, $height)
 
 =over
 
@@ -1106,7 +1143,7 @@ from a file:
 
 =back
 
-=head4 $surface->set_device_offset ($x_offset, $y_offset)
+=item $surface->set_device_offset ($x_offset, $y_offset)
 
 =over
 
@@ -1116,9 +1153,9 @@ from a file:
 
 =back
 
-=head4 ($x_offset, $y_offset) = $surface->get_device_offset [1.2]
+=item ($x_offset, $y_offset) = $surface->get_device_offset [1.2]
 
-=head4 $surface->set_fallback_resolution ($x_pixels_per_inch, $y_pixels_per_inch) [1.2]
+=item $surface->set_fallback_resolution ($x_pixels_per_inch, $y_pixels_per_inch) [1.2]
 
 =over
 
@@ -1128,9 +1165,9 @@ from a file:
 
 =back
 
-=head4 $type = $surface->get_type [1.2]
+=item $type = $surface->get_type [1.2]
 
-=head4 $status = $surface->copy_page [1.6]
+=item $status = $surface->copy_page [1.6]
 
 =over
 
@@ -1138,11 +1175,13 @@ from a file:
 
 =back
 
-=head4 $status = $surface->show_page [1.6]
+=item $status = $surface->show_page [1.6]
 
 =over
 
 =item $status: I<Cairo::Status>
+
+=back
 
 =back
 
@@ -1152,7 +1191,9 @@ from a file:
 
 =head3 Image Surfaces -- Rendering to memory buffers
 
-=head4 $surface = Cairo::ImageSurface->create ($format, $width, $height)
+=over
+
+=item $surface = Cairo::ImageSurface->create ($format, $width, $height)
 
 =over
 
@@ -1164,7 +1205,7 @@ from a file:
 
 =back
 
-=head4 $surface = Cairo::ImageSurface->create_for_data ($data, $format, $width, $height, $stride)
+=item $surface = Cairo::ImageSurface->create_for_data ($data, $format, $width, $height, $stride)
 
 =over
 
@@ -1180,15 +1221,17 @@ from a file:
 
 =back
 
-=head4 $data = $surface->get_data [1.2]
+=item $data = $surface->get_data [1.2]
 
-=head4 $format = $surface->get_format [1.2]
+=item $format = $surface->get_format [1.2]
 
-=head4 $width = $surface->get_width
+=item $width = $surface->get_width
 
-=head4 $height = $surface->get_height
+=item $height = $surface->get_height
 
-=head4 $stride = $surface->get_stride [1.2]
+=item $stride = $surface->get_stride [1.2]
+
+=back
 
 =cut
 
@@ -1196,7 +1239,9 @@ from a file:
 
 =head3 PDF Surfaces -- Rendering PDF documents
 
-=head4 $surface = Cairo::PdfSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+=over
+
+=item $surface = Cairo::PdfSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1208,7 +1253,7 @@ from a file:
 
 =back
 
-=head4 $surface = Cairo::PdfSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+=item $surface = Cairo::PdfSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1222,7 +1267,7 @@ from a file:
 
 =back
 
-=head4 $surface->set_size ($width_in_points, $height_in_points) [1.2]
+=item $surface->set_size ($width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1232,13 +1277,17 @@ from a file:
 
 =back
 
+=back
+
 =cut
 
 # --------------------------------------------------------------------------- #
 
 =head3 PNG Support -- Reading and writing PNG images
 
-=head4 $surface = Cairo::ImageSurface->create_from_png ($filename)
+=over
+
+=item $surface = Cairo::ImageSurface->create_from_png ($filename)
 
 =over
 
@@ -1246,7 +1295,7 @@ from a file:
 
 =back
 
-=head4 Cairo::ReadFunc: $data = sub { my ($callback_data, $length) = @_; }
+=item Cairo::ReadFunc: $data = sub { my ($callback_data, $length) = @_; }
 
 =over
 
@@ -1258,7 +1307,7 @@ from a file:
 
 =back
 
-=head4 $surface = Cairo::ImageSurface->create_from_png_stream ($callback, $callback_data)
+=item $surface = Cairo::ImageSurface->create_from_png_stream ($callback, $callback_data)
 
 =over
 
@@ -1268,7 +1317,7 @@ from a file:
 
 =back
 
-=head4 $status = $surface->write_to_png ($filename)
+=item $status = $surface->write_to_png ($filename)
 
 =over
 
@@ -1276,7 +1325,7 @@ from a file:
 
 =back
 
-=head4 Cairo::WriteFunc: sub { my ($callback_data, $data) = @_; }
+=item Cairo::WriteFunc: sub { my ($callback_data, $data) = @_; }
 
 =over
 
@@ -1286,13 +1335,15 @@ from a file:
 
 =back
 
-=head4 $status = $surface->write_to_png_stream ($callback, $callback_data)
+=item $status = $surface->write_to_png_stream ($callback, $callback_data)
 
 =over
 
 =item $callback: L<Cairo::WriteFunc>
 
 =item $callback_data: scalar
+
+=back
 
 =back
 
@@ -1302,7 +1353,9 @@ from a file:
 
 =head3 PostScript Surfaces -- Rendering PostScript documents
 
-=head4 $surface = Cairo::PsSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+=over
+
+=item $surface = Cairo::PsSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1314,7 +1367,7 @@ from a file:
 
 =back
 
-=head4 $surface = Cairo::PsSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+=item $surface = Cairo::PsSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1328,7 +1381,7 @@ from a file:
 
 =back
 
-=head4 $surface->set_size ($width_in_points, $height_in_points) [1.2]
+=item $surface->set_size ($width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1338,11 +1391,11 @@ from a file:
 
 =back
 
-=head4 $surface->dsc_begin_setup [1.2]
+=item $surface->dsc_begin_setup [1.2]
 
-=head4 $surface->dsc_begin_page_setup [1.2]
+=item $surface->dsc_begin_page_setup [1.2]
 
-=head4 $surface->dsc_comment ($comment) [1.2]
+=item $surface->dsc_comment ($comment) [1.2]
 
 =over
 
@@ -1350,7 +1403,7 @@ from a file:
 
 =back
 
-=head4 $surface->restrict_to_level ($level) [1.6]
+=item $surface->restrict_to_level ($level) [1.6]
 
 =over
 
@@ -1358,9 +1411,9 @@ from a file:
 
 =back
 
-=head4 @levels = Cairo::PsSurface::get_levels [1.6]
+=item @levels = Cairo::PsSurface::get_levels [1.6]
 
-=head4 $string = Cairo::PsSurface::level_to_string ($level) [1.6]
+=item $string = Cairo::PsSurface::level_to_string ($level) [1.6]
 
 =over
 
@@ -1368,7 +1421,7 @@ from a file:
 
 =back
 
-=head4 $surface->set_eps ($eps) [1.6]
+=item $surface->set_eps ($eps) [1.6]
 
 =over
 
@@ -1376,7 +1429,9 @@ from a file:
 
 =back
 
-=head4 $eps = $surface->get_eps [1.6]
+=item $eps = $surface->get_eps [1.6]
+
+=back
 
 =cut
 
@@ -1384,7 +1439,9 @@ from a file:
 
 =head3 SVG Surfaces -- Rendering SVG documents
 
-=head4 $surface = Cairo::SvgSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
+=over
+
+=item $surface = Cairo::SvgSurface->create ($filename, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1396,7 +1453,7 @@ from a file:
 
 =back
 
-=head4 $surface = Cairo::SvgSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
+=item $surface = Cairo::SvgSurface->create_for_stream ($callback, $callback_data, $width_in_points, $height_in_points) [1.2]
 
 =over
 
@@ -1410,7 +1467,7 @@ from a file:
 
 =back
 
-=head4 $surface->restrict_to_version ($version) [1.2]
+=item $surface->restrict_to_version ($version) [1.2]
 
 =over
 
@@ -1418,13 +1475,15 @@ from a file:
 
 =back
 
-=head4 @versions = Cairo::SvgSurface::get_versions [1.2]
+=item @versions = Cairo::SvgSurface::get_versions [1.2]
 
-=head4 $string = Cairo::SvgSurface::version_to_string ($version) [1.2]
+=item $string = Cairo::SvgSurface::version_to_string ($version) [1.2]
 
 =over
 
 =item $version: I<Cairo::SvgVersion>
+
+=back
 
 =back
 
@@ -1436,13 +1495,15 @@ from a file:
 
 =head3 Version Information -- Run-time and compile-time version checks.
 
-=head4 $version = Cairo->version
+=over
 
-=head4 $string = Cairo->version_string
+=item $version = Cairo->version
 
-=head4 $version_code = Cairo->VERSION
+=item $string = Cairo->version_string
 
-=head4 $version_code = Cairo->VERSION_ENCODE ($major, $minor, $micro)
+=item $version_code = Cairo->VERSION
+
+=item $version_code = Cairo->VERSION_ENCODE ($major, $minor, $micro)
 
 =over
 
@@ -1454,13 +1515,15 @@ from a file:
 
 =back
 
-=head4 $stride = Cairo::Format::stride_for_width ($format, $width) [1.6]
+=item $stride = Cairo::Format::stride_for_width ($format, $width) [1.6]
 
 =over
 
 =item $format: I<Cairo::Format>
 
 =item $width: integer
+
+=back
 
 =back
 
@@ -1472,11 +1535,11 @@ from a file:
 
 =over
 
-=item http://cairographics.org/documentation
+=item L<http://cairographics.org/documentation>
 
 Lists many available resources including tutorials and examples
 
-=item http://cairographics.org/manual/
+=item L<http://cairographics.org/manual/>
 
 Contains the reference manual
 
