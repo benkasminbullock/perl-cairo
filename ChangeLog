@@ -1,5 +1,9 @@
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
+	* MANIFEST.SKIP: Update for SVN.
+
+2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
+
 	* Makefile.PL: Use EU::MM's META_MERGE instead of EXTRA_META.
 
 2008-10-26  Torsten Schoenfeld  <kaffeetisch@gmx.de>
