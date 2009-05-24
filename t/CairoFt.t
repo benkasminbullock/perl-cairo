@@ -29,3 +29,31 @@ my $ft_face = Font::FreeType->new->face ($file);
 my $cr_ft_face = Cairo::FtFontFace->create ($ft_face);
 isa_ok ($cr_ft_face, 'Cairo::FontFace');
 is ($cr_ft_face->status, 'success');
+
+
+# make sure freetype font object is correctly referenced
+{
+  sub draw_text {
+    my $cr = shift;
+
+    my $ft_face = Font::FreeType->new->face( $file );
+    my $face = Cairo::FtFontFace->create($ft_face);
+    $cr->set_font_face( $face );
+    $cr->set_font_size( 12 );
+    $cr->translate( 10 , 10 );
+    $cr->show_text( "123 123123" );
+    $cr->stroke;
+  }
+
+  my $surface = Cairo::PdfSurface->create( "test.pdf", 500 , 500 );
+  my $cr = Cairo::Context->create($surface);
+  $cr->save;
+  draw_text( $cr );
+  $cr->set_font_size( 12 );
+  $cr->restore;
+
+  # must call finish() here so that cairo attemps to use the FtFontFace
+  $surface->finish;
+
+  unlink "test.pdf";
+}
