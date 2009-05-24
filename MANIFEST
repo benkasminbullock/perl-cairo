@@ -8,7 +8,7 @@ CairoMatrix.xs
 CairoPath.xs
 CairoPattern.xs
 CairoSurface.xs
-ChangeLog
+ChangeLog.pre-git
 doctypes
 examples/freetype-font.pl
 examples/png-streams.pl

@@ -1,3 +1,8 @@
+=== ChangeLog discontinued ===
+
+	With the move to git, we stop maintaining a separate ChangeLog and
+	rely on proper commit messages instead.
+
 2009-03-28  Torsten Schoenfeld  <kaffeetisch@gmx.de>
 
 	* NEWS

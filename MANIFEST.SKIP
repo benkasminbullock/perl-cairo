@@ -4,12 +4,12 @@ blib
 .*\.bs
 build
 .*\.c
+\.git
 MAINTAINERS$
 Makefile$
 Makefile\.old
 .*\.o
 pm_to_blib
 .*\.png
-\.svn
 .*\.swp
 .*\.tar\.gz
