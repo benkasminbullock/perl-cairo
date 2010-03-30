@@ -79,6 +79,10 @@ cairo_matrix_t * cairo_pattern_get_matrix (cairo_pattern_t * pattern);
 
 cairo_status_t cairo_pattern_status (cairo_pattern_t *pattern);
 
+void cairo_pattern_set_extend (cairo_pattern_t * pattern, cairo_extend_t extend);
+
+cairo_extend_t cairo_pattern_get_extend (cairo_pattern_t * pattern);
+
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 
 cairo_pattern_type_t cairo_pattern_get_type (cairo_pattern_t *pattern);
@@ -143,10 +147,6 @@ cairo_pattern_t_noinc * create (class, cairo_surface_t * surface);
 #endif
     OUTPUT:
 	RETVAL
-
-void cairo_pattern_set_extend (cairo_pattern_t * pattern, cairo_extend_t extend);
-
-cairo_extend_t cairo_pattern_get_extend (cairo_pattern_t * pattern);
 
 void cairo_pattern_set_filter (cairo_pattern_t * pattern, cairo_filter_t filter);
 
