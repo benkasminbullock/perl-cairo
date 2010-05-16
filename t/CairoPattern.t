@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 31;
+use Test::More tests => 48;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -22,61 +22,62 @@ use constant IMG_HEIGHT => 256;
 
 use Cairo;
 
-my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
-isa_ok ($pat, 'Cairo::SolidPattern');
-isa_ok ($pat, 'Cairo::Pattern');
+sub common_pattern_ok {
+	my ($pat, $type) = @_;
 
-$pat = Cairo::SolidPattern->create_rgba(1.0, 0.0, 0.0, 1.0);
-isa_ok ($pat, 'Cairo::SolidPattern');
-isa_ok ($pat, 'Cairo::Pattern');
+	isa_ok ($pat, $type);
+	isa_ok ($pat, 'Cairo::Pattern');
 
-$pat->set_extend ('pad');
-is ($pat->get_extend, 'pad', 'Cairo::SolidPattern set|get_extend');
+	$pat->set_extend ('pad');
+	is ($pat->get_extend, 'pad', "$type set|get_extend");
 
-$pat->set_filter ('good');
-is ($pat->get_filter, 'good', 'Cairo::SolidPattern set|get_filter');
+	$pat->set_filter ('good');
+	is ($pat->get_filter, 'good', "$type set|get_filter");
 
-my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
-$pat = Cairo::SurfacePattern->create ($surf);
-isa_ok ($pat, 'Cairo::SurfacePattern');
-isa_ok ($pat, 'Cairo::Pattern');
+	my $matrix = Cairo::Matrix->init_identity;
+	$pat->set_matrix ($matrix);
+	isa_ok ($pat->get_matrix, 'Cairo::Matrix', "$type set|get_matrix");
 
-$pat->set_extend ('none');
-is ($pat->get_extend, 'none', 'Cairo::SurfacePattern set|get_extend');
+	is ($pat->status, 'success', "$type status");
+}
 
-$pat->set_filter ('fast');
-is ($pat->get_filter, 'fast', 'Cairo::SurfacePattern set|get_filter');
+{
+	my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
+	common_pattern_ok ($pat, 'Cairo::SolidPattern');
+}
 
-$pat = Cairo::LinearGradient->create (1, 2, 3, 4);
-isa_ok ($pat, 'Cairo::LinearGradient');
-isa_ok ($pat, 'Cairo::Gradient');
-isa_ok ($pat, 'Cairo::Pattern');
+{
+	my $pat = Cairo::SolidPattern->create_rgba(1.0, 0.0, 0.0, 1.0);
+	common_pattern_ok ($pat, 'Cairo::SolidPattern');
+}
 
-$pat->set_extend ('repeat');
-is ($pat->get_extend, 'repeat', 'Cairo::LinearGradient set|get_extend');
+{
+	my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
+	my $pat = Cairo::SurfacePattern->create ($surf);
+	common_pattern_ok ($pat, 'Cairo::SurfacePattern');
+}
 
-$pat->set_filter ('best');
-is ($pat->get_filter, 'best', 'Cairo::LinearGradient set|get_filter');
+{
+	my $pat = Cairo::LinearGradient->create (1, 2, 3, 4);
+	common_pattern_ok ($pat, 'Cairo::LinearGradient');
+	isa_ok ($pat, 'Cairo::Gradient');
 
-$pat = Cairo::RadialGradient->create (1, 2, 3, 4, 5, 6);
-isa_ok ($pat, 'Cairo::RadialGradient');
-isa_ok ($pat, 'Cairo::Gradient');
-isa_ok ($pat, 'Cairo::Pattern');
+	$pat->add_color_stop_rgb (1, 0.5, 0.6, 0.7);
+	$pat->add_color_stop_rgba (1, 0.5, 0.6, 0.7, 0.8);
 
-$pat->set_extend ('reflect');
-is ($pat->get_extend, 'reflect', 'Cairo::RadialGradient set|get_extend');
+	is ($pat->status, 'success');
+}
 
-$pat->set_filter ('nearest');
-is ($pat->get_filter, 'nearest', 'Cairo::RadialGradient set|get_filter');
+{
+	my $pat = Cairo::RadialGradient->create (1, 2, 3, 4, 5, 6);
+	common_pattern_ok ($pat, 'Cairo::RadialGradient');
+	isa_ok ($pat, 'Cairo::Gradient');
 
-$pat->add_color_stop_rgb (1, 0.5, 0.6, 0.7);
-$pat->add_color_stop_rgba (1, 0.5, 0.6, 0.7, 0.8);
+	$pat->add_color_stop_rgb (1, 0.5, 0.6, 0.7);
+	$pat->add_color_stop_rgba (1, 0.5, 0.6, 0.7, 0.8);
 
-my $matrix = Cairo::Matrix->init_identity;
-$pat->set_matrix ($matrix);
-isa_ok ($pat->get_matrix, 'Cairo::Matrix');
-
-is ($pat->status, 'success');
+	is ($pat->status, 'success');
+}
 
 SKIP: {
 	skip 'new stuff', 1
@@ -87,28 +88,43 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'new stuff', 8,
+	skip 'new stuff', 13,
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0);
 
-	my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
-	my ($r, $g, $b, $a) = $pat->get_rgba;
-	delta_ok ($r, 1.0);
-	delta_ok ($g, 0.0);
-	delta_ok ($b, 0.0);
-	delta_ok ($a, 1.0);
+	{
+		my $pat = Cairo::SolidPattern->create_rgb(1.0, 0.0, 0.0);
+		my ($r, $g, $b, $a) = $pat->get_rgba;
+		delta_ok ($r, 1.0);
+		delta_ok ($g, 0.0);
+		delta_ok ($b, 0.0);
+		delta_ok ($a, 1.0);
+		is ($pat->status, 'success');
+	}
 
-	my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
-	$pat = Cairo::SurfacePattern->create ($surf);
-	isa_ok ($pat->get_surface, 'Cairo::ImageSurface');
+	{
+		my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
+		my $pat = Cairo::SurfacePattern->create ($surf);
+		isa_ok ($pat->get_surface, 'Cairo::ImageSurface');
+		is ($pat->status, 'success');
+	}
 
-	$pat = Cairo::LinearGradient->create (1, 2, 3, 4);
-	$pat->add_color_stop_rgba (0.25, 1, 0, 1, 0);
-	$pat->add_color_stop_rgba (0.75, 0, 1, 0, 1);
-	delta_ok ([$pat->get_color_stops], [[0.25, 1, 0, 1, 0], [0.75, 0, 1, 0, 1]]);
+	{
+		my $pat = Cairo::LinearGradient->create (1, 2, 3, 4);
+		$pat->add_color_stop_rgba (0.25, 1, 0, 1, 0);
+		$pat->add_color_stop_rgba (0.75, 0, 1, 0, 1);
+		delta_ok ([$pat->get_color_stops], [[0.25, 1, 0, 1, 0], [0.75, 0, 1, 0, 1]]);
+		is ($pat->status, 'success');
+	}
 
-	$pat = Cairo::LinearGradient->create (1.5, 2.5, 3.5, 4.5);
-	delta_ok ([$pat->get_points], [1.5, 2.5, 3.5, 4.5]);
+	{
+		my $pat = Cairo::LinearGradient->create (1.5, 2.5, 3.5, 4.5);
+		delta_ok ([$pat->get_points], [1.5, 2.5, 3.5, 4.5]);
+		is ($pat->status, 'success');
+	}
 
-	$pat = Cairo::RadialGradient->create (1.5, 2.5, 3.5, 4.5, 5.5, 6.5);
-	delta_ok ([$pat->get_circles], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]);
+	{
+		my $pat = Cairo::RadialGradient->create (1.5, 2.5, 3.5, 4.5, 5.5, 6.5);
+		delta_ok ([$pat->get_circles], [1.5, 2.5, 3.5, 4.5, 5.5, 6.5]);
+		is ($pat->status, 'success');
+	}
 }
