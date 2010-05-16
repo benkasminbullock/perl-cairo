@@ -166,6 +166,24 @@ cairo_perl_callback_free (CairoPerlCallback *callback)
 
 /* -------------------------------------------------------------------------- */
 
+/* Caller owns returned SV */
+static SV *
+strip_off_location (SV *error)
+{
+	SV *saved_defsv, *result;
+	saved_defsv = newSVsv (DEFSV);
+	ENTER;
+	SAVETMPS;
+	sv_setsv (DEFSV, error);
+	eval_pv ("s/^([-_\\w]+) .+$/$1/s", FALSE);
+	result = newSVsv (DEFSV);
+	FREETMPS;
+	LEAVE;
+	sv_setsv (DEFSV, saved_defsv);
+	SvREFCNT_dec (saved_defsv);
+	return result;
+}
+
 static cairo_status_t
 write_func_marshaller (void *closure,
                        const unsigned char *data,
@@ -192,7 +210,9 @@ write_func_marshaller (void *closure,
 	SPAGAIN;
 
 	if (SvTRUE (ERRSV)) {
-		status = SvCairoStatus (ERRSV);
+		SV *sv = strip_off_location (ERRSV);
+		status = SvCairoStatus (sv);
+		SvREFCNT_dec (sv);
 	}
 
 	PUTBACK;
@@ -230,7 +250,9 @@ read_func_marshaller (void *closure,
 	SPAGAIN;
 
 	if (SvTRUE (ERRSV)) {
-		status = SvCairoStatus (ERRSV);
+		SV *sv = strip_off_location (ERRSV);
+		status = SvCairoStatus (sv);
+		SvREFCNT_dec (sv);
 	} else {
 		SV *retval = POPs;
 		memcpy (data, SvPV_nolen (retval), sv_len (retval));
