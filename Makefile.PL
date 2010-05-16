@@ -219,22 +219,26 @@ my %flags = ();
 
 # --------------------------------------------------------------------------- #
 
-my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
-my $have_cairo_1_4 = ExtUtils::PkgConfig->atleast_version("cairo", "1.4.0");
-my $have_cairo_1_6 = ExtUtils::PkgConfig->atleast_version("cairo", "1.5.0"); # FIXME: 1.6
-
-if ($have_cairo_1_2) {
-	my %new = (
-		cairo_extend_t => [qw/CAIRO_EXTEND_PAD/],
-		cairo_format_t => [qw/CAIRO_FORMAT_RGB16_565/],
-		cairo_status_t => [qw/CAIRO_STATUS_INVALID_DSC_COMMENT/],
-	);
-
+sub add_new_enum_values {
+	my (%new) = @_;
 	foreach my $enum (keys %new) {
 		foreach my $value (@{$new{$enum}}) {
 			push @{$enums{$enum}}, $value;
 		}
 	}
+}
+
+my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
+my $have_cairo_1_4 = ExtUtils::PkgConfig->atleast_version("cairo", "1.4.0");
+my $have_cairo_1_6 = ExtUtils::PkgConfig->atleast_version("cairo", "1.6.0");
+my $have_cairo_1_8 = ExtUtils::PkgConfig->atleast_version("cairo", "1.8.0");
+
+if ($have_cairo_1_2) {
+	add_new_enum_values(
+		cairo_extend_t => [qw/CAIRO_EXTEND_PAD/],
+		cairo_format_t => [qw/CAIRO_FORMAT_RGB16_565/],
+		cairo_status_t => [qw/CAIRO_STATUS_INVALID_DSC_COMMENT/],
+	);
 
 	$enums{cairo_font_type_t} = [qw/
 		CAIRO_FONT_TYPE_
@@ -283,37 +287,46 @@ if ($have_cairo_1_2) {
 }
 
 if ($have_cairo_1_4) {
-	my %new = (
+	add_new_enum_values(
 		cairo_status_t => [qw/CAIRO_STATUS_INVALID_INDEX
 		                      CAIRO_STATUS_CLIP_NOT_REPRESENTABLE/],
 	);
-
-	foreach my $enum (keys %new) {
-		foreach my $value (@{$new{$enum}}) {
-			push @{$enums{$enum}}, $value;
-		}
-	}
 }
 
 if ($have_cairo_1_6) {
+	add_new_enum_values(
+		cairo_font_type_t => [qw/CAIRO_FONT_TYPE_QUARTZ/],
+		cairo_status_t => [qw/CAIRO_STATUS_TEMP_FILE_ERROR
+				      CAIRO_STATUS_INVALID_STRIDE/],
+
+	);
+
 	$enums{cairo_ps_level_t} = [qw/
 		CAIRO_PS_LEVEL_
 		CAIRO_PS_LEVEL_2
 		CAIRO_PS_LEVEL_3
 	/];
-
-	my %new = (
-		cairo_font_type_t => [qw/CAIRO_FONT_TYPE_QUARTZ/],
-	);
-
-	foreach my $enum (keys %new) {
-		foreach my $value (@{$new{$enum}}) {
-			push @{$enums{$enum}}, $value;
-		}
-	}
-
 } else {
 	$enums{cairo_ps_level_t} = [];
+}
+
+if ($have_cairo_1_8) {
+	add_new_enum_values(
+	      cairo_status_t => [qw/CAIRO_STATUS_FONT_TYPE_MISMATCH
+				    CAIRO_STATUS_USER_FONT_IMMUTABLE
+				    CAIRO_STATUS_USER_FONT_ERROR
+				    CAIRO_STATUS_NEGATIVE_COUNT
+				    CAIRO_STATUS_INVALID_CLUSTERS
+				    CAIRO_STATUS_INVALID_SLANT
+				    CAIRO_STATUS_INVALID_WEIGHT/],
+	);
+
+	$flags{cairo_text_cluster_flags_t} = [qw/
+		CAIRO_TEXT_CLUSTER_FLAG_
+		CAIRO_TEXT_CLUSTER_FLAG_BACKWARD
+	/];
+} else {
+	$flags{cairo_text_cluster_flags_t} = [];
 }
 
 # --------------------------------------------------------------------------- #

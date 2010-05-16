@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 73;
+use Test::More tests => 74;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -209,6 +209,16 @@ my @glyphs = ({ index => 1, x => 2, y => 3 },
 
 $cr->show_text ('Urgs?');
 $cr->show_glyphs (@glyphs);
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+
+	my @clusters = map { {num_bytes => 1, num_glyphs => 1} } (1 .. 3);
+	my $text = 'abc';
+	$cr->show_text_glyphs ($text, \@glyphs, \@clusters, ['backward']);
+	is ($cr->status, 'success');
+}
 
 my $face = $cr->get_font_face;
 isa_ok ($face, 'Cairo::FontFace');

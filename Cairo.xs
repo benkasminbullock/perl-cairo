@@ -32,6 +32,20 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 
 /* ------------------------------------------------------------------------- */
 
+/* Copied from Glib/Glib.xs. */
+void *
+cairo_perl_alloc_temp (int nbytes)
+{
+	dTHR;
+	SV * s;
+
+	if (nbytes <= 0) return NULL;
+
+	s = sv_2mortal (NEWSV (0, nbytes));
+	memset (SvPVX (s), 0, nbytes);
+	return SvPVX (s);
+}
+
 /* Copied from Glib/GType.xs. */
 void
 cairo_perl_set_isa (const char *child_package,
@@ -154,20 +168,6 @@ newSVCairoTextExtents (cairo_text_extents_t *extents)
 
 /* ------------------------------------------------------------------------- */
 
-/* taken from Glib/Glib.xs */
-void *
-cairo_perl_alloc_temp (int nbytes)
-{
-	dTHR;
-	SV * s;
-
-	if (nbytes <= 0) return NULL;
-
-	s = sv_2mortal (NEWSV (0, nbytes));
-	memset (SvPVX (s), 0, nbytes);
-	return SvPVX (s);
-}
-
 SV *
 newSVCairoGlyph (cairo_glyph_t *glyph)
 {
@@ -240,6 +240,52 @@ newSVCairoRectangle (cairo_rectangle_t *rectangle)
 	hv_store (hv, "height", 6, newSVnv (rectangle->height), 0);
 
 	return newRV_noinc ((SV *) hv);
+}
+
+#endif
+
+/* ------------------------------------------------------------------------- */
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+
+SV *
+newSVCairoTextCluster (cairo_text_cluster_t *cluster)
+{
+	HV *hv;
+
+	if (!cluster)
+		return &PL_sv_undef;
+
+	hv = newHV ();
+
+	hv_store (hv, "num_bytes", 9, newSViv (cluster->num_bytes), 0);
+	hv_store (hv, "num_glyphs", 10, newSVnv (cluster->num_glyphs), 0);
+
+	return newRV_noinc ((SV *) hv);
+}
+
+cairo_text_cluster_t *
+SvCairoTextCluster (SV *sv)
+{
+	HV *hv;
+	SV **value;
+	cairo_text_cluster_t *cluster;
+
+	if (!cairo_perl_sv_is_hash_ref (sv))
+		croak ("cairo_text_cluster_t must be a hash reference");
+
+	hv = (HV *) SvRV (sv);
+	cluster = cairo_perl_alloc_temp (sizeof (cairo_text_cluster_t));
+
+	value = hv_fetch (hv, "num_bytes", 9, 0);
+	if (value && SvOK (*value))
+		cluster->num_bytes = SvIV (*value);
+
+	value = hv_fetch (hv, "num_glyphs", 10, 0);
+	if (value && SvOK (*value))
+		cluster->num_glyphs = SvIV (*value);
+
+	return cluster;
 }
 
 #endif
@@ -524,6 +570,54 @@ void cairo_show_glyphs (cairo_t * cr, ...)
 		glyphs[i - 1] = *SvCairoGlyph (ST (i));
 	cairo_show_glyphs (cr, glyphs, num_glyphs);
 	Safefree (glyphs);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+
+##void cairo_show_text_glyphs (cairo_t *cr, const char *utf8, int utf8_len, const cairo_glyph_t *glyphs, int num_glyphs, const cairo_text_cluster_t *clusters, int num_clusters, cairo_text_cluster_flags_t cluster_flags);
+void
+cairo_show_text_glyphs (cairo_t *cr, SV *utf8_sv, SV *glyphs_sv, SV *clusters_sv, cairo_text_cluster_flags_t cluster_flags)
+    PREINIT:
+	const char *utf8 = NULL;
+	STRLEN utf8_len = 0;
+	cairo_glyph_t * glyphs = NULL;
+	cairo_text_cluster_t * clusters = NULL;
+	int i, num_glyphs, num_clusters;
+	AV *glyphs_av, *clusters_av;
+    CODE:
+	if (!cairo_perl_sv_is_array_ref (glyphs_sv))
+		croak ("glyphs must be an array ref");
+	if (!cairo_perl_sv_is_array_ref (clusters_sv))
+		croak ("text clusters must be an array ref");
+
+	utf8 = SvPV (utf8_sv, utf8_len);
+
+	glyphs_av = (AV *) SvRV (glyphs_sv);
+	num_glyphs = av_len (glyphs_av) + 1;
+	glyphs = cairo_glyph_allocate (num_glyphs);
+	for (i = 0; i < num_glyphs; i++) {
+		SV **value = av_fetch (glyphs_av, i, 0);
+		if (value)
+			glyphs[i] = *SvCairoGlyph (*value);
+	}
+
+	clusters_av = (AV *) SvRV (clusters_sv);
+	num_clusters = av_len (clusters_av) + 1;
+	clusters = cairo_text_cluster_allocate (num_clusters);
+	for (i = 0; i < num_clusters; i++) {
+		SV **value = av_fetch (clusters_av, i, 0);
+		if (value)
+			clusters[i] = *SvCairoTextCluster (*value);
+	}
+
+	cairo_show_text_glyphs (cr,
+	                        utf8, (int) utf8_len,
+	                        glyphs, num_glyphs,
+	                        clusters, num_clusters, cluster_flags);
+
+	cairo_text_cluster_free (clusters);
+	cairo_glyph_free (glyphs);
+
+#endif
 
 cairo_font_face_t * cairo_get_font_face (cairo_t *cr);
 

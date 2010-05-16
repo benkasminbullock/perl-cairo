@@ -17,6 +17,7 @@ cairo_bool_t		T_UV
 cairo_font_extents_t *	T_CAIRO_FONT_EXTENTS
 cairo_text_extents_t *	T_CAIRO_TEXT_EXTENTS
 cairo_glyph_t *		T_CAIRO_GLYPH
+cairo_text_cluster_t *	T_CAIRO_TEXT_CLUSTER
 cairo_path_t *		T_CAIRO_PATH
 
 FT_Face			T_FT_FACE
@@ -26,6 +27,9 @@ INPUT
 
 T_CAIRO_GLYPH
 	$var = SvCairoGlyph ($arg);
+
+T_CAIRO_TEXT_CLUSTER
+	$var = SvCairoTextCluster ($arg);
 
 T_CAIRO_PATH
 	$var = SvCairoPath ($arg);
@@ -40,6 +44,9 @@ T_CAIRO_TEXT_EXTENTS
 
 T_CAIRO_GLYPH
 	$arg = newSVCairoGlyph ($var);
+
+T_CAIRO_TEXT_CLUSTER
+	$arg = newSVCairoTextCluster ($var);
 
 T_CAIRO_PATH
 	$arg = newSVCairoPath ($var);

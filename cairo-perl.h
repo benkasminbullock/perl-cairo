@@ -57,6 +57,13 @@ SV * newSVCairoTextExtents (cairo_text_extents_t *extents);
 SV * newSVCairoGlyph (cairo_glyph_t *glyph);
 cairo_glyph_t * SvCairoGlyph (SV *sv);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+
+SV * newSVCairoTextCluster (cairo_text_cluster_t *cluster);
+cairo_text_cluster_t * SvCairoTextCluster (SV *sv);
+
+#endif
+
 SV * newSVCairoPath (cairo_path_t *path);
 cairo_path_t * SvCairoPath (SV *sv);
 
