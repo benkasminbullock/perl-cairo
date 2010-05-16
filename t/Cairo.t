@@ -268,7 +268,7 @@ isa_ok ($cr->get_source, 'Cairo::Pattern');
 
 SKIP: {
 	skip 'new stuff', 1
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 10); # FIXME: 1.6
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 6, 0);
 
 	ok ($cr->has_current_point);
 }

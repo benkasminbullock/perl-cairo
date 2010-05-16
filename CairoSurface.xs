@@ -338,7 +338,7 @@ cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=
 
 #endif
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE (1, 5, 8) /* FIXME: 1.6 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE (1, 6, 0)
 
 void cairo_surface_copy_page (cairo_surface_t *surface);
 
@@ -526,7 +526,7 @@ void cairo_ps_surface_dsc_begin_page_setup (cairo_surface_t *surface);
 
 #endif
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 2) /* FIXME: 1.6 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 
 void cairo_ps_surface_restrict_to_level (cairo_surface_t *surface, cairo_ps_level_t level);
 
@@ -635,7 +635,7 @@ cairo_svg_surface_version_to_string (...)
 
 # --------------------------------------------------------------------------- #
 
-#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 5, 8) /* FIXME: 1.6 */
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::Format	PREFIX = cairo_format_
 

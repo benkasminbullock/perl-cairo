@@ -107,7 +107,7 @@ $surf->flush;
 
 SKIP: {
 	skip 'new stuff', 1
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 8); # FIXME: 1.6
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 6, 0);
 
 	$surf->copy_page;
 	$surf->show_page;
@@ -281,7 +281,7 @@ SKIP: {
 
 	SKIP: {
 		skip 'new stuff', 7
-			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 5, 2); # FIXME: 1.6
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 6, 0);
 
 		$surf->restrict_to_level ('2');
 		$surf->restrict_to_level ('3');
