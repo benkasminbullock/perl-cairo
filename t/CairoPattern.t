@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 28;
+use Test::More tests => 31;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -33,6 +33,9 @@ isa_ok ($pat, 'Cairo::Pattern');
 $pat->set_extend ('pad');
 is ($pat->get_extend, 'pad', 'Cairo::SolidPattern set|get_extend');
 
+$pat->set_filter ('good');
+is ($pat->get_filter, 'good', 'Cairo::SolidPattern set|get_filter');
+
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 $pat = Cairo::SurfacePattern->create ($surf);
 isa_ok ($pat, 'Cairo::SurfacePattern');
@@ -42,7 +45,7 @@ $pat->set_extend ('none');
 is ($pat->get_extend, 'none', 'Cairo::SurfacePattern set|get_extend');
 
 $pat->set_filter ('fast');
-is ($pat->get_filter, 'fast', '$pat->set|get_filter');
+is ($pat->get_filter, 'fast', 'Cairo::SurfacePattern set|get_filter');
 
 $pat = Cairo::LinearGradient->create (1, 2, 3, 4);
 isa_ok ($pat, 'Cairo::LinearGradient');
@@ -52,6 +55,9 @@ isa_ok ($pat, 'Cairo::Pattern');
 $pat->set_extend ('repeat');
 is ($pat->get_extend, 'repeat', 'Cairo::LinearGradient set|get_extend');
 
+$pat->set_filter ('best');
+is ($pat->get_filter, 'best', 'Cairo::LinearGradient set|get_filter');
+
 $pat = Cairo::RadialGradient->create (1, 2, 3, 4, 5, 6);
 isa_ok ($pat, 'Cairo::RadialGradient');
 isa_ok ($pat, 'Cairo::Gradient');
@@ -59,6 +65,9 @@ isa_ok ($pat, 'Cairo::Pattern');
 
 $pat->set_extend ('reflect');
 is ($pat->get_extend, 'reflect', 'Cairo::RadialGradient set|get_extend');
+
+$pat->set_filter ('nearest');
+is ($pat->get_filter, 'nearest', 'Cairo::RadialGradient set|get_filter');
 
 $pat->add_color_stop_rgb (1, 0.5, 0.6, 0.7);
 $pat->add_color_stop_rgba (1, 0.5, 0.6, 0.7, 0.8);
