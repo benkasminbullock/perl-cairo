@@ -1,3 +1,20 @@
+Overview of changes in Cairo 1.070
+==================================
+
+* Wrap 1.8 API:
+  - cairo_show_text_glyphs
+  - cairo_scaled_font_text_to_glyphs and
+    cairo_scaled_font_get_scale_matrix
+  - cairo_surface_get_fallback_resolution and
+    cairo_surface_has_show_text_glyphs
+* Make Cairo::Pattern->set_extend, get_extend, set_filter and get_filter
+  available to all pattern types, not just surface patterns.
+* Fix a memory manage bug in Cairo::FtFontFace.
+* Fix a bug in the enum conversion code that made it more lenient that
+  intended.
+* Add a few examples.
+* Fix a few test failures.
+
 Overview of changes in Cairo 1.061
 ==================================
 

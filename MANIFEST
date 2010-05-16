@@ -11,12 +11,14 @@ CairoSurface.xs
 ChangeLog.pre-git
 doctypes
 examples/freetype-font.pl
+examples/glyph-text.pl
 examples/png-streams.pl
 examples/png/bevels.pl
 examples/png/caps_joins.pl
 examples/png/hering.pl
 examples/png/outline.pl
 examples/png/README
+examples/png/snapping.pl
 examples/png/spiral.pl
 examples/png/spline-pipeline.pl
 examples/png/splines_tolerance.pl
@@ -24,6 +26,7 @@ examples/png/stars.pl
 examples/png/text-rotate.pl
 examples/png/text.pl
 examples/simple.pl
+examples/subclassing.pl
 inc/MakeHelper.pm
 lib/Cairo.pm
 LICENSE
@@ -31,6 +34,7 @@ Makefile.PL
 MANIFEST
 MANIFEST.SKIP
 NEWS
+perl-Cairo.doap
 ppport.h
 README
 t/Cairo.t
