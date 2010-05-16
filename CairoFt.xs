@@ -10,6 +10,12 @@
 
 static const cairo_user_data_key_t face_key;
 
+static void
+face_destroy (void *face)
+{
+	SvREFCNT_dec ((SV *) face);
+}
+
 MODULE = Cairo::Ft	PACKAGE = Cairo::FtFontFace PREFIX = cairo_ft_font_face_
 
 # cairo_font_face_t * cairo_ft_font_face_create_for_ft_face (FT_Face face, int load_flags);
@@ -28,10 +34,8 @@ cairo_ft_font_face_create (class, SV *face, int load_flags=0)
 	RETVAL = cairo_ft_font_face_create_for_ft_face (real_face, load_flags);
 	/* Keep the face SV (and thus the FT_Face) alive long enough */
 	SvREFCNT_inc (face);
-	status = cairo_font_face_set_user_data (
-			RETVAL,
-			&face_key,
-			face, (cairo_destroy_func_t) Perl_sv_free);
+	status = cairo_font_face_set_user_data (RETVAL, &face_key, face,
+	                                        face_destroy);
 	if (status) {
 		warn ("Couldn't install a user data handler, "
 		      "so an FT_Face will be leaked");
