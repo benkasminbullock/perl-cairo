@@ -199,7 +199,7 @@ SvCairoGlyph (SV *sv)
 	SV **value;
 	cairo_glyph_t *glyph;
 
-	if (!SvOK (sv) || !SvRV (sv) || SvTYPE (SvRV (sv)) != SVt_PVHV)
+	if (!cairo_perl_sv_is_hash_ref (sv))
 		croak ("cairo_glyph_t must be a hash reference");
 
 	hv = (HV *) SvRV (sv);

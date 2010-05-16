@@ -33,4 +33,10 @@ const char * cairo_perl_package_table_lookup (void *pointer);
 		croak (Nullch);					\
 	}
 
+#define cairo_perl_sv_is_array_ref(sv) \
+	(SvOK (sv) && SvROK (sv) && SvTYPE (SvRV(sv)) == SVt_PVAV)
+
+#define cairo_perl_sv_is_hash_ref(sv) \
+	(SvOK (sv) && SvROK (sv) && SvTYPE (SvRV(sv)) == SVt_PVHV)
+
 #endif /* _CAIRO_PERL_PRIVATE_H_ */
