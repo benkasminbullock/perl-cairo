@@ -19,6 +19,11 @@ use constant IMG_HEIGHT => 256;
 
 use Cairo;
 
+unless (eval 'use Test::Number::Delta; 1;') {
+	my $reason = 'Test::Number::Delta not available';
+	*delta_ok = sub { SKIP: { skip $reason, 1 } };
+}
+
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::ImageSurface');
 isa_ok ($surf, 'Cairo::Surface');
@@ -120,9 +125,9 @@ SKIP: {
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
 
 	$surf->set_fallback_resolution (72, 72);
-        is_deeply ([$surf->get_fallback_resolution], [72, 72]);
+	delta_ok ([$surf->get_fallback_resolution], [72, 72]);
 
-        ok (defined $surf->has_show_text_glyphs);
+	ok (defined $surf->has_show_text_glyphs);
 }
 
 # --------------------------------------------------------------------------- #
