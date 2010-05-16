@@ -18,8 +18,13 @@ unless (Cairo::HAS_FT_FONT && eval 'use Font::FreeType; 1;') {
 	plan skip_all => 'need Cairo with FreeType support and Font::FreeType';
 }
 
-my $file = '/usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf';
-unless (-r $file) {
+my @files_to_try = qw(
+  /usr/share/fonts/truetype/ttf-bitstream-vera/Vera.ttf
+  /usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf
+);
+my @files_found = grep { -r $_ } @files_to_try;
+my $file = $files_found[0];
+unless ($file) {
 	plan skip_all => 'can\'t find font file';
 }
 
