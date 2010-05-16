@@ -66,13 +66,21 @@ sub write_boot
 
 # --------------------------------------------------------------------------- #
 
+sub name
+{
+	$_[0] =~ /cairo_(\w+)_t/;
+	return $1;
+}
+
 sub do_typemaps
 {
 	my %objects = %{shift ()};
 	my %structs = %{shift ()};
 	my %enums = %{shift ()};
+	my %flags = %{shift ()};
 	my %backend_guards = %{shift ()};
 	my %enum_guards = %{shift ()};
+	my %flag_guards = %{shift ()};
 
 	my $cairo_perl = File::Spec->catfile ($autogen_dir,
 					      'cairo-perl-auto.typemap');
@@ -101,7 +109,7 @@ EOS
 		$1;
 	}
 
-	foreach (keys %objects, keys %structs, keys %enums)
+	foreach (keys %objects, keys %structs, keys %enums, keys %flags)
 	{
 		print TYPEMAP "$_\tT_CAIROPERL_GENERIC_WRAPPER\n";
 	}
@@ -182,12 +190,6 @@ EOS
 		return $ref;
 	}
 
-	sub name
-	{
-		$_[0] =~ /cairo_(\w+)_t/;
-		return $1;
-	}
-
 	# ------------------------------------------------------------------- #
 
 	print HEADER "\n/* objects */\n\n";
@@ -264,12 +266,91 @@ EOS
 		}
 	}
 
+	# ------------------------------------------------------------------- #
+
+	print HEADER "\n/* flags */\n\n";
+
+	foreach my $type (keys %flags)
+	{
+		my $mangled = mangle ($type);
+		my $name = name ($type);
+
+		next unless @{$flags{$type}};
+
+		if (exists $flag_guards{$type}) {
+			print HEADER "#ifdef $flag_guards{$type}\n";
+		}
+
+		print HEADER <<"EOS";
+$type cairo_${name}_from_sv (SV * $name);
+SV * cairo_${name}_to_sv ($type val);
+#define Sv$mangled(sv)		(cairo_${name}_from_sv (sv))
+#define newSV$mangled(val)	(cairo_${name}_to_sv (val))
+EOS
+
+		if (exists $flag_guards{$type}) {
+			print HEADER "#endif /* $flag_guards{$type} */\n";
+		}
+	}
+
 	close HEADER;
 
 	return ($cairo_perl);
 }
 
 # --------------------------------------------------------------------------- #
+
+sub canonicalize_enum_name
+{
+	my ($name, $prefix) = @_;
+	$name =~ s/$prefix//;
+	$name =~ tr/_/-/;
+	$name = lc ($name);
+	return $name;
+}
+
+sub enum_if_tree_from
+{
+	my ($prefix, @enums) = @_;
+	my $str = '';
+
+	my $is_first = 1;
+	foreach my $full (@enums)
+	{
+		my $name = canonicalize_enum_name($full, $prefix);
+		# +1 so that strncmp also looks at the trailing \0, and
+		# discerns 'color' and 'color-alpha', for example.
+		my $len = length ($name) + 1;
+		my $conditional = $is_first ? 'if' : 'else if';
+		$str .= <<"EOS";
+	$conditional (strncmp (str, "$name", $len) == 0)
+		return $full;
+EOS
+		$is_first = 0;
+	}
+
+	return $str;
+}
+
+sub enum_if_tree_to
+{
+	my ($prefix, @enums) = @_;
+	my $str = '';
+
+	my $is_first = 1;
+	foreach my $full (@enums)
+	{
+		my $name = canonicalize_enum_name($full, $prefix);
+		my $conditional = $is_first ? 'if' : 'else if';
+		$str .= <<"EOS";
+	$conditional (val == $full)
+		return newSVpv ("$name", 0);
+EOS
+		$is_first = 0;
+	}
+
+	return $str;
+}
 
 sub do_enums
 {
@@ -280,80 +361,14 @@ sub do_enums
 	open ENUMS, '>', $cairo_enums
 		or die "unable to open ($cairo_enums) for output";
 
-	print ENUMS "
+	print ENUMS <<'EOS';
 /*
  * This file was automatically generated.  Do not edit.
  */
 
 #include <cairo-perl.h>
 
-";
-
-	sub canonicalize
-	{
-		my ($name, $prefix) = @_;
-		$name =~ s/$prefix//;
-		$name =~ tr/_/-/;
-		$name = lc ($name);
-		return $name;
-	}
-
-	sub if_tree_from
-	{
-		my @enums = @_;
-
-		my $prefix = shift @enums;
-
-		my $full = shift @enums;
-		my $name = canonicalize($full, $prefix);
-
-		# +1 so that strncmp also looks at the trailing \0, and discerns
-		# 'color' and 'color-alpha', for example.
-		my $len = length ($name) + 1;
-
-		my $str = <<"EOS";
-	if (strncmp (str, "$name", $len) == 0)
-		return $full;
 EOS
-
-		foreach $full (@enums)
-		{
-			my $name = canonicalize($full, $prefix);
-			$len = length ($name);
-
-			$str .= <<"EOS";
-	else if (strncmp (str, "$name", $len) == 0)
-		return $full;
-EOS
-		}
-
-		$str;
-	}
-
-	sub if_tree_to
-	{
-		my @enums = @_;
-
-		my $prefix = shift @enums;
-		my $full = shift @enums;
-		my $name = canonicalize($full, $prefix);
-
-		my $str = <<"EOS";
-	if (val == $full)
-		return newSVpv ("$name", 0);
-EOS
-
-		foreach $full (@enums)
-		{
-			my $name = canonicalize($full, $prefix);
-			$str .= <<"EOS";
-	else if (val == $full)
-		return newSVpv ("$name", 0);
-EOS
-		}
-
-		$str;
-	}
 
 	foreach my $type (keys %enums)
 	{
@@ -362,9 +377,12 @@ EOS
 
 		next unless @enum_values;
 
-		my $value_list = join ", ", map { canonicalize($_, $enum_values[0]) } @enum_values[1..$#enum_values];
-		my $tree_from = if_tree_from (@enum_values);
-		my $tree_to = if_tree_to (@enum_values);
+		my $value_list =
+			join ", ", map {
+				canonicalize_enum_name($_, $enum_values[0])
+			} @enum_values[1..$#enum_values];
+		my $tree_from = enum_if_tree_from (@enum_values);
+		my $tree_to = enum_if_tree_to (@enum_values);
 
 		if (exists $guards{$type}) {
 			print ENUMS "#ifdef $guards{$type}\n\n";
@@ -398,6 +416,135 @@ EOS
 	}
 
 	close ENUMS;
+}
+
+# --------------------------------------------------------------------------- #
+
+sub flag_if_tree_from
+{
+	my ($prefix, @flags) = @_;
+	my $str = '';
+
+	my $is_first = 1;
+	foreach my $full (@flags)
+	{
+		my $name = canonicalize_enum_name($full, $prefix);
+		# +1 so that strncmp also looks at the trailing \0, and
+		# discerns 'color' and 'color-alpha', for example.
+		my $len = length ($name) + 1;
+		my $conditional = $is_first ? 'if' : 'else if';
+		$str .= <<"EOS";
+	$conditional (strncmp (str, "$name", $len) == 0) {
+		return $full;
+	}
+EOS
+		$is_first = 0;
+	}
+
+	return $str;
+}
+
+sub flag_if_tree_to
+{
+	my ($prefix, @flags) = @_;
+	my $str = '';
+
+	foreach my $full (@flags)
+	{
+		my $name = canonicalize_enum_name($full, $prefix);
+		$str .= <<"EOS";
+	if ((val & $full) == $full) {
+		val -= $full;
+		av_push (flags, newSVpv ("$name", 0));
+	}
+EOS
+	}
+
+	return $str;
+}
+
+sub do_flags
+{
+	my %flags = %{shift ()};
+        my %guards = %{shift ()};
+
+	my $cairo_flags = 'cairo-perl-flags.c';
+	open FLAGS, '>', $cairo_flags
+		or die "unable to open ($cairo_flags) for output";
+
+	print FLAGS <<'EOS';
+/*
+ * This file was automatically generated.  Do not edit.
+ */
+
+#include <cairo-perl.h>
+#include <cairo-perl-private.h>
+
+EOS
+
+	foreach my $type (keys %flags)
+	{
+		my $name = name($type);
+		my @flag_values = @{$flags{$type}};
+
+		next unless @flag_values;
+
+		my $value_list =
+			join ", ", map {
+				canonicalize_enum_name($_, $flag_values[0])
+			} @flag_values[1..$#flag_values];
+		my $tree_from = flag_if_tree_from (@flag_values);
+		my $tree_to = flag_if_tree_to (@flag_values);
+
+		if (exists $guards{$type}) {
+			print FLAGS "#ifdef $guards{$type}\n\n";
+		}
+
+		print FLAGS <<"EOS";
+static $type
+cairo_${name}_from_sv_part (const char *str)
+{
+	$tree_from
+	croak ("`%s' is not a valid $type value; valid values are: $value_list", str);
+	return 0;
+}
+
+$type
+cairo_${name}_from_sv (SV * $name)
+{
+	if (cairo_perl_sv_is_array_ref ($name)) {
+		AV *vals = (AV *) SvRV ($name);
+		$type value = 0;
+		int i;
+		for (i=0; i<=av_len(vals); i++)
+			value |= cairo_${name}_from_sv_part (
+					SvPV_nolen (*av_fetch (vals, i, 0)));
+		return value;
+	}
+	if (SvPOK ($name))
+		return cairo_${name}_from_sv_part (SvPV_nolen ($name));
+	croak ("`%s' is not a valid $type value, expecting a string scalar "
+	       "or an arrayref of strings",
+	       SvPV_nolen ($name));
+	return 0;
+}
+
+SV *
+cairo_${name}_to_sv ($type val)
+{
+	AV *flags = newAV ();
+	$tree_to
+	return newRV_noinc ((SV *) flags);
+}
+
+EOS
+
+		if (exists $guards{$type}) {
+			print FLAGS "#endif /* $guards{$type} */\n";
+		}
+	}
+
+	close FLAGS;
 }
 
 1;

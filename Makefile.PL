@@ -215,6 +215,8 @@ my %enums = (
 	/],
 );
 
+my %flags = ();
+
 # --------------------------------------------------------------------------- #
 
 my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
@@ -319,8 +321,10 @@ if ($have_cairo_1_6) {
 my %enum_guards = (
 	cairo_svg_version_t => $backend_guards{cairo_svg_surface_t},
 );
-
 MakeHelper::do_enums (\%enums, \%enum_guards);
+
+my %flag_guards = ();
+MakeHelper::do_flags (\%flags, \%flag_guards);
 
 my @xs_files = qw(
 	Cairo.xs
@@ -345,15 +349,17 @@ MakeHelper::write_boot (
 	ignore => '^Cairo$',
 );
 
-my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums,
-                                        \%backend_guards, \%enum_guards);
+my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums, \%flags,
+                                        \%backend_guards,
+                                        \%enum_guards,
+                                        \%flag_guards);
 push @typemaps, 'cairo-perl.typemap';
 
 my $dep = ExtUtils::Depends->new ('Cairo');
 $dep->set_inc ('-I. -I'.$autogen_dir.' '.$cairo_cfg{cflags});
 $dep->set_libs ($cairo_cfg{libs});
 $dep->add_xs (@xs_files);
-$dep->add_c ('cairo-perl-enums.c');
+$dep->add_c (qw/cairo-perl-enums.c cairo-perl-flags.c/);
 $dep->add_pm ('lib/Cairo.pm' => '$(INST_LIBDIR)/Cairo.pm');
 $dep->add_typemaps (@typemaps);
 

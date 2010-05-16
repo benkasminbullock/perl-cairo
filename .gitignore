@@ -5,4 +5,5 @@ Makefile
 blib
 build
 cairo-perl-enums.*
+cairo-perl-flags.*
 pm_to_blib
