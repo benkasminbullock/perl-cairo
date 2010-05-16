@@ -882,6 +882,20 @@ I<x> and I<y>.  Example:
 
 =back
 
+=item $cr->show_text_glyphs ($utf8, $glyphs, $clusters, $cluster_flags) [1.8]
+
+=over
+
+=item $utf8: string
+
+=item $glyphs: array ref of glyphs
+
+=item $clusters: array ref of clusters
+
+=item $cluster_flags: I<Cairo::TextClusterFlags>
+
+=back
+
 =item $face = $cr->get_font_face
 
 =item $extents = $cr->font_extents
@@ -978,6 +992,18 @@ I<x> and I<y>.  Example:
 
 =back
 
+=item ($status, $glyphs, $clusters, $cluster_flags) = $scaled_font->text_to_glyphs ($x, $y, $utf8) [1.8]
+
+=over
+
+=item $x: double
+
+=item $y: double
+
+=item $utf8: string
+
+=back
+
 =item $font_face = $scaled_font->get_font_face [1.2]
 
 =item $options = $scaled_font->get_font_options [1.2]
@@ -985,6 +1011,8 @@ I<x> and I<y>.  Example:
 =item $font_matrix = $scaled_font->get_font_matrix [1.2]
 
 =item $ctm = $scaled_font->get_ctm [1.2]
+
+=item $scale_matrix = $scaled_font->get_scale_matrix [1.8]
 
 =item $type = $scaled_font->get_type [1.2]
 
@@ -1165,6 +1193,8 @@ from a file:
 
 =back
 
+=item ($x_pixels_per_inch, $y_pixels_per_inch) = $surface->get_fallback_resolution [1.8]
+
 =item $type = $surface->get_type [1.2]
 
 =item $status = $surface->copy_page [1.6]
@@ -1182,6 +1212,8 @@ from a file:
 =item $status: I<Cairo::Status>
 
 =back
+
+=item $boolean = $surface->has_show_text_glyphs [1.8]
 
 =back
 
