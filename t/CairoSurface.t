@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 72;
+use Test::More tests => 74;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -113,6 +113,16 @@ SKIP: {
 	$surf->show_page;
 
 	like (Cairo::Format::stride_for_width ('argb32', 23), qr/\A\d+\z/);
+}
+
+SKIP: {
+	skip 'new stuff', 2
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+
+	$surf->set_fallback_resolution (72, 72);
+        is_deeply ([$surf->get_fallback_resolution], [72, 72]);
+
+        ok (defined $surf->has_show_text_glyphs);
 }
 
 # --------------------------------------------------------------------------- #

@@ -296,6 +296,12 @@ void cairo_surface_set_fallback_resolution (cairo_surface_t *surface, double x_p
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+
+void cairo_surface_get_fallback_resolution (cairo_surface_t *surface, OUTLIST double x_pixels_per_inch, OUTLIST double y_pixels_per_inch);
+
+#endif
+
 ##void cairo_surface_get_font_options (cairo_surface_t *surface, cairo_font_options_t *options);
 cairo_font_options_t * cairo_surface_get_font_options (cairo_surface_t *surface)
     CODE:
@@ -343,6 +349,12 @@ cairo_surface_write_to_png_stream (cairo_surface_t *surface, SV *func, SV *data=
 void cairo_surface_copy_page (cairo_surface_t *surface);
 
 void cairo_surface_show_page (cairo_surface_t *surface);
+
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE (1, 8, 0)
+
+cairo_bool_t cairo_surface_has_show_text_glyphs (cairo_surface_t *surface);
 
 #endif
 
