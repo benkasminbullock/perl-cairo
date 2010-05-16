@@ -9,8 +9,9 @@
 
 use strict;
 use warnings;
+use utf8;
 
-use Test::More tests => 20;
+use Test::More tests => 23;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -61,7 +62,9 @@ my $ctm = Cairo::Matrix->init_identity;
 my $font = Cairo::ScaledFont->create ($face, $matrix, $ctm, $options);
 isa_ok ($font, 'Cairo::ScaledFont');
 
+$cr->set_scaled_font ($font);
 is ($font->status, 'success');
+is ($cr->status, 'success');
 
 isa_ok ($font->extents, 'HASH');
 isa_ok ($font->glyph_extents ({ index => 1, x => 2, y => 3 }), 'HASH');
@@ -78,4 +81,17 @@ SKIP: {
 	isa_ok ($font->get_font_matrix, 'Cairo::Matrix');
 	isa_ok ($font->get_ctm, 'Cairo::Matrix');
 	isa_ok ($font->get_font_options, 'Cairo::FontOptions');
+}
+
+SKIP: {
+	skip 'new stuff', 2
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+
+	isa_ok ($font->get_scale_matrix, 'Cairo::Matrix');
+
+	my $text = 'æſðđŋ';
+	my ($status, $glyphs, $clusters, $flags) =
+		$font->text_to_glyphs (5, 10, $text);
+	$cr->show_text_glyphs ($text, $glyphs, $clusters, $flags);
+	is ($cr->status, 'success');
 }
