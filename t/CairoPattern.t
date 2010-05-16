@@ -28,8 +28,8 @@ sub common_pattern_ok {
 	isa_ok ($pat, $type);
 	isa_ok ($pat, 'Cairo::Pattern');
 
-	$pat->set_extend ('pad');
-	is ($pat->get_extend, 'pad', "$type set|get_extend");
+	$pat->set_extend ('repeat');
+	is ($pat->get_extend, 'repeat', "$type set|get_extend");
 
 	$pat->set_filter ('good');
 	is ($pat->get_filter, 'good', "$type set|get_filter");
