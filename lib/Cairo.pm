@@ -562,6 +562,26 @@ C<$cr-E<gt>close_path>.
 
 =item $type = $pattern->get_type [1.2]
 
+=item $pattern->set_extend ($extend)
+
+=over
+
+=item $extend: I<Cairo::Extend>
+
+=back
+
+=item $extend = $pattern->get_extend
+
+=item $pattern->set_filter ($filter)
+
+=over
+
+=item $filter: I<Cairo::Filter>
+
+=back
+
+=item $filter = $pattern->get_filter
+
 =item $pattern->set_matrix ($matrix)
 
 =over
@@ -607,26 +627,6 @@ C<$cr-E<gt>close_path>.
 =item $surface: I<Cairo::Surface>
 
 =back
-
-=item $pattern->set_extend ($extend)
-
-=over
-
-=item $extend: I<Cairo::Extend>
-
-=back
-
-=item $extend = $pattern->get_extend
-
-=item $pattern->set_filter ($filter)
-
-=over
-
-=item $filter: I<Cairo::Filter>
-
-=back
-
-=item $filter = $pattern->get_filter
 
 =item $surface = $pattern->get_surface [1.4]
 
