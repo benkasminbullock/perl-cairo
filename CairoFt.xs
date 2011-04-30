@@ -18,6 +18,9 @@ face_destroy (void *face)
 
 MODULE = Cairo::Ft	PACKAGE = Cairo::FtFontFace PREFIX = cairo_ft_font_face_
 
+BOOT:
+	cairo_perl_set_isa ("Cairo::FtFontFace", "Cairo::FontFace");
+
 # cairo_font_face_t * cairo_ft_font_face_create_for_ft_face (FT_Face face, int load_flags);
 cairo_font_face_t_noinc *
 cairo_ft_font_face_create (class, SV *face, int load_flags=0)

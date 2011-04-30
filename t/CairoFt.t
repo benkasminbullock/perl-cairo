@@ -28,10 +28,11 @@ unless ($file) {
 	plan skip_all => 'can\'t find font file';
 }
 
-plan tests => 2;
+plan tests => 3;
 
 my $ft_face = Font::FreeType->new->face ($file);
 my $cr_ft_face = Cairo::FtFontFace->create ($ft_face);
+isa_ok ($cr_ft_face, 'Cairo::FtFontFace');
 isa_ok ($cr_ft_face, 'Cairo::FontFace');
 is ($cr_ft_face->status, 'success');
 

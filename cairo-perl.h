@@ -91,4 +91,13 @@ SV * cairo_pattern_to_sv (cairo_pattern_t *surface);
 #define newSVCairoPattern(object)	(cairo_pattern_to_sv (cairo_pattern_reference (object)))
 #define newSVCairoPattern_noinc(object)	(cairo_pattern_to_sv (object))
 
+/*
+ * special treatment for font faces
+ */
+SV * cairo_font_face_to_sv (cairo_font_face_t *surface);
+#undef newSVCairoFontFace
+#undef newSVCairoFontFace_noinc
+#define newSVCairoFontFace(object)		(cairo_font_face_to_sv (cairo_font_face_reference (object)))
+#define newSVCairoFontFace_noinc(object)	(cairo_font_face_to_sv (object))
+
 #endif /* _CAIRO_PERL_H_ */

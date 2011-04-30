@@ -9,6 +9,53 @@
 #include <cairo-perl.h>
 #include <cairo-perl-private.h>
 
+static const char *
+get_package (cairo_font_face_t *face)
+{
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
+	cairo_font_type_t type;
+	const char *package;
+
+	type = cairo_font_face_get_type (face);
+	switch (type) {
+	    case CAIRO_FONT_TYPE_TOY:
+		package = "Cairo::ToyFontFace";
+		break;
+
+	    case CAIRO_FONT_TYPE_FT:
+		package = "Cairo::FtFontFace";
+		break;
+
+	    /* These aren't wrapped yet: */
+	    case CAIRO_FONT_TYPE_WIN32:
+	    case CAIRO_FONT_TYPE_QUARTZ:
+	    case CAIRO_FONT_TYPE_USER:
+		package = "Cairo::FontFace";
+		break;
+
+	    default:
+		warn ("unknown font face type %d encountered", type);
+		package = "Cairo::FontFace";
+		break;
+	}
+
+	return package;
+#else
+	const char *package = cairo_perl_package_table_lookup (pattern);
+	return package ? package : "Cairo::FontFace";
+#endif
+}
+
+SV *
+cairo_font_face_to_sv (cairo_font_face_t *face)
+{
+	SV *sv = newSV (0);
+	sv_setref_pv(sv, get_package (face), face);
+	return sv;
+}
+
+/* ------------------------------------------------------------------------- */
+
 MODULE = Cairo::Font	PACKAGE = Cairo::FontFace	PREFIX = cairo_font_face_
 
 cairo_status_t cairo_font_face_status (cairo_font_face_t * font);
@@ -22,6 +69,13 @@ cairo_font_type_t cairo_font_face_get_type (cairo_font_face_t *font_face);
 void DESTROY (cairo_font_face_t * font)
     CODE:
 	cairo_font_face_destroy (font);
+
+# --------------------------------------------------------------------------- #
+
+MODULE = Cairo	PACKAGE = Cairo::ToyFontFace	PREFIX = cairo_toy_font_face_
+
+BOOT:
+	cairo_perl_set_isa ("Cairo::ToyFontFace", "Cairo::FontFace");
 
 # --------------------------------------------------------------------------- #
 
