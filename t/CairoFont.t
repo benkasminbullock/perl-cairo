@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use utf8;
 
-use Test::More tests => 23;
+use Test::More tests => 29;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -94,4 +94,20 @@ SKIP: {
 		$font->text_to_glyphs (5, 10, $text);
 	$cr->show_text_glyphs ($text, $glyphs, $clusters, $flags);
 	is ($cr->status, 'success');
+}
+
+# --------------------------------------------------------------------------- #
+
+SKIP: {
+	skip 'toy font face', 6
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+
+	my $face = Cairo::ToyFontFace->create ('Sans', 'italic', 'bold');
+	isa_ok ($face, 'Cairo::ToyFontFace');
+	isa_ok ($face, 'Cairo::FontFace');
+	is ($face->status, 'success');
+
+	is ($face->get_family, 'Sans');
+	is ($face->get_slant, 'italic');
+	is ($face->get_weight, 'bold');
 }
