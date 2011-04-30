@@ -328,6 +328,7 @@ if ($have_cairo_1_8) {
 my %object_guards = ();
 
 my %enum_guards = (
+	cairo_ps_level_t    => '#ifdef CAIRO_HAS_PS_SURFACE',
 	cairo_svg_version_t => '#ifdef CAIRO_HAS_SVG_SURFACE',
 );
 
