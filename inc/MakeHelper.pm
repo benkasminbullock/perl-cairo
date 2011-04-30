@@ -78,7 +78,7 @@ sub do_typemaps
 	my %structs = %{shift ()};
 	my %enums = %{shift ()};
 	my %flags = %{shift ()};
-	my %backend_guards = %{shift ()};
+	my %object_guards = %{shift ()};
 	my %enum_guards = %{shift ()};
 	my %flag_guards = %{shift ()};
 
@@ -201,8 +201,8 @@ EOS
 		my $mangled = mangle ($type);
 		my $ref = reference ($type);
 
-		if (exists $backend_guards{$type}) {
-			print HEADER "#ifdef $backend_guards{$type}\n";
+		if (exists $object_guards{$type}) {
+			print HEADER "$object_guards{$type}\n";
 		}
 
 		print HEADER <<"EOS";
@@ -215,8 +215,8 @@ typedef $type ${type}_ornull;
 #define newSV${mangled}_ornull(object)	(((object) == NULL) ? &PL_sv_undef : newSV$mangled(object))
 EOS
 
-		if (exists $backend_guards{$type}) {
-			print HEADER "#endif /* $backend_guards{$type} */\n";
+		if (exists $object_guards{$type}) {
+			print HEADER "#endif /* $object_guards{$type} */\n";
 		}
 	}
 
@@ -251,7 +251,7 @@ EOS
 		next unless @{$enums{$type}};
 
 		if (exists $enum_guards{$type}) {
-			print HEADER "#ifdef $enum_guards{$type}\n";
+			print HEADER "$enum_guards{$type}\n";
 		}
 
 		print HEADER <<"EOS";
@@ -278,7 +278,7 @@ EOS
 		next unless @{$flags{$type}};
 
 		if (exists $flag_guards{$type}) {
-			print HEADER "#ifdef $flag_guards{$type}\n";
+			print HEADER "$flag_guards{$type}\n";
 		}
 
 		print HEADER <<"EOS";
@@ -385,7 +385,7 @@ EOS
 		my $tree_to = enum_if_tree_to (@enum_values);
 
 		if (exists $guards{$type}) {
-			print ENUMS "#ifdef $guards{$type}\n\n";
+			print ENUMS "$guards{$type}\n\n";
 		}
 
 		print ENUMS <<"EOS";
@@ -497,7 +497,7 @@ EOS
 		my $tree_to = flag_if_tree_to (@flag_values);
 
 		if (exists $guards{$type}) {
-			print FLAGS "#ifdef $guards{$type}\n\n";
+			print FLAGS "$guards{$type}\n\n";
 		}
 
 		print FLAGS <<"EOS";

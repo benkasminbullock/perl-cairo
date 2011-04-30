@@ -61,12 +61,6 @@ if ($@ ne '') {
 	exit 0;
 }
 
-my %backend_guards = (
-	'cairo_pdf_surface_t' => 'CAIRO_HAS_PDF_SURFACE',
-	'cairo_ps_surface_t'  => 'CAIRO_HAS_PS_SURFACE',
-	'cairo_svg_surface_t' => 'CAIRO_HAS_SVG_SURFACE',
-);
-
 my %objects = (
 	'cairo_t *'             => 'Cairo::Context',
 	'cairo_font_face_t *'   => 'Cairo::FontFace',
@@ -331,12 +325,16 @@ if ($have_cairo_1_8) {
 
 # --------------------------------------------------------------------------- #
 
+my %object_guards = ();
+
 my %enum_guards = (
-	cairo_svg_version_t => $backend_guards{cairo_svg_surface_t},
+	cairo_svg_version_t => '#ifdef CAIRO_HAS_SVG_SURFACE',
 );
-MakeHelper::do_enums (\%enums, \%enum_guards);
 
 my %flag_guards = ();
+
+MakeHelper::do_enums (\%enums, \%enum_guards);
+
 MakeHelper::do_flags (\%flags, \%flag_guards);
 
 my @xs_files = qw(
@@ -363,7 +361,7 @@ MakeHelper::write_boot (
 );
 
 my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums, \%flags,
-                                        \%backend_guards,
+                                        \%object_guards,
                                         \%enum_guards,
                                         \%flag_guards);
 push @typemaps, 'cairo-perl.typemap';
