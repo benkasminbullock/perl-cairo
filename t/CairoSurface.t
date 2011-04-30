@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 74;
+use Test::More tests => 72;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -195,7 +195,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 8
+	skip 'pdf surface', 7
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -209,18 +209,9 @@ SKIP: {
 		$surf->set_size (23, 42);
 	}
 
+	# create_similar might return any kind of surface
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
-
-	# create_similar actually returns an image surface at the moment, but
-	# the compatibility layer has no way of knowing this and thus turns it
-	# into a pdf surface.  Recently, it also started returning meta
-	# surfaces whose type is internal, so the bindings have no other choice
-	# but represent them as plain surfaces.  Thus, mark this TODO for now.
-	TODO: {
-		local $TODO = 'create_similar returns surfaces whose type is not predictable';
-		isa_ok ($surf, 'Cairo::ImageSurface');
-	}
 
 	unlink 'tmp.pdf';
 
@@ -240,7 +231,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'ps surface', 15
+	skip 'ps surface', 14
 		unless Cairo::HAS_PS_SURFACE;
 
 	my $surf = Cairo::PsSurface->create ('tmp.ps', IMG_WIDTH, IMG_HEIGHT);
@@ -262,17 +253,9 @@ SKIP: {
 		$surf->dsc_begin_page_setup;
 	}
 
+	# create_similar might return any kind of surface
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
-
-	# create_similar actually returns an image surface at the moment, but
-	# the compatibility layer has no way of knowing this and thus turns it
-	# into a ps surface.
-	if (Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0)) {
-		isa_ok ($surf, 'Cairo::ImageSurface');
-	} else {
-		isa_ok ($surf, 'Cairo::PsSurface');
-	}
 
 	unlink 'tmp.ps';
 
