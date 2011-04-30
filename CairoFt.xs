@@ -7,6 +7,7 @@
  */
 
 #include <cairo-perl.h>
+#include <cairo-perl-private.h>
 
 static const cairo_user_data_key_t face_key;
 
