@@ -72,11 +72,9 @@ is ($surf->get_height, IMG_HEIGHT);
 	}
 }
 
-$surf->finish;
-
-$surf = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
-isa_ok ($surf, 'Cairo::ImageSurface');
-isa_ok ($surf, 'Cairo::Surface');
+my $similar = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+isa_ok ($similar, 'Cairo::ImageSurface');
+isa_ok ($similar, 'Cairo::Surface');
 
 # Test that the enum wrappers differentiate between color and color-alpha.
 SKIP: {
@@ -129,6 +127,8 @@ SKIP: {
 
 	ok (defined $surf->has_show_text_glyphs);
 }
+
+$surf->finish;
 
 # --------------------------------------------------------------------------- #
 
