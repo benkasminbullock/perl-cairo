@@ -265,6 +265,9 @@ if ($have_cairo_1_2) {
 		CAIRO_SURFACE_TYPE_BEOS
 		CAIRO_SURFACE_TYPE_DIRECTFB
 		CAIRO_SURFACE_TYPE_SVG
+		CAIRO_SURFACE_TYPE_OS2
+		CAIRO_SURFACE_TYPE_WIN32_PRINTING
+		CAIRO_SURFACE_TYPE_QUARTZ_IMAGE
 	/];
 
 	$enums{cairo_svg_version_t} = [qw/
@@ -308,13 +311,13 @@ if ($have_cairo_1_6) {
 
 if ($have_cairo_1_8) {
 	add_new_enum_values(
-	      cairo_status_t => [qw/CAIRO_STATUS_FONT_TYPE_MISMATCH
-				    CAIRO_STATUS_USER_FONT_IMMUTABLE
-				    CAIRO_STATUS_USER_FONT_ERROR
-				    CAIRO_STATUS_NEGATIVE_COUNT
-				    CAIRO_STATUS_INVALID_CLUSTERS
-				    CAIRO_STATUS_INVALID_SLANT
-				    CAIRO_STATUS_INVALID_WEIGHT/],
+		cairo_status_t => [qw/CAIRO_STATUS_FONT_TYPE_MISMATCH
+				      CAIRO_STATUS_USER_FONT_IMMUTABLE
+				      CAIRO_STATUS_USER_FONT_ERROR
+				      CAIRO_STATUS_NEGATIVE_COUNT
+				      CAIRO_STATUS_INVALID_CLUSTERS
+				      CAIRO_STATUS_INVALID_SLANT
+				      CAIRO_STATUS_INVALID_WEIGHT/],
 	);
 
 	$flags{cairo_text_cluster_flags_t} = [qw/
@@ -326,6 +329,19 @@ if ($have_cairo_1_8) {
 }
 
 if ($have_cairo_1_10) {
+	add_new_enum_values(
+		cairo_surface_type_t => [
+			qw/CAIRO_SURFACE_TYPE_SCRIPT
+			   CAIRO_SURFACE_TYPE_QT
+			   CAIRO_SURFACE_TYPE_RECORDING
+			   CAIRO_SURFACE_TYPE_VG
+			   CAIRO_SURFACE_TYPE_GL
+			   CAIRO_SURFACE_TYPE_DRM
+			   CAIRO_SURFACE_TYPE_TEE
+			   CAIRO_SURFACE_TYPE_XML
+			   CAIRO_SURFACE_TYPE_SKIA
+			   CAIRO_SURFACE_TYPE_SUBSURFACE/]);
+
 	$enums{cairo_pdf_version_t} = [qw/
 		CAIRO_PDF_VERSION_
 		CAIRO_PDF_VERSION_1_4
