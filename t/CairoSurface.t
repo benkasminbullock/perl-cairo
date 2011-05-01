@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 72;
+use Test::More tests => 77;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -338,4 +338,26 @@ SKIP: {
 
 	like (Cairo::SvgSurface::version_to_string('1-1'), qr/1\.1/);
 	like (Cairo::SvgSurface->version_to_string('1-1'), qr/1\.1/);
+}
+
+SKIP: {
+	skip 'svg surface', 5
+		unless Cairo::HAS_RECORDING_SURFACE;
+
+	my $surf = Cairo::RecordingSurface->create (
+	             'color',
+	             {x=>10, y=>10, width=>5, height=>5});
+	isa_ok ($surf, 'Cairo::RecordingSurface');
+	isa_ok ($surf, 'Cairo::Surface');
+
+	# Test that the extents rectangle was marshalled correctly.
+	my $cr = Cairo::Context->create ($surf);
+	$cr->move_to (0, 0);
+	$cr->line_to (30, 30);
+	$cr->paint;
+	is_deeply ([$surf->ink_extents], [10, 10, 5, 5]);
+
+	$surf = Cairo::RecordingSurface->create ('color', undef);
+	isa_ok ($surf, 'Cairo::RecordingSurface');
+	isa_ok ($surf, 'Cairo::Surface');
 }

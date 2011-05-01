@@ -85,6 +85,12 @@ get_package (cairo_surface_t *surface)
 		package = "Cairo::SvgSurface";
 		break;
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+	    case CAIRO_SURFACE_TYPE_RECORDING:
+		package = "Cairo::RecordingSurface";
+		break;
+#endif
+
 	    case CAIRO_SURFACE_TYPE_XLIB:
 	    case CAIRO_SURFACE_TYPE_XCB:
 	    case CAIRO_SURFACE_TYPE_GLITZ:
@@ -92,6 +98,20 @@ get_package (cairo_surface_t *surface)
 	    case CAIRO_SURFACE_TYPE_WIN32:
 	    case CAIRO_SURFACE_TYPE_BEOS:
 	    case CAIRO_SURFACE_TYPE_DIRECTFB:
+	    case CAIRO_SURFACE_TYPE_OS2:
+	    case CAIRO_SURFACE_TYPE_WIN32_PRINTING:
+	    case CAIRO_SURFACE_TYPE_QUARTZ_IMAGE:
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+	    case CAIRO_SURFACE_TYPE_SCRIPT:
+	    case CAIRO_SURFACE_TYPE_QT:
+	    case CAIRO_SURFACE_TYPE_VG:
+	    case CAIRO_SURFACE_TYPE_GL:
+	    case CAIRO_SURFACE_TYPE_DRM:
+	    case CAIRO_SURFACE_TYPE_TEE:
+	    case CAIRO_SURFACE_TYPE_XML:
+	    case CAIRO_SURFACE_TYPE_SKIA:
+	    case CAIRO_SURFACE_TYPE_SUBSURFACE:
+#endif
 		package = "Cairo::Surface";
 		break;
 
@@ -642,6 +662,28 @@ cairo_svg_surface_version_to_string (...)
 	}
     OUTPUT:
 	RETVAL
+
+#endif
+
+# --------------------------------------------------------------------------- #
+
+# The recording surface doesn't need the special package treatment because it
+# didn't exist in cairo 1.0.
+
+#ifdef CAIRO_HAS_RECORDING_SURFACE
+
+MODULE = Cairo::Surface	PACKAGE = Cairo::RecordingSurface	PREFIX = cairo_recording_surface_
+
+BOOT:
+	cairo_perl_set_isa ("Cairo::RecordingSurface", "Cairo::Surface");
+
+# cairo_surface_t * cairo_recording_surface_create (cairo_content_t, const cairo_rectangle_t *extents);
+cairo_surface_t_noinc *
+cairo_recording_surface_create (class, cairo_content_t content, cairo_rectangle_t_ornull *extents)
+    C_ARGS:
+	content, extents
+
+void cairo_recording_surface_ink_extents (cairo_surface_t *surface, OUTLIST double x0, OUTLIST double y0, OUTLIST double width, OUTLIST double height);
 
 #endif
 

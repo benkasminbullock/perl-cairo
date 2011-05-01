@@ -72,6 +72,7 @@ my %objects = (
 my %structs = (
 	'cairo_font_options_t *' => 'Cairo::FontOptions',
 	'cairo_matrix_t *'       => 'Cairo::Matrix',
+	'cairo_rectangle_t *'    => 'Cairo::Rectangle',
 );
 
 my %enums = (
@@ -327,6 +328,10 @@ if ($have_cairo_1_8) {
 
 my %object_guards = ();
 
+my %struct_guards = (
+	cairo_rectangle_t => '#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)',
+);
+
 my %enum_guards = (
 	cairo_ps_level_t    => '#ifdef CAIRO_HAS_PS_SURFACE',
 	cairo_svg_version_t => '#ifdef CAIRO_HAS_SVG_SURFACE',
@@ -363,6 +368,7 @@ MakeHelper::write_boot (
 
 my @typemaps = MakeHelper::do_typemaps (\%objects, \%structs, \%enums, \%flags,
                                         \%object_guards,
+                                        \%struct_guards,
                                         \%enum_guards,
                                         \%flag_guards);
 push @typemaps, 'cairo-perl.typemap';

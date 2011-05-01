@@ -69,7 +69,10 @@ cairo_path_t * SvCairoPath (SV *sv);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
 
+#undef newSVCairoRectangle
+#undef SvCairoRectangle
 SV * newSVCairoRectangle (cairo_rectangle_t *rectangle);
+cairo_rectangle_t * SvCairoRectangle (SV *sv);
 
 #endif
 

@@ -79,6 +79,7 @@ sub do_typemaps
 	my %enums = %{shift ()};
 	my %flags = %{shift ()};
 	my %object_guards = %{shift ()};
+	my %struct_guards = %{shift ()};
 	my %enum_guards = %{shift ()};
 	my %flag_guards = %{shift ()};
 
@@ -230,13 +231,21 @@ EOS
 		my $type = $1;
 		my $mangled = mangle ($type);
 
+		if (exists $struct_guards{$type}) {
+			print HEADER "$struct_guards{$type}\n";
+		}
+
 		print HEADER <<"EOS";
 typedef $type ${type}_ornull;
 #define Sv$mangled(sv)			(($type *) cairo_struct_from_sv (sv, "$structs{$_}"))
 #define Sv${mangled}_ornull(sv)		(((sv) && SvOK (sv)) ? Sv$mangled(sv) : NULL)
-#define newSV$mangled(struct)		(cairo_struct_to_sv (($type *) struct, "$structs{$_}"))
-#define newSV${mangled}_ornull(struct)	(((struct) == NULL) ? &PL_sv_undef : newSV$mangled(struct))
+#define newSV$mangled(struct_)		(cairo_struct_to_sv (($type *) struct_, "$structs{$_}"))
+#define newSV${mangled}_ornull(struct_)	(((struct_) == NULL) ? &PL_sv_undef : newSV$mangled(struct_))
 EOS
+
+		if (exists $struct_guards{$type}) {
+			print HEADER "#endif /* $struct_guards{$type} */\n";
+		}
 	}
 
 	# ------------------------------------------------------------------- #

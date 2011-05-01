@@ -242,6 +242,38 @@ newSVCairoRectangle (cairo_rectangle_t *rectangle)
 	return newRV_noinc ((SV *) hv);
 }
 
+cairo_rectangle_t *
+SvCairoRectangle (SV *sv)
+{
+	HV *hv;
+	SV **value;
+	cairo_rectangle_t *rectangle;
+
+	if (!cairo_perl_sv_is_hash_ref (sv))
+		croak ("cairo_rectangle_t must be a hash reference");
+
+	hv = (HV *) SvRV (sv);
+	rectangle = cairo_perl_alloc_temp (sizeof (cairo_rectangle_t));
+
+	value = hv_fetchs (hv, "x", 0);
+	if (value && SvOK (*value))
+		rectangle->x = SvNV (*value);
+
+	value = hv_fetchs (hv, "y", 0);
+	if (value && SvOK (*value))
+		rectangle->y = SvNV (*value);
+
+	value = hv_fetchs (hv, "width", 0);
+	if (value && SvOK (*value))
+		rectangle->width = SvNV (*value);
+
+	value = hv_fetchs (hv, "height", 0);
+	if (value && SvOK (*value))
+		rectangle->height = SvNV (*value);
+
+	return rectangle;
+}
+
 #endif
 
 /* ------------------------------------------------------------------------- */
@@ -783,6 +815,17 @@ bool
 HAS_SVG_SURFACE ()
     CODE:
 #ifdef CAIRO_HAS_SVG_SURFACE
+	RETVAL = TRUE;
+#else
+	RETVAL = FALSE;
+#endif
+    OUTPUT:
+	RETVAL
+
+bool
+HAS_RECORDING_SURFACE ()
+    CODE:
+#ifdef CAIRO_HAS_RECORDING_SURFACE
 	RETVAL = TRUE;
 #else
 	RETVAL = FALSE;
