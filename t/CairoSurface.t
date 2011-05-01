@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 83;
+use Test::More tests => 84;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -126,6 +126,14 @@ SKIP: {
 	delta_ok ([$surf->get_fallback_resolution], [72, 72]);
 
 	ok (defined $surf->has_show_text_glyphs);
+}
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+
+	my $rect_surf = Cairo::Surface->create_for_rectangle ($surf, 0, 0, 10, 10);
+	isa_ok ($rect_surf, 'Cairo::Surface');
 }
 
 $surf->finish;

@@ -378,6 +378,16 @@ cairo_bool_t cairo_surface_has_show_text_glyphs (cairo_surface_t *surface);
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE (1, 10, 0)
+
+# cairo_surface_t * cairo_surface_create_for_rectangle (cairo_surface_t *target, double x, double y, double width, double height);
+cairo_surface_t_noinc *
+cairo_surface_create_for_rectangle (class, cairo_surface_t *target, double x, double y, double width, double height)
+    C_ARGS:
+	target, x, y, width, height
+
+#endif
+
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Surface	PACKAGE = Cairo::ImageSurface	PREFIX = cairo_image_surface_
