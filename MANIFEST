@@ -7,6 +7,7 @@ CairoFt.xs
 CairoMatrix.xs
 CairoPath.xs
 CairoPattern.xs
+CairoRegion.xs
 CairoSurface.xs
 ChangeLog.pre-git
 doctypes
@@ -43,5 +44,6 @@ t/CairoFt.t
 t/CairoMatrix.t
 t/CairoPath.t
 t/CairoPattern.t
+t/CairoRegion.t
 t/CairoSurface.t
 TODO

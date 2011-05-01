@@ -65,14 +65,16 @@ my %objects = (
 	'cairo_t *'             => 'Cairo::Context',
 	'cairo_font_face_t *'   => 'Cairo::FontFace',
 	'cairo_pattern_t *'     => 'Cairo::Pattern',
+	'cairo_region_t *'      => 'Cairo::Region',
 	'cairo_scaled_font_t *' => 'Cairo::ScaledFont',
 	'cairo_surface_t *'     => 'Cairo::Surface',
 );
 
 my %structs = (
-	'cairo_font_options_t *' => 'Cairo::FontOptions',
-	'cairo_matrix_t *'       => 'Cairo::Matrix',
-	'cairo_rectangle_t *'    => 'Cairo::Rectangle',
+	'cairo_font_options_t *'  => 'Cairo::FontOptions',
+	'cairo_matrix_t *'        => 'Cairo::Matrix',
+	'cairo_rectangle_t *'     => 'Cairo::Rectangle',
+	'cairo_rectangle_int_t *' => 'Cairo::RectangleInt',
 );
 
 my %enums = (
@@ -347,16 +349,27 @@ if ($have_cairo_1_10) {
 		CAIRO_PDF_VERSION_1_4
 		CAIRO_PDF_VERSION_1_5
 	/];
+
+	$enums{cairo_region_overlap_t} = [qw/
+		CAIRO_REGION_OVERLAP_
+		CAIRO_REGION_OVERLAP_IN
+		CAIRO_REGION_OVERLAP_OUT
+		CAIRO_REGION_OVERLAP_PART
+	/];
 } else {
 	$enums{cairo_pdf_version_t} = [];
+	$enums{cairo_region_overlap_t} = [];
 }
 
 # --------------------------------------------------------------------------- #
 
-my %object_guards = ();
+my %object_guards = (
+	cairo_region_t => '#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)',
+);
 
 my %struct_guards = (
-	cairo_rectangle_t => '#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)',
+	cairo_rectangle_t     => '#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)',
+	cairo_rectangle_int_t => '#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)',
 );
 
 my %enum_guards = (
@@ -378,6 +391,10 @@ my @xs_files = qw(
 	CairoPattern.xs
 	CairoSurface.xs
 );
+
+if ($have_cairo_1_10) {
+	push @xs_files, 'CairoRegion.xs';
+}
 
 my $have_cairo_ft = !system qw(pkg-config --exists --silence-errors cairo-ft);
 if ($have_cairo_ft) {

@@ -76,6 +76,15 @@ cairo_rectangle_t * SvCairoRectangle (SV *sv);
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+
+#undef newSVCairoRectangleInt
+#undef SvCairoRectangleInt
+SV * newSVCairoRectangleInt (cairo_rectangle_int_t *rectangle);
+cairo_rectangle_int_t * SvCairoRectangleInt (SV *sv);
+
+#endif
+
 /*
  * special treatment for surfaces
  */

@@ -278,6 +278,62 @@ SvCairoRectangle (SV *sv)
 
 /* ------------------------------------------------------------------------- */
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+
+SV *
+newSVCairoRectangleInt (cairo_rectangle_int_t *rectangle)
+{
+	HV *hv;
+
+	if (!rectangle)
+		return &PL_sv_undef;
+
+	hv = newHV ();
+
+	hv_store (hv, "x", 1, newSViv (rectangle->x), 0);
+	hv_store (hv, "y", 1, newSViv (rectangle->y), 0);
+	hv_store (hv, "width", 5, newSViv (rectangle->width), 0);
+	hv_store (hv, "height", 6, newSViv (rectangle->height), 0);
+
+	return newRV_noinc ((SV *) hv);
+}
+
+cairo_rectangle_int_t *
+SvCairoRectangleInt (SV *sv)
+{
+	HV *hv;
+	SV **value;
+	cairo_rectangle_int_t *rectangle;
+
+	if (!cairo_perl_sv_is_hash_ref (sv))
+		croak ("cairo_rectangle_int_t must be a hash reference");
+
+	hv = (HV *) SvRV (sv);
+	rectangle = cairo_perl_alloc_temp (sizeof (cairo_rectangle_t));
+
+	value = hv_fetchs (hv, "x", 0);
+	if (value && SvOK (*value))
+		rectangle->x = SvIV (*value);
+
+	value = hv_fetchs (hv, "y", 0);
+	if (value && SvOK (*value))
+		rectangle->y = SvIV (*value);
+
+	value = hv_fetchs (hv, "width", 0);
+	if (value && SvOK (*value))
+		rectangle->width = SvIV (*value);
+
+	value = hv_fetchs (hv, "height", 0);
+	if (value && SvOK (*value))
+		rectangle->height = SvIV (*value);
+
+	return rectangle;
+}
+
+#endif
+
+/* ------------------------------------------------------------------------- */
+
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
 
 SV *
