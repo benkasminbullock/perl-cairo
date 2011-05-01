@@ -548,6 +548,12 @@ void cairo_clip_extents (cairo_t *cr, OUTLIST double x1, OUTLIST double y1, OUTL
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+
+cairo_bool_t cairo_in_clip (cairo_t *cr, double x, double y);
+
+#endif
+
 void cairo_reset_clip (cairo_t *cr);
 
 void cairo_select_font_face (cairo_t *cr, const char *family, cairo_font_slant_t slant, cairo_font_weight_t weight);

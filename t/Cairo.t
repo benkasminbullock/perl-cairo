@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -172,6 +172,13 @@ is (@ext, 4);
 $cr->clip;
 $cr->clip_preserve;
 $cr->reset_clip;
+
+SKIP: {
+	skip 'new stuff', 1
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 10, 0);
+
+	ok ($cr->in_clip (23, 42));
+}
 
 SKIP: {
 	skip 'new stuff', 7
