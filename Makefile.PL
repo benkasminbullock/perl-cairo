@@ -227,6 +227,7 @@ my $have_cairo_1_2 = ExtUtils::PkgConfig->atleast_version("cairo", "1.2.0");
 my $have_cairo_1_4 = ExtUtils::PkgConfig->atleast_version("cairo", "1.4.0");
 my $have_cairo_1_6 = ExtUtils::PkgConfig->atleast_version("cairo", "1.6.0");
 my $have_cairo_1_8 = ExtUtils::PkgConfig->atleast_version("cairo", "1.8.0");
+my $have_cairo_1_10 = ExtUtils::PkgConfig->atleast_version("cairo", "1.10.0");
 
 if ($have_cairo_1_2) {
 	add_new_enum_values(
@@ -322,6 +323,16 @@ if ($have_cairo_1_8) {
 	/];
 } else {
 	$flags{cairo_text_cluster_flags_t} = [];
+}
+
+if ($have_cairo_1_10) {
+	$enums{cairo_pdf_version_t} = [qw/
+		CAIRO_PDF_VERSION_
+		CAIRO_PDF_VERSION_1_4
+		CAIRO_PDF_VERSION_1_5
+	/];
+} else {
+	$enums{cairo_pdf_version_t} = [];
 }
 
 # --------------------------------------------------------------------------- #

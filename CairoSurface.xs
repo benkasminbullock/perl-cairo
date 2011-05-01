@@ -506,6 +506,40 @@ void cairo_pdf_surface_set_size (cairo_surface_t *surface, double width_in_point
 
 #endif
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+
+void cairo_pdf_surface_restrict_to_version (cairo_surface_t *surface, cairo_pdf_version_t version);
+
+# void cairo_pdf_get_versions (cairo_pdf_version_t const **versions, int *num_versions);
+void
+cairo_pdf_surface_get_versions (class=NULL)
+    PREINIT:
+	cairo_pdf_version_t const *versions = NULL;
+	int num_versions = 0, i;
+    PPCODE:
+	PERL_UNUSED_VAR (ax);
+	cairo_pdf_get_versions (&versions, &num_versions);
+	EXTEND (sp, num_versions);
+	for (i = 0; i < num_versions; i++)
+		PUSHs (sv_2mortal (newSVCairoPdfVersion (versions[i])));
+
+# const char * cairo_pdf_version_to_string (cairo_pdf_version_t version);
+const char *
+cairo_pdf_surface_version_to_string (...)
+    CODE:
+	if (items == 1) {
+		RETVAL = cairo_pdf_version_to_string (SvCairoPdfVersion (ST (0)));
+	} else if (items == 2) {
+		RETVAL = cairo_pdf_version_to_string (SvCairoPdfVersion (ST (1)));
+	} else {
+		RETVAL = NULL;
+		croak ("Usage: Cairo::PdfSurface::version_to_string (version) or Cairo::PdfSurface->version_to_string (version)");
+	}
+    OUTPUT:
+	RETVAL
+
+#endif
+
 #endif
 
 # --------------------------------------------------------------------------- #

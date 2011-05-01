@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 77;
+use Test::More tests => 83;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -195,7 +195,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 7
+	skip 'pdf surface', 13
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -213,8 +213,6 @@ SKIP: {
 	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
 
-	unlink 'tmp.pdf';
-
 	SKIP: {
 		skip 'create_for_stream on pdf surfaces', 4
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
@@ -228,6 +226,28 @@ SKIP: {
 		isa_ok ($surf, 'Cairo::PdfSurface');
 		isa_ok ($surf, 'Cairo::Surface');
 	}
+
+	SKIP: {
+		skip 'new stuff', 6
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 10, 0);
+
+		my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
+		$surf->restrict_to_version ('1-4');
+		$surf->restrict_to_version ('1-5');
+
+		my @versions = Cairo::PdfSurface::get_versions();
+		ok (scalar @versions > 0);
+		is ($versions[0], '1-4');
+
+		@versions = Cairo::PdfSurface->get_versions();
+		ok (scalar @versions > 0);
+		is ($versions[0], '1-4');
+
+		like (Cairo::PdfSurface::version_to_string('1-4'), qr/1\.4/);
+		like (Cairo::PdfSurface->version_to_string('1-4'), qr/1\.4/);
+	}
+
+	unlink 'tmp.pdf';
 }
 
 SKIP: {
