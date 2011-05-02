@@ -13,24 +13,26 @@ void DESTROY (cairo_region_t * region);
     CODE:
 	cairo_region_destroy (region);
 
+# cairo_region_t * cairo_region_create (void);
+# cairo_region_t * cairo_region_create_rectangle (const cairo_rectangle_int_t *rect);
 # cairo_region_t * cairo_region_create_rectangles (const cairo_rectangle_int_t *rects, int count);
 cairo_region_t_noinc *
 cairo_region_create (class, ...)
-    PREINIT:
-	cairo_rectangle_int_t *rects;
-	int i, count;
     CODE:
 	if (items == 1) {
 		RETVAL = cairo_region_create ();
 	} else if (items == 2) {
 		RETVAL = cairo_region_create_rectangle (SvCairoRectangleInt (ST (1)));
 	} else {
+		cairo_rectangle_int_t *rects;
+		int i, count;
 		count = items - 1;
 		Newz (0, rects, count, cairo_rectangle_int_t);
 		for (i = 1; i < items; i++) {
 			rects[i-1] = *SvCairoRectangleInt (ST (i));
 		}
 		RETVAL = cairo_region_create_rectangles (rects, count);
+		Safefree (rects);
 	}
     OUTPUT:
 	RETVAL
