@@ -256,6 +256,16 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =item ($x1, $y1, $x2, $y2) = $cr->clip_extents [1.4]
 
+=item $bool = $cr->in_clip ($x, $y) [1.10]
+
+=over
+
+=item $x: double
+
+=item $y: double
+
+=back
+
 =item @rectangles = $cr->copy_clip_rectangle_list [1.4]
 
 =item $cr->reset_clip
@@ -707,6 +717,90 @@ red, green, blue, and alpha.
 
 # --------------------------------------------------------------------------- #
 
+=head3 Regions -- Representing a pixel-aligned area
+
+=over
+
+=item $region = Cairo::Region->create (...) [1.10]
+
+=over
+
+=item ...: zero or more I<Cairo::RectangleInt>
+
+=back
+
+=item $status = $region->status [1.10]
+
+=item $num = $region->num_rectangles [1.10]
+
+=item $rect = $region->get_rectangle ($i) [1.10]
+
+=over
+
+=item $i: integer
+
+=back
+
+=item $bool = $region->is_empty [1.10]
+
+=item $bool = $region->contains_point ($x, $y) [1.10]
+
+=over
+
+=item $x: integer
+
+=item $y: integer
+
+=back
+
+=item $bool = $region_one->equal ($region_two) [1.10]
+
+=over
+
+=item $region_two: I<Cairo::Region>
+
+=back
+
+=item $region->translate ($dx, $dy) [1.10]
+
+=over
+
+=item $dx: integer
+
+=item $dy: integer
+
+=back
+
+=item $status = $dst->intersect ($other) [1.10]
+
+=item $status = $dst->intersect_rectangle ($rect) [1.10]
+
+=item $status = $dst->subtract ($other) [1.10]
+
+=item $status = $dst->subtract_rectangle ($rect) [1.10]
+
+=item $status = $dst->union ($other) [1.10]
+
+=item $status = $dst->union_rectangle ($rect) [1.10]
+
+=item $status = $dst->xor ($other) [1.10]
+
+=item $status = $dst->xor_rectangle ($rect) [1.10]
+
+=over
+
+=item $other: I<Cairo::Region>
+
+=item $rect: I<Cairo::RectangleInt>
+
+=back
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
 =head3 Transformations -- Manipulating the current transformation matrix
 
 =over
@@ -932,6 +1026,24 @@ I<x> and I<y>.  Example:
 
 =back
 
+=item $face = Cairo::ToyFontFace->create ($family, $slant, $weight) [1.8]
+
+=over
+
+=item $family: string
+
+=item $slant: I<Cairo::FontSlant>
+
+=item $weight: I<Cairo::FontWeight>
+
+=back
+
+=item $family = $face->get_family [1.8]
+
+=item $slang = $face->get_slant [1.8]
+
+=item $weight = $face->get_weight [1.8]
+
 =back
 
 =cut
@@ -1145,6 +1257,22 @@ from a file:
 
 =back
 
+=item $new = Cairo::Surface->create_for_rectangle ($target, $x, $y, $width, $height) [1.10]
+
+=over
+
+=item $target: I<Cairo::Surface>
+
+=item $x: double
+
+=item $y: double
+
+=item $width: double
+
+=item $height: double
+
+=back
+
 =item $status = $surface->status
 
 =item $surface->finish
@@ -1309,6 +1437,24 @@ from a file:
 
 =back
 
+=item $surface->restrict_to_version ($version) [1.10]
+
+=over
+
+=item $version: I<Cairo::PdfVersion>
+
+=back
+
+=item @versions = Cairo::PdfSurface::get_versions [1.10]
+
+=item $string = Cairo::PdfSurface::version_to_string ($version) [1.10]
+
+=over
+
+=item $version: I<Cairo::PdfVersion>
+
+=back
+
 =back
 
 =cut
@@ -1462,6 +1608,28 @@ from a file:
 =back
 
 =item $eps = $surface->get_eps [1.6]
+
+=back
+
+=cut
+
+# --------------------------------------------------------------------------- #
+
+=head3 Recording Surfaces -- Records all drawing operations
+
+=over
+
+=item $surface = Cairo::RecordingSurface->create ($content, $extents) [1.10]
+
+=over
+
+=item $content: I<Cairo::Content>
+
+=item $extents: I<Cairo::Rectangle>
+
+=back
+
+=item ($x0, $y0, $width, $height) = $surface->ink_extents [1.10]
 
 =back
 
