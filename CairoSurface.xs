@@ -293,14 +293,36 @@ void DESTROY (cairo_surface_t * surface);
     CODE:
 	cairo_surface_destroy (surface);
 
-cairo_surface_t_noinc * cairo_surface_create_similar (cairo_surface_t * other, cairo_content_t content, int width, int height);
-    POSTCALL:
+cairo_surface_t_noinc *
+cairo_surface_create_similar (...)
+    PREINIT:
+	int offset = 0;
+	cairo_surface_t * other = NULL;
+	cairo_content_t content = 0;
+	int width = 0;
+	int height = 0;
+    CODE:
+	if (items == 4) {
+		offset = 0;
+	} else if (items == 5) {
+		offset = 1;
+	} else {
+		croak ("Usage: Cairo::Surface->create_similar ($other, $content, $width, $height)\n"
+		       " -or-: $other->create_similar ($content, $width, $height)");
+	}
+	other = SvCairoSurface (ST (0 + offset));
+	content = SvCairoContent (ST (1 + offset));
+	width = SvIV (ST (2 + offset));
+	height = SvIV (ST (3 + offset));
+	RETVAL = cairo_surface_create_similar (other, content, width, height);
 #if CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 2, 0)
-    {
+	{
 	const char *package = cairo_perl_package_table_lookup (other);
 	cairo_perl_package_table_insert (RETVAL, package ? package : "Cairo::Surface");
-    }
+	}
 #endif
+    OUTPUT:
+	RETVAL
 
 void cairo_surface_finish (cairo_surface_t *surface);
 

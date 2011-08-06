@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 84;
+use Test::More tests => 88;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -72,18 +72,31 @@ is ($surf->get_height, IMG_HEIGHT);
 	}
 }
 
-my $similar = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+my $similar = Cairo::Surface->create_similar ($surf, 'color', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($similar, 'Cairo::ImageSurface');
 isa_ok ($similar, 'Cairo::Surface');
+
+# Test that create_similar can be called with both conventions.
+{
+	my $similar = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+	isa_ok ($similar, 'Cairo::ImageSurface');
+	isa_ok ($similar, 'Cairo::Surface');
+
+	eval { Cairo::Surface->create_similar (1, 2) };
+	like ($@, qr/Usage/);
+
+	eval { Cairo::Surface->create_similar (1, 2, 3, 4, 5) };
+	like ($@, qr/Usage/);
+}
 
 # Test that the enum wrappers differentiate between color and color-alpha.
 SKIP: {
 	skip 'content tests', 2
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
 
-	my $tmp = $surf->create_similar ('color-alpha', IMG_WIDTH, IMG_HEIGHT);
+	my $tmp = Cairo::Surface->create_similar ($surf, 'color-alpha', IMG_WIDTH, IMG_HEIGHT);
 	is ($tmp->get_content, 'color-alpha');
-	$tmp = $surf->create_similar ('color', IMG_WIDTH, IMG_HEIGHT);
+	$tmp = Cairo::Surface->create_similar ($surf, 'color', IMG_WIDTH, IMG_HEIGHT);
 	is ($tmp->get_content, 'color');
 }
 
@@ -218,7 +231,7 @@ SKIP: {
 	}
 
 	# create_similar might return any kind of surface
-	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	$surf = Cairo::Surface->create_similar ($surf, 'alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
 
 	SKIP: {
@@ -282,7 +295,7 @@ SKIP: {
 	}
 
 	# create_similar might return any kind of surface
-	$surf = $surf->create_similar ('alpha', IMG_WIDTH, IMG_HEIGHT);
+	$surf = Cairo::Surface->create_similar ($surf, 'alpha', IMG_WIDTH, IMG_HEIGHT);
 	isa_ok ($surf, 'Cairo::Surface');
 
 	unlink 'tmp.ps';

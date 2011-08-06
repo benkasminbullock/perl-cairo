@@ -1245,9 +1245,11 @@ from a file:
 
 =over
 
-=item $new = $old->create_similar ($content, $width, $height)
+=item $similar = Cairo::Surface->create_similar ($other, $content, $width, $height)
 
 =over
+
+=item $other: I<Cairo::Surface>
 
 =item $content: I<Cairo::Content>
 
@@ -1256,6 +1258,10 @@ from a file:
 =item $height: integer
 
 =back
+
+For hysterical reasons, you can also use the following syntax:
+
+  $similar = $other->create_similar ($content, $width, $height)
 
 =item $new = Cairo::Surface->create_for_rectangle ($target, $x, $y, $width, $height) [1.10]
 
