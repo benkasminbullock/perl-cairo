@@ -33,10 +33,12 @@ const char * cairo_perl_package_table_lookup (void *pointer);
 		croak (Nullch);					\
 	}
 
+cairo_bool_t cairo_perl_sv_is_defined (SV *sv);
+#define cairo_perl_sv_is_ref(sv) \
+	(cairo_perl_sv_is_defined (sv) && SvROK (sv))
 #define cairo_perl_sv_is_array_ref(sv) \
-	(SvOK (sv) && SvROK (sv) && SvTYPE (SvRV(sv)) == SVt_PVAV)
-
+	(cairo_perl_sv_is_ref (sv) && SvTYPE (SvRV(sv)) == SVt_PVAV)
 #define cairo_perl_sv_is_hash_ref(sv) \
-	(SvOK (sv) && SvROK (sv) && SvTYPE (SvRV(sv)) == SVt_PVHV)
+	(cairo_perl_sv_is_ref (sv) && SvTYPE (SvRV(sv)) == SVt_PVHV)
 
 #endif /* _CAIRO_PERL_PRIVATE_H_ */

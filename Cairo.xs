@@ -63,12 +63,46 @@ cairo_perl_set_isa (const char *child_package,
 	av_push (isa, newSVpv (parent_package, 0));
 }
 
+/* Copied from Glib/Glib.xs. */
+cairo_bool_t
+cairo_perl_sv_is_defined (SV *sv)
+{
+	/* This is adapted from PP(pp_defined) in perl's pp.c */
+
+	if (!sv || !SvANY(sv))
+		return FALSE;
+
+	switch (SvTYPE(sv)) {
+	    case SVt_PVAV:
+		if (AvMAX(sv) >= 0 || SvGMAGICAL(sv)
+		    || (SvRMAGICAL(sv) && mg_find(sv, PERL_MAGIC_tied)))
+			return TRUE;
+		break;
+	    case SVt_PVHV:
+		if (HvARRAY(sv) || SvGMAGICAL(sv)
+		    || (SvRMAGICAL(sv) && mg_find(sv, PERL_MAGIC_tied)))
+			return TRUE;
+		break;
+	    case SVt_PVCV:
+		if (CvROOT(sv) || CvXSUB(sv))
+			return TRUE;
+		break;
+	    default:
+		if (SvGMAGICAL(sv))
+			mg_get(sv);
+		if (SvOK(sv))
+			return TRUE;
+	}
+
+	return FALSE;
+}
+
 /* ------------------------------------------------------------------------- */
 
 void *
 cairo_object_from_sv (SV *sv, const char *package)
 {
-	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
+	if (!cairo_perl_sv_is_ref (sv) || !sv_derived_from (sv, package))
 		croak("Cannot convert scalar %p to an object of type %s",
 		      sv, package);
 	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
@@ -87,7 +121,7 @@ cairo_object_to_sv (void *object, const char *package)
 void *
 cairo_struct_from_sv (SV *sv, const char *package)
 {
-	if (!SvOK (sv) || !SvROK (sv) || !sv_derived_from (sv, package))
+	if (!cairo_perl_sv_is_ref (sv) || !sv_derived_from (sv, package))
 		croak("Cannot convert scalar %p to a struct of type %s",
 		      sv, package);
 	return INT2PTR (void *, SvIV ((SV *) SvRV (sv)));
