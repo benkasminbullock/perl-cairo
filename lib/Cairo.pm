@@ -353,8 +353,8 @@ C<$cr-E<gt>restore> to restore to the saved state.
   ];
 
 I<Cairo::Path> is a data structure for holding a path. This data structure
-serves as the return value for C<$cr-E<gt>copy_path_data> and
-C<$cr-E<gt>copy_path_data_flat> as well the input value for
+serves as the return value for C<$cr-E<gt>copy_path> and
+C<$cr-E<gt>copy_path_flat> as well the input value for
 C<$cr-E<gt>append_path>.
 
 I<Cairo::Path> is represented as an array reference that contains path
@@ -393,6 +393,18 @@ path element:
 The semantics and ordering of the coordinate values are consistent with
 C<$cr-E<gt>move_to>, C<$cr-E<gt>line_to>, C<$cr-E<gt>curve_to>, and
 C<$cr-E<gt>close_path>.
+
+Note that the paths returned by Cairo are implemented as tied array references
+which do B<not> support adding, removing or shuffling of path segments.  For
+these operations, you need to make a shallow copy first:
+
+  my @path_clone = @{$path};
+  # now you can alter @path_clone which ever way you want
+
+The points of a single path element can be changed directly, however, without
+the need for a shallow copy:
+
+  $path->[$i]{points} = [[3, 4], [5, 6], [7, 8]];
 
 =over
 
