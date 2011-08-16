@@ -31,6 +31,14 @@ Overview of changes in Cairo 1.070
 * Add a few examples.
 * Fix a few test failures.
 
+Overview of changes in Cairo 1.062
+==================================
+
+* Cairo::FtFontFace: Keep the FT_Face alive long enough to avoid
+  segfaults
+* Add two new example programs
+* Fix test failures
+
 Overview of changes in Cairo 1.061
 ==================================
 
