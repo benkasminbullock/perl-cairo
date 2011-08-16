@@ -24,9 +24,12 @@ call_xs (pTHX_ void (*subaddr) (pTHX_ CV *), CV * cv, SV ** mark)
 	PUTBACK;	/* forget return values */
 }
 
+#ifndef XS_EXTERNAL
+# define XS_EXTERNAL(name) XS(name)
+#endif
 #define CAIRO_PERL_CALL_BOOT(name)				\
 	{							\
-		extern XS(name);				\
+		extern XS_EXTERNAL (name);			\
 		call_xs (aTHX_ name, cv, mark);	\
 	}
 
