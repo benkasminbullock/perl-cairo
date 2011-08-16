@@ -1,3 +1,19 @@
+Overview of changes in Cairo 1.071
+==================================
+
+* Add new API:
+  - recording surface
+  - region functions
+  - toy font face
+  - PDF version functions
+  - Cairo::in_clip
+  - Cairo::Surface::create_for_rectangle
+* Make it possible to modify and create paths
+* Make Cairo::Surface::create_similar callable as a class-static method, for
+  consistency with Cairo::Surface::create_for_rectangle.
+* Fix a few test failures.
+* Add more examples.
+
 Overview of changes in Cairo 1.070
 ==================================
 

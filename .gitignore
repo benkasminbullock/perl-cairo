@@ -2,6 +2,7 @@ Cairo.bs
 Cairo*.c
 Cairo*.o
 Makefile
+MYMETA.*
 blib
 build
 cairo-perl-enums.*
