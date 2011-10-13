@@ -1,3 +1,17 @@
+Overview of changes in Cairo 1.080
+==================================
+Since 1.06x
+-----------
+* Wrap new 1.8 and 1.10 API.
+* Make Cairo::Pattern->set_extend, get_extend, set_filter and get_filter
+  available to all pattern types, not just surface patterns.
+* Make it possible to modify and create paths.
+
+Since 1.071
+-----------
+* Add support for missing operator types.
+* Fix compilation agains perl 5.15.x.
+
 Overview of changes in Cairo 1.071
 ==================================
 
@@ -8,7 +22,7 @@ Overview of changes in Cairo 1.071
   - PDF version functions
   - Cairo::in_clip
   - Cairo::Surface::create_for_rectangle
-* Make it possible to modify and create paths
+* Make it possible to modify and create paths.
 * Make Cairo::Surface::create_similar callable as a class-static method, for
   consistency with Cairo::Surface::create_for_rectangle.
 * Fix a few test failures.
@@ -26,7 +40,7 @@ Overview of changes in Cairo 1.070
 * Make Cairo::Pattern->set_extend, get_extend, set_filter and get_filter
   available to all pattern types, not just surface patterns.
 * Fix a memory manage bug in Cairo::FtFontFace.
-* Fix a bug in the enum conversion code that made it more lenient that
+* Fix a bug in the enum conversion code that made it more lenient than
   intended.
 * Add a few examples.
 * Fix a few test failures.
