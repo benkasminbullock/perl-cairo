@@ -320,6 +320,7 @@ if ($have_cairo_1_8) {
 				      CAIRO_STATUS_INVALID_CLUSTERS
 				      CAIRO_STATUS_INVALID_SLANT
 				      CAIRO_STATUS_INVALID_WEIGHT/],
+                cairo_font_type_t => [qw/CAIRO_FONT_TYPE_USER/],
 	);
 
 	$flags{cairo_text_cluster_flags_t} = [qw/
