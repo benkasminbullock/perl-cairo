@@ -30,7 +30,7 @@ __END__
 
 =head1 NAME
 
-Cairo - Perl interface to the cairo library
+Cairo - Perl interface to the cairo 2d vector graphics library
 
 =head1 SYNOPSIS
 
