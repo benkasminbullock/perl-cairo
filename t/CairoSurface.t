@@ -143,7 +143,7 @@ SKIP: {
 
 SKIP: {
 	skip 'new stuff', 1
-		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 8, 0);
+		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 10, 0);
 
 	my $rect_surf = Cairo::Surface->create_for_rectangle ($surf, 0, 0, 10, 10);
 	isa_ok ($rect_surf, 'Cairo::Surface');
