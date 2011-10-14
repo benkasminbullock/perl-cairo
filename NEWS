@@ -1,5 +1,12 @@
+Overview of changes in Cairo 1.081
+==================================
+
+* Add a missing cairo_font_type_t value.
+* Fix a test failure.
+
 Overview of changes in Cairo 1.080
 ==================================
+
 Since 1.06x
 -----------
 * Wrap new 1.8 and 1.10 API.
