@@ -216,6 +216,60 @@ my %flags = ();
 
 # --------------------------------------------------------------------------- #
 
+my @exports = qw(
+	cairo_font_face_to_sv
+	cairo_font_type_from_sv
+	cairo_font_type_to_sv
+	cairo_object_from_sv
+	cairo_object_to_sv
+	cairo_pattern_to_sv
+	cairo_struct_from_sv
+	cairo_struct_to_sv
+	cairo_surface_to_sv
+
+	newSVCairoGlyph
+	SvCairoGlyph
+	newSVCairoPath
+	SvCairoPath
+	newSVCairoFontExtents
+	newSVCairoTextExtents
+
+	cairo_antialias_from_sv
+	cairo_antialias_to_sv
+	cairo_content_from_sv
+	cairo_content_to_sv
+	cairo_extend_from_sv
+	cairo_extend_to_sv
+	cairo_fill_rule_from_sv
+	cairo_fill_rule_to_sv
+	cairo_filter_from_sv
+	cairo_filter_to_sv
+	cairo_font_slant_from_sv
+	cairo_font_slant_to_sv
+	cairo_font_weight_from_sv
+	cairo_font_weight_to_sv
+	cairo_format_from_sv
+	cairo_format_to_sv
+	cairo_hint_metrics_from_sv
+	cairo_hint_metrics_to_sv
+	cairo_hint_style_from_sv
+	cairo_hint_style_to_sv
+	cairo_line_cap_from_sv
+	cairo_line_cap_to_sv
+	cairo_line_join_from_sv
+	cairo_line_join_to_sv
+	cairo_operator_from_sv
+	cairo_operator_to_sv
+	cairo_path_data_type_from_sv
+	cairo_path_data_type_to_sv
+	cairo_status_from_sv
+	cairo_status_to_sv
+	cairo_subpixel_order_from_sv
+	cairo_subpixel_order_to_sv
+);
+
+# --------------------------------------------------------------------------- #
+
 sub add_new_enum_values {
 	my (%new) = @_;
 	foreach my $enum (keys %new) {
@@ -277,6 +331,15 @@ if ($have_cairo_1_2) {
 		CAIRO_SVG_VERSION_1_1
 		CAIRO_SVG_VERSION_1_2
 	/];
+
+	push @exports, qw/cairo_font_type_from_sv
+	                  cairo_font_type_to_sv
+	                  cairo_pattern_type_from_sv
+	                  cairo_pattern_type_to_sv
+	                  cairo_surface_type_from_sv
+	                  cairo_surface_type_to_sv
+	                  cairo_svg_version_from_sv
+	                  cairo_svg_version_to_sv/;
 } else {
 	# We need to create empty enum entries for new types so that typemaps
 	# are generated for them.  xsubpp demands typemaps even if the code is
@@ -292,6 +355,9 @@ if ($have_cairo_1_4) {
 		cairo_status_t => [qw/CAIRO_STATUS_INVALID_INDEX
 		                      CAIRO_STATUS_CLIP_NOT_REPRESENTABLE/],
 	);
+
+	push @exports, qw/newSVCairoRectangle
+	                  SvCairoRectangle/;
 }
 
 if ($have_cairo_1_6) {
@@ -307,6 +373,9 @@ if ($have_cairo_1_6) {
 		CAIRO_PS_LEVEL_2
 		CAIRO_PS_LEVEL_3
 	/];
+
+	push @exports, qw/cairo_ps_level_from_sv
+	                  cairo_ps_level_to_sv/;
 } else {
 	$enums{cairo_ps_level_t} = [];
 }
@@ -327,6 +396,11 @@ if ($have_cairo_1_8) {
 		CAIRO_TEXT_CLUSTER_FLAG_
 		CAIRO_TEXT_CLUSTER_FLAG_BACKWARD
 	/];
+
+	push @exports, qw/newSVCairoTextCluster
+	                  SvCairoTextCluster
+	                  cairo_text_cluster_flags_from_sv
+	                  cairo_text_cluster_flags_to_sv/;
 } else {
 	$flags{cairo_text_cluster_flags_t} = [];
 }
@@ -374,6 +448,13 @@ if ($have_cairo_1_10) {
 		CAIRO_REGION_OVERLAP_OUT
 		CAIRO_REGION_OVERLAP_PART
 	/];
+
+	push @exports, qw/newSVCairoRectangleInt
+	                  SvCairoRectangleInt
+	                  cairo_pdf_version_from_sv
+	                  cairo_pdf_version_to_sv
+	                  cairo_region_overlap_from_sv
+	                  cairo_region_overlap_to_sv/;
 } else {
 	$enums{cairo_pdf_version_t} = [];
 	$enums{cairo_region_overlap_t} = [];
@@ -449,23 +530,6 @@ $dep->install (qw(cairo-perl.h
                   build/cairo-perl-auto.h
                   build/cairo-perl-auto.typemap));
 $dep->save_config ('build/IFiles.pm');
-
-my @exports = qw(
-	cairo_font_type_from_sv
-	cairo_font_type_to_sv
-	cairo_object_from_sv
-	cairo_object_to_sv
-	cairo_pattern_to_sv
-	cairo_struct_from_sv
-	cairo_struct_to_sv
-	cairo_surface_to_sv
-	newSVCairoFontExtents
-	newSVCairoGlyph
-	newSVCairoPath
-	newSVCairoTextExtents
-	SvCairoGlyph
-	SvCairoPath
-);
 
 WriteMakefile (
 	NAME          => 'Cairo',
