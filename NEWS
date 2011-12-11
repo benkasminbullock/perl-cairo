@@ -1,6 +1,11 @@
 Overview of changes in Cairo <next>
 ==================================
 
+* Auto-upgrade strings to utf8.  Note that this means that calling
+  utf8::encode() on strings before passing them into Cairo will now
+  yield doubly-encoded and thus broken strings.  Also, having
+  utf8-encoded literals in your code without an accompanying "use utf8"
+  line will also lead to double encoding.
 * Fix compiling and testing against older versions of cairo.
 * Make the test suite more robust.
 

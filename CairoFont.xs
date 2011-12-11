@@ -85,7 +85,7 @@ BOOT:
 
 # cairo_font_face_t * cairo_toy_font_face_create (const char *family, cairo_font_slant_t slant, cairo_font_weight_t weight)
 cairo_font_face_t_noinc *
-cairo_toy_font_face_create (class, const char *family, cairo_font_slant_t slant, cairo_font_weight_t weight)
+cairo_toy_font_face_create (class, const char_utf8 *family, cairo_font_slant_t slant, cairo_font_weight_t weight)
     C_ARGS:
 	family, slant, weight
     POSTCALL:
@@ -93,7 +93,7 @@ cairo_toy_font_face_create (class, const char *family, cairo_font_slant_t slant,
 	cairo_perl_package_table_insert (RETVAL, "Cairo::ToyFontFace");
 #endif
 
-const char * cairo_toy_font_face_get_family (cairo_font_face_t *font_face);
+const char_utf8 * cairo_toy_font_face_get_family (cairo_font_face_t *font_face);
 
 cairo_font_slant_t  cairo_toy_font_face_get_slant (cairo_font_face_t *font_face);
 
@@ -135,7 +135,7 @@ cairo_font_extents_t * cairo_scaled_font_extents (cairo_scaled_font_t *scaled_fo
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 2, 0)
 
 ##void cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8, cairo_text_extents_t *extents);
-cairo_text_extents_t * cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char *utf8)
+cairo_text_extents_t * cairo_scaled_font_text_extents (cairo_scaled_font_t *scaled_font, const char_utf8 *utf8)
     PREINIT:
 	cairo_text_extents_t extents;
     CODE:
@@ -178,6 +178,7 @@ cairo_scaled_font_text_to_glyphs (cairo_scaled_font_t *scaled_font, double x, do
 	cairo_text_cluster_flags_t cluster_flags;
 	cairo_status_t status;
     PPCODE:
+	sv_utf8_upgrade (utf8_sv);
 	utf8 = SvPV (utf8_sv, utf8_len);
 	status = cairo_scaled_font_text_to_glyphs (
 	           scaled_font,

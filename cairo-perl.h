@@ -112,4 +112,9 @@ SV * cairo_font_face_to_sv (cairo_font_face_t *surface);
 #define newSVCairoFontFace(object)		(cairo_font_face_to_sv (cairo_font_face_reference (object)))
 #define newSVCairoFontFace_noinc(object)	(cairo_font_face_to_sv (object))
 
+/*
+ * Type aliases for the typemap
+ */
+typedef char char_utf8;
+
 #endif /* _CAIRO_PERL_H_ */

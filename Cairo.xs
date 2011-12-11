@@ -656,7 +656,7 @@ cairo_bool_t cairo_in_clip (cairo_t *cr, double x, double y);
 
 void cairo_reset_clip (cairo_t *cr);
 
-void cairo_select_font_face (cairo_t *cr, const char *family, cairo_font_slant_t slant, cairo_font_weight_t weight);
+void cairo_select_font_face (cairo_t *cr, const char_utf8 *family, cairo_font_slant_t slant, cairo_font_weight_t weight);
 
 void cairo_set_font_size (cairo_t *cr, double size);
 
@@ -694,7 +694,7 @@ cairo_scaled_font_t * cairo_get_scaled_font (cairo_t *cr);
 
 #endif
 
-void cairo_show_text (cairo_t * cr, const char * utf8);
+void cairo_show_text (cairo_t * cr, const char_utf8 * utf8);
 
 ##void cairo_show_glyphs (cairo_t * cr, cairo_glyph_t * glyphs, int num_glyphs);
 void cairo_show_glyphs (cairo_t * cr, ...)
@@ -727,6 +727,7 @@ cairo_show_text_glyphs (cairo_t *cr, SV *utf8_sv, SV *glyphs_sv, SV *clusters_sv
 	if (!cairo_perl_sv_is_array_ref (clusters_sv))
 		croak ("text clusters must be an array ref");
 
+	sv_utf8_upgrade (utf8_sv);
 	utf8 = SvPV (utf8_sv, utf8_len);
 
 	glyphs_av = (AV *) SvRV (glyphs_sv);
@@ -771,8 +772,8 @@ cairo_font_extents_t * cairo_font_extents (cairo_t *cr)
 
 void cairo_set_font_face (cairo_t *cr, cairo_font_face_t *font_face);
 
-##void cairo_text_extents (cairo_t * cr, const unsigned char * utf8, cairo_text_extents_t * extents);
-cairo_text_extents_t * cairo_text_extents (cairo_t * cr, const char * utf8)
+##void cairo_text_extents (cairo_t * cr, const char * utf8, cairo_text_extents_t * extents);
+cairo_text_extents_t * cairo_text_extents (cairo_t * cr, const char_utf8 * utf8)
     PREINIT:
 	cairo_text_extents_t extents;
     CODE:
@@ -798,7 +799,7 @@ cairo_text_extents_t * cairo_glyph_extents (cairo_t * cr, ...)
     OUTPUT:
 	RETVAL
 
-void cairo_text_path  (cairo_t * cr, const char * utf8);
+void cairo_text_path  (cairo_t * cr, const char_utf8 * utf8);
 
 ##void cairo_glyph_path (cairo_t * cr, cairo_glyph_t * glyphs, int num_glyphs);
 void cairo_glyph_path (cairo_t * cr, ...)

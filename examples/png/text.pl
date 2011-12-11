@@ -2,13 +2,14 @@
 
 use strict;
 use warnings;
+use utf8;
 use Cairo;
 
 use constant
 {
 	WIDTH => 450,
 	HEIGHT => 600,
-	TEXT => 'hello, world',
+	TEXT => 'hëllø, wôrld',
 	NUM_GLYPHS => 10,
 	M_PI => 4 * atan2(1, 1),
 };
@@ -19,7 +20,7 @@ sub box_text
 
 	$cr->save;
 
-	my $extents = $cr->text_extents (TEXT);
+	my $extents = $cr->text_extents ($utf8);
 	my $line_width = $cr->get_line_width;
 	$cr->rectangle ($x + $extents->{x_bearing} - $line_width,
 	                $y + $extents->{y_bearing} - $line_width,

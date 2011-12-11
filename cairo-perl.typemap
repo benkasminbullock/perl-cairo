@@ -1,9 +1,7 @@
 #
-# Copyright (c) 2004-2005 by the cairo perl team (see the file README)
+# Copyright (c) 2004-2011 by the cairo perl team (see the file README)
 #
 # Licensed under the LGPL, see LICENSE file for more information.
-#
-# $Id$
 #
 
 TYPEMAP
@@ -11,6 +9,9 @@ TYPEMAP
 # For backwards compatibility: The typemap shipped with perl 5.6.2 apparently
 # don't know const char *.
 const char * 	   	T_PV
+
+char_utf8 *             T_PV_UTF8
+const char_utf8 *       T_PV_UTF8
 
 cairo_bool_t		T_UV
 
@@ -22,8 +23,13 @@ cairo_path_t *		T_CAIRO_PATH
 
 FT_Face			T_FT_FACE
 
+# -----------------------------------------------------------------------------
 
 INPUT
+
+T_PV_UTF8
+	sv_utf8_upgrade ($arg);
+	$var = ($type) SvPV_nolen ($arg);
 
 T_CAIRO_GLYPH
 	$var = SvCairoGlyph ($arg);
@@ -34,7 +40,13 @@ T_CAIRO_TEXT_CLUSTER
 T_CAIRO_PATH
 	$var = SvCairoPath ($arg);
 
+# -----------------------------------------------------------------------------
+
 OUTPUT
+
+T_PV_UTF8
+	sv_setpv ((SV*)$arg, $var);
+	SvUTF8_on ($arg);
 
 T_CAIRO_FONT_EXTENTS
 	$arg = newSVCairoFontExtents ($var);
