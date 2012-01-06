@@ -1409,6 +1409,16 @@ For hysterical reasons, you can also use the following syntax:
 
 =item $stride = $surface->get_stride [1.2]
 
+=item $stride = Cairo::Format::stride_for_width ($format, $width) [1.6]
+
+=over
+
+=item $format: I<Cairo::Format>
+
+=item $width: integer
+
+=back
+
 =back
 
 =cut
@@ -1730,16 +1740,6 @@ For hysterical reasons, you can also use the following syntax:
 =item $minor: integer
 
 =item $micro: integer
-
-=back
-
-=item $stride = Cairo::Format::stride_for_width ($format, $width) [1.6]
-
-=over
-
-=item $format: I<Cairo::Format>
-
-=item $width: integer
 
 =back
 
