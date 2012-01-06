@@ -425,13 +425,16 @@ BOOT:
 	call_atexit ((ATEXIT_t) cairo_debug_reset_static_data, NULL);
 #endif
 
-int VERSION (class=NULL)
+# The VERSION fallback is implemented in lib/Cairo.pm.
+int LIB_VERSION (...)
     CODE:
 	RETVAL = CAIRO_VERSION;
     OUTPUT:
 	RETVAL
 
-int VERSION_ENCODE (...)
+int LIB_VERSION_ENCODE (...)
+    ALIAS:
+	VERSION_ENCODE = 1
     PREINIT:
 	int major, minor, micro;
     CODE:
@@ -444,7 +447,7 @@ int VERSION_ENCODE (...)
 		minor = SvIV (ST (2));
 		micro = SvIV (ST (3));
 	} else {
-		croak ("Usage: Cairo::VERSION_ENCODE (major, minor, micro) or Cairo->VERSION_ENCODE (major, minor, micro)");
+		croak ("Usage: Cairo::LIB_VERSION_ENCODE (major, minor, micro) or Cairo->LIB_VERSION_ENCODE (major, minor, micro)");
 	}
 
 	RETVAL = CAIRO_VERSION_ENCODE (major, minor, micro);
@@ -453,11 +456,15 @@ int VERSION_ENCODE (...)
 
 # int cairo_version ();
 int cairo_version (class=NULL)
+    ALIAS:
+	lib_version = 1
     C_ARGS:
 	/* void */
 
 # const char* cairo_version_string ();
 const char* cairo_version_string (class=NULL)
+    ALIAS:
+	lib_version_string = 1
     C_ARGS:
 	/* void */
 

@@ -20,9 +20,17 @@ sub dl_load_flags { $^O eq 'darwin' ? 0x00 : 0x01 }
 
 Cairo->bootstrap ($VERSION);
 
-# --------------------------------------------------------------------------- #
-
-package Cairo;
+# Our Cairo::VERSION used to be a simple wrapper around CAIRO_VERSION.  But a
+# package's VERSION sub is supposed to do Perl version checking so that things
+# like 'use Cairo 1.00' work.  To not break backwards-compatibility, we
+# dispatch according to the number of arguments passed in.
+sub VERSION {
+  if (scalar @_ == 2) {
+    shift->SUPER::VERSION (@_);
+  } else {
+    Cairo::LIB_VERSION (@_);
+  }
+}
 
 1;
 
@@ -1725,13 +1733,18 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $version = Cairo->version
+=item $version_code = Cairo->lib_version
 
-=item $string = Cairo->version_string
+=item $version_string = Cairo->lib_version_string
 
-=item $version_code = Cairo->VERSION
+These two functions return the version of libcairo that the program is
+currently running against.
 
-=item $version_code = Cairo->VERSION_ENCODE ($major, $minor, $micro)
+=item $version_code = Cairo->LIB_VERSION
+
+Returns the version of libcairo that L<Cairo> was compiled against.
+
+=item $version_code = Cairo->LIB_VERSION_ENCODE ($major, $minor, $micro)
 
 =over
 
@@ -1742,6 +1755,9 @@ For hysterical reasons, you can also use the following syntax:
 =item $micro: integer
 
 =back
+
+Encodes the version C<$major.$minor.$micro> as an integer suitable for
+comparison against C<< Cairo->lib_version >> and C<< Cairo->LIB_VERSION >>.
 
 =back
 

@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 75;
+use Test::More tests => 70;
 
 unless (eval 'use Test::Number::Delta; 1;') {
 	my $reason = 'Test::Number::Delta not available';
@@ -20,15 +20,7 @@ unless (eval 'use Test::Number::Delta; 1;') {
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
 
-BEGIN {
-	use_ok ('Cairo');
-}
-
-ok(defined Cairo::version);
-ok(defined Cairo::version_string);
-
-ok(defined Cairo->version);
-ok(defined Cairo->version_string);
+use Cairo;
 
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 isa_ok ($surf, 'Cairo::Surface');

@@ -1,8 +1,16 @@
+Overview of changes in Cairo <NEXT UNSTABLE>
+==================================
+
+* Make "use Cairo x.yyy" work.  This required renaming the old Cairo::VERSION,
+  a wrapper for CAIRO_VERSION, to Cairo::LIB_VERSION -- but we kept the old way
+  of calling it working.  Cairo::version, Cairo::version_string and
+  Cairo::VERSION_ENCODE got the same treatment for consistency.
+
 Overview of changes in Cairo 1.082
 ==================================
 
 * Update the symbol export list for linking on win32
-  (https://bugzilla.gnome.org/show_bug.cgi?id=665265) 
+  (https://bugzilla.gnome.org/show_bug.cgi?id=665265)
 
 Overview of changes in Cairo 1.081
 ==================================
