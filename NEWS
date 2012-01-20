@@ -1,10 +1,12 @@
-Overview of changes in Cairo <NEXT UNSTABLE>
+Overview of changes in Cairo 1.090
 ==================================
 
-* Make "use Cairo x.yyy" work.  This required renaming the old Cairo::VERSION,
-  a wrapper for CAIRO_VERSION, to Cairo::LIB_VERSION -- but we kept the old way
-  of calling it working.  Cairo::version, Cairo::version_string and
-  Cairo::VERSION_ENCODE got the same treatment for consistency.
+* Make "use Cairo x.yyy" work; fixes RT#72783.  This required renaming the old
+  Cairo::VERSION, a wrapper for CAIRO_VERSION, to Cairo::LIB_VERSION -- but we
+  kept the old way of calling it working.  Cairo::version,
+  Cairo::version_string and Cairo::VERSION_ENCODE got the same treatment for
+  consistency.
+* Updated FSF LGPL notice address (RT#72664)
 
 Overview of changes in Cairo 1.082
 ==================================
