@@ -11,10 +11,16 @@ use strict;
 use warnings;
 use Cairo;
 
-use Test::More tests => 6;
+use Test::More;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
+
+if (Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 4, 0)) {
+  plan tests => 6;
+} else {
+  plan skip_all => 'path behavior not predictable on cairo < 1.4';
+}
 
 my $surf = Cairo::ImageSurface->create ('rgb24', IMG_WIDTH, IMG_HEIGHT);
 my $cr = Cairo::Context->create ($surf);

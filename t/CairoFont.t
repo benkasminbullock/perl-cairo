@@ -62,16 +62,16 @@ my $ctm = Cairo::Matrix->init_identity;
 my $font = Cairo::ScaledFont->create ($face, $matrix, $ctm, $options);
 isa_ok ($font, 'Cairo::ScaledFont');
 
-$cr->set_scaled_font ($font);
-is ($font->status, 'success');
-is ($cr->status, 'success');
-
 isa_ok ($font->extents, 'HASH');
 isa_ok ($font->glyph_extents ({ index => 1, x => 2, y => 3 }), 'HASH');
 
 SKIP: {
-	skip 'new stuff', 6
+	skip 'new stuff', 8
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
+
+	$cr->set_scaled_font ($font);
+	is ($font->status, 'success');
+	is ($cr->status, 'success');
 
 	ok (defined $font->get_type);
 

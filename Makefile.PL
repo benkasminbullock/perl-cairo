@@ -321,9 +321,6 @@ if ($have_cairo_1_2) {
 		CAIRO_SURFACE_TYPE_BEOS
 		CAIRO_SURFACE_TYPE_DIRECTFB
 		CAIRO_SURFACE_TYPE_SVG
-		CAIRO_SURFACE_TYPE_OS2
-		CAIRO_SURFACE_TYPE_WIN32_PRINTING
-		CAIRO_SURFACE_TYPE_QUARTZ_IMAGE
 	/];
 
 	$enums{cairo_svg_version_t} = [qw/
@@ -354,6 +351,7 @@ if ($have_cairo_1_4) {
 	add_new_enum_values(
 		cairo_status_t => [qw/CAIRO_STATUS_INVALID_INDEX
 		                      CAIRO_STATUS_CLIP_NOT_REPRESENTABLE/],
+		cairo_surface_type_t => [qw/CAIRO_SURFACE_TYPE_OS2/],
 	);
 
 	push @exports, qw/newSVCairoRectangle
@@ -365,7 +363,8 @@ if ($have_cairo_1_6) {
 		cairo_font_type_t => [qw/CAIRO_FONT_TYPE_QUARTZ/],
 		cairo_status_t => [qw/CAIRO_STATUS_TEMP_FILE_ERROR
 				      CAIRO_STATUS_INVALID_STRIDE/],
-
+		cairo_surface_type_t => [qw/CAIRO_SURFACE_TYPE_WIN32_PRINTING
+					    CAIRO_SURFACE_TYPE_QUARTZ_IMAGE/],
 	);
 
 	$enums{cairo_ps_level_t} = [qw/
