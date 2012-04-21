@@ -1,3 +1,9 @@
+Overview of changes in Cairo <next>
+==================================
+
+* Fix compiling and testing against older versions of cairo.
+* Make the test suite more robust.
+
 Overview of changes in Cairo 1.090
 ==================================
 
