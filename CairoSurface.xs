@@ -279,7 +279,10 @@ read_func_marshaller (void *closure,
 		SvREFCNT_dec (sv);
 	} else {
 		SV *retval = POPs;
-		memcpy (data, SvPV_nolen (retval), sv_len (retval));
+		STRLEN len = 0;
+		const char *sv_data = SvPV (retval, len);
+		/* should we assert that len == length? */
+		memcpy (data, sv_data, len);
 	}
 
 	PUTBACK;
