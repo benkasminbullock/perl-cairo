@@ -24,6 +24,41 @@ my %prereqs = (
 	'ExtUtils::PkgConfig' => 1.0,
 );
 
+my %meta_merge = (
+        q(meta-spec)          => {
+            version => '2',
+            url     => 'http://search.cpan.org/perldoc?CPAN::Meta::Spec',
+        },
+        author              =>
+            ['Cairo Perl Team <gtk-perl-list at gnome dot org>'],
+        release_status      => 'unstable',
+        # valid values: https://metacpan.org/module/CPAN::Meta::Spec#license
+        license             => 'lgpl_2_1',
+        resources => {
+            license     => 'http://www.gnu.org/licenses/lgpl-2.1.html',
+            homepage    => 'http://gtk2-perl.sourceforge.net',
+            x_MailingList =>
+                'https://mail.gnome.org/mailman/listinfo/gtk-perl-list',
+            bugtracker  => {
+                    web     =>
+                    'http://rt.cpan.org/Public/Dist/Display.html?Name=Cairo',
+                    mailto  => 'bug-Cairo [at] rt.cpan.org',
+            },
+            repository  => {
+                    url     => 'git://git.gnome.org/perl-Cairo',
+                    type    => 'git',
+                    web     => 'http://git.gnome.org/browse/perl-Cairo',
+            },
+        },
+        configure_requires  => \%prereqs,
+        build_requires      => {
+            'Test::Number::Delta' => 1.0,
+        },
+        no_index            => {
+            file => [qw(inc/MakeHelper.pm)],
+        },
+);
+
 # ... thus we have to make sure they are installed.
 while ((my $module, my $version) = each(%prereqs)) {
 	unless (eval "use $module $version; 1" ) {
@@ -531,25 +566,16 @@ $dep->install (qw(cairo-perl.h
 $dep->save_config ('build/IFiles.pm');
 
 WriteMakefile (
-	NAME          => 'Cairo',
-	VERSION_FROM  => 'lib/Cairo.pm',
-	ABSTRACT_FROM => 'lib/Cairo.pm',
-	PREREQ_PM     => \%prereqs,
-	XSPROTOARG    => '-noprototypes',
-	FUNCLIST      => \@exports,
-	DL_FUNCS      => { Cairo=> [] },
-
-	$dep->get_makefile_vars,
-
-	META_MERGE => {
-		configure_requires => \%prereqs,
-		build_requires => {
-			'Test::Number::Delta' => 1.0,
-		},
-		no_index => {
-			files => [qw(inc/MakeHelper.pm)],
-		},
-        },
+    NAME          => 'Cairo',
+    #AUTHOR, LICENSE are now part of %meta_merge
+    VERSION_FROM  => 'lib/Cairo.pm',
+    ABSTRACT_FROM => 'lib/Cairo.pm',
+    PREREQ_PM     => \%prereqs,
+    XSPROTOARG    => '-noprototypes',
+    FUNCLIST      => \@exports,
+    DL_FUNCS      => { Cairo=> [] },
+    META_MERGE    => \%meta_merge,
+    $dep->get_makefile_vars,
 );
 
 sub MY::postamble
