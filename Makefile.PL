@@ -31,7 +31,7 @@ my %meta_merge = (
         },
         author              =>
             ['Cairo Perl Team <gtk-perl-list at gnome dot org>'],
-        release_status      => 'unstable',
+        release_status      => 'stable',
         # valid values: https://metacpan.org/module/CPAN::Meta::Spec#license
         license             => 'lgpl_2_1',
         resources => {
