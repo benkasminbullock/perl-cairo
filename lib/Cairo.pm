@@ -1453,7 +1453,7 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $callback: L<Cairo::WriteFunc>
+=item $callback: I<Cairo::WriteFunc>
 
 =item $callback_data: scalar
 
@@ -1525,7 +1525,7 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $callback: L<Cairo::ReadFunc>
+=item $callback: I<Cairo::ReadFunc>
 
 =item $callback_data: scalar
 
@@ -1553,7 +1553,7 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $callback: L<Cairo::WriteFunc>
+=item $callback: I<Cairo::WriteFunc>
 
 =item $callback_data: scalar
 
@@ -1585,7 +1585,7 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $callback: L<Cairo::WriteFunc>
+=item $callback: I<Cairo::WriteFunc>
 
 =item $callback_data: scalar
 
@@ -1693,7 +1693,7 @@ For hysterical reasons, you can also use the following syntax:
 
 =over
 
-=item $callback: L<Cairo::WriteFunc>
+=item $callback: I<Cairo::WriteFunc>
 
 =item $callback_data: scalar
 
@@ -1742,7 +1742,7 @@ currently running against.
 
 =item $version_code = Cairo->LIB_VERSION
 
-Returns the version of libcairo that L<Cairo> was compiled against.
+Returns the version of libcairo that Cairo was compiled against.
 
 =item $version_code = Cairo->LIB_VERSION_ENCODE ($major, $minor, $micro)
 
