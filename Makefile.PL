@@ -50,9 +50,15 @@ my %meta_merge = (
                     web     => 'http://git.gnome.org/browse/perl-Cairo',
             },
         },
-        configure_requires  => \%prereqs,
-        build_requires      => {
-            'Test::Number::Delta' => 1.0,
+        prereqs => {
+          configure => {
+            requires => \%prereqs
+          },
+          test => {
+            recommends => {
+              'Test::Number::Delta' => 1.0,
+            },
+          },
         },
         no_index            => {
             file => [qw(inc/MakeHelper.pm)],
