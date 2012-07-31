@@ -1,3 +1,10 @@
+Overview of changes in Cairo 1.101
+==================================
+
+* Properly specify our dependencies.
+* Fix some erroneous POD links.
+* Distribute a missing test file.
+
 Overview of changes in Cairo 1.100
 ==================================
 
