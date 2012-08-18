@@ -1,3 +1,8 @@
+Overview of changes in Cairo <next>
+==================================
+
+* Prevent crashes on exit with Cairo::Path on perl 5.6.
+
 Overview of changes in Cairo 1.101
 ==================================
 

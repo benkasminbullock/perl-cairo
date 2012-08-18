@@ -323,6 +323,17 @@ SV * FETCH (cairo_path_t * path, IV index)
 
 MODULE = Cairo::Path	PACKAGE = Cairo::Path::Data
 
+#if PERL_REVISION <= 5 && PERL_VERSION <= 6
+
+void DESTROY (SV * sv)
+    CODE:
+	/* Unset mg_ptr to prevent perl 5.6.x from trying to free it. */
+	MAGIC *mg = cairo_perl_mg_find (SvRV (sv), PERL_MAGIC_ext);
+	if (mg)
+		mg->mg_ptr = NULL;
+
+#endif /* 5.6.x */
+
 SV * FETCH (SV * sv, const char * key)
     PREINIT:
 	cairo_path_data_t * data;
@@ -387,6 +398,17 @@ const char * NEXTKEY (sv, const char * lastkey)
 
 MODULE = Cairo::Path	PACKAGE = Cairo::Path::Points
 
+#if PERL_REVISION <= 5 && PERL_VERSION <= 6
+
+void DESTROY (SV * sv)
+    CODE:
+	/* Unset mg_ptr to prevent perl 5.6.x from trying to free it. */
+	MAGIC *mg = cairo_perl_mg_find (SvRV (sv), PERL_MAGIC_ext);
+	if (mg)
+		mg->mg_ptr = NULL;
+
+#endif /* 5.6.x */
+
 IV FETCHSIZE (SV * sv)
     PREINIT:
 	cairo_path_data_t * data;
@@ -434,6 +456,17 @@ SV * STORE (SV * sv, IV index, SV * value)
 # --------------------------------------------------------------------------- #
 
 MODULE = Cairo::Path	PACKAGE = Cairo::Path::Point
+
+#if PERL_REVISION <= 5 && PERL_VERSION <= 6
+
+void DESTROY (SV * sv)
+    CODE:
+	/* Unset mg_ptr to prevent perl 5.6.x from trying to free it. */
+	MAGIC *mg = cairo_perl_mg_find (SvRV (sv), PERL_MAGIC_ext);
+	if (mg)
+		mg->mg_ptr = NULL;
+
+#endif /* 5.6.x */
 
 IV FETCHSIZE (sv)
     CODE:
