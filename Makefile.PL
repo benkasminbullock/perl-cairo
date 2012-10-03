@@ -52,7 +52,7 @@ my %meta_merge = (
         },
         prereqs => {
           configure => {
-            requires => \%prereqs
+            requires => {%prereqs}, # no direct ref for 5.14 compatibility
           },
           test => {
             recommends => {
