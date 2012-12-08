@@ -1,6 +1,7 @@
-Overview of changes in Cairo <next>
+Overview of changes in Cairo 1.102
 ==================================
 
+* Fix building with perl <= 5.14
 * Prevent crashes on exit with Cairo::Path on perl 5.6.
 
 Overview of changes in Cairo 1.101
