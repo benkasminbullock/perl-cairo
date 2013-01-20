@@ -428,6 +428,7 @@ BOOT:
 # The VERSION fallback is implemented in lib/Cairo.pm.
 int LIB_VERSION (...)
     CODE:
+	PERL_UNUSED_VAR (items);
 	RETVAL = CAIRO_VERSION;
     OUTPUT:
 	RETVAL
@@ -438,6 +439,7 @@ int LIB_VERSION_ENCODE (...)
     PREINIT:
 	int major, minor, micro;
     CODE:
+	PERL_UNUSED_VAR (ix);
 	if (items == 3) {
 		major = SvIV (ST (0));
 		minor = SvIV (ST (1));
@@ -460,6 +462,8 @@ int cairo_version (class=NULL)
 	lib_version = 1
     C_ARGS:
 	/* void */
+    CLEANUP:
+	PERL_UNUSED_VAR (ix);
 
 # const char* cairo_version_string ();
 const char* cairo_version_string (class=NULL)
@@ -467,6 +471,8 @@ const char* cairo_version_string (class=NULL)
 	lib_version_string = 1
     C_ARGS:
 	/* void */
+    CLEANUP:
+	PERL_UNUSED_VAR (ix);
 
 # ---------------------------------------------------------------------------- #
 
