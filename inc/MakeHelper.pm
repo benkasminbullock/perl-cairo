@@ -140,7 +140,8 @@ EOS
 	    my ($name, $options) = ($1, $2);
 	    $name =~ s/([^_]+)/ucfirst $1/ge;
 	    $name =~ s/_//g;
-	    $result = $name . $options;
+	    $result = $name;
+	    $result .= $options if defined $options;
 	  }
 	  \$result';
 
