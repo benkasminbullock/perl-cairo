@@ -1,3 +1,10 @@
+Overview of changes in Cairo <next>
+==================================
+
+* Avoid misusing the macro PL_na, thus preventing potential issues when Cairo
+  is used in conjunction with certain XS modules, among them XML::Parser and
+  String::Approx.
+
 Overview of changes in Cairo 1.103
 ==================================
 

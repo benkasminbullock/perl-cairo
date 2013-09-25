@@ -36,7 +36,7 @@ cairo_perl_package_table_insert (void *pointer, const char *package)
 	}
 
 	sprintf (key, "%p", pointer);
-	hv_store (pointer_to_package, key, strlen (key), newSVpv (package, PL_na), 0);
+	hv_store (pointer_to_package, key, strlen (key), newSVpv (package, 0), 0);
 }
 
 const char *
