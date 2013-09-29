@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2004-2006, 2012 by the cairo perl team (see the file README)
+ * Copyright (c) 2004-2006, 2012-2013 by the cairo perl team (see the file
+ * README)
  *
  * Licensed under the LGPL, see LICENSE file for more information.
  *
