@@ -1,4 +1,4 @@
-Overview of changes in Cairo <next>
+Overview of changes in Cairo 1.104
 ==================================
 
 * Avoid misusing the macro PL_na, thus preventing potential issues when Cairo
