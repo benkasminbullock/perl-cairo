@@ -571,6 +571,20 @@ $dep->install (qw(cairo-perl.h
                   build/cairo-perl-auto.typemap));
 $dep->save_config ('build/IFiles.pm');
 
+# On OpenBSD, any program that directly or indirectly wants to load
+# libpthread.so must do so from the start.  But when perl is built without
+# ithreads, it will also most likely not be compiled with "-pthread".  When
+# libglib/libgobject then go and try to load libpthread.so, the loader will
+# error out.
+my @openbsd_compat_flags = ();
+if ($^O eq 'openbsd' && $Config::Config{ldflags} !~ m/-pthread\b/) {
+  warn " ***\n *** on OpenBSD, we either need perl linked with '-pthread',\n",
+       " ***   or we need to set LD_PRELOAD=libpthread.so; doing the latter now...\n ***\n";
+  @openbsd_compat_flags = (
+    macro => {FULLPERLRUN => 'LD_PRELOAD=libpthread.so $(FULLPERL)'},
+  );
+}
+
 WriteMakefile (
     NAME          => 'Cairo',
     #AUTHOR, LICENSE are now part of %meta_merge
@@ -582,6 +596,7 @@ WriteMakefile (
     DL_FUNCS      => { Cairo=> [] },
     META_MERGE    => \%meta_merge,
     $dep->get_makefile_vars,
+    @openbsd_compat_flags,
 );
 
 sub MY::postamble
