@@ -1,3 +1,8 @@
+Overview of changes in Cairo 1.105
+==================================
+
+* Fix libpthread-related building issues on OpenBSD
+
 Overview of changes in Cairo 1.104
 ==================================
 
