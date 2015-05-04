@@ -110,12 +110,12 @@ EOS
 		$1;
 	}
 
-	foreach (keys %objects, keys %structs, keys %enums, keys %flags)
+	foreach (sort(keys %objects, keys %structs, keys %enums, keys %flags))
 	{
 		print TYPEMAP "$_\tT_CAIROPERL_GENERIC_WRAPPER\n";
 	}
 
-	foreach (keys %objects, keys %structs)
+	foreach (sort(keys %objects, keys %structs))
 	{
 		my $trunk = $_;
 		$trunk =~ s/ \*//;
@@ -125,7 +125,7 @@ EOS
 		print TYPEMAP "const ${trunk}_ornull *\tT_CAIROPERL_GENERIC_WRAPPER\n";
 	}
 
-	foreach (keys %objects)
+	foreach (sort(keys %objects))
 	{
 		my $trunk = $_;
 		$trunk =~ s/ \*//;
@@ -196,7 +196,7 @@ EOS
 
 	print HEADER "\n/* objects */\n\n";
 
-	foreach (keys %objects)
+	foreach (sort(keys %objects))
 	{
 		/^(.+) \*/;
 		my $type = $1;
@@ -226,7 +226,7 @@ EOS
 
 	print HEADER "\n/* structs */\n\n";
 
-	foreach (keys %structs)
+	foreach (sort(keys %structs))
 	{
 		/^(.+) \*/;
 		my $type = $1;
@@ -253,7 +253,7 @@ EOS
 
 	print HEADER "\n/* enums */\n\n";
 
-	foreach my $type (keys %enums)
+	foreach my $type (sort(keys %enums))
 	{
 		my $mangled = mangle ($type);
 		my $name = name ($type);
@@ -280,7 +280,7 @@ EOS
 
 	print HEADER "\n/* flags */\n\n";
 
-	foreach my $type (keys %flags)
+	foreach my $type (sort(keys %flags))
 	{
 		my $mangled = mangle ($type);
 		my $name = name ($type);
@@ -380,7 +380,7 @@ sub do_enums
 
 EOS
 
-	foreach my $type (keys %enums)
+	foreach my $type (sort(keys %enums))
 	{
 		my $name = name($type);
 		my @enum_values = @{$enums{$type}};
@@ -492,7 +492,7 @@ sub do_flags
 
 EOS
 
-	foreach my $type (keys %flags)
+	foreach my $type (sort(keys %flags))
 	{
 		my $name = name($type);
 		my @flag_values = @{$flags{$type}};
