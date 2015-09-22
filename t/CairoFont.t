@@ -62,10 +62,13 @@ my $ctm = Cairo::Matrix->init_identity;
 my $font = Cairo::ScaledFont->create ($face, $matrix, $ctm, $options);
 isa_ok ($font, 'Cairo::ScaledFont');
 
-isa_ok ($font->extents, 'HASH');
-isa_ok ($font->glyph_extents ({ index => 1, x => 2, y => 3 }), 'HASH');
-
 SKIP: {
+	skip 'scaled font tests', 10
+		unless $font->status eq 'success';
+
+	isa_ok ($font->extents, 'HASH');
+	isa_ok ($font->glyph_extents ({ index => 1, x => 2, y => 3 }), 'HASH');
+
 	skip 'new stuff', 8
 		unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 2, 0);
 
@@ -92,6 +95,8 @@ SKIP: {
 	my $text = 'æſðđŋ';
 	my ($status, $glyphs, $clusters, $flags) =
 		$font->text_to_glyphs (5, 10, $text);
+	skip 'show_text_glyphs', 1
+		unless $status eq 'success';
 	$cr->show_text_glyphs ($text, $glyphs, $clusters, $flags);
 	is ($cr->status, 'success');
 }
