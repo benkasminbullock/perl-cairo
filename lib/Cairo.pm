@@ -340,6 +340,24 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
+=item $cr->tag_begin($name, $atts) [1.16]
+
+=over
+
+=item $name: string
+
+=item $atts: string
+
+=back
+
+=item $cr->tag_end($name) [1.16]
+
+=over
+
+=item $name: string
+
+=back
+
 =item $cr->copy_page
 
 =item $cr->show_page
