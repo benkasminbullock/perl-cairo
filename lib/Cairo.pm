@@ -1509,6 +1509,16 @@ For hysterical reasons, you can also use the following syntax:
 
 =back
 
+=item $surface->set_metadata($name, $value) [1.16]
+
+=over
+
+=item $name: string
+
+=item $value: string
+
+=back
+
 =back
 
 =cut
