@@ -1369,6 +1369,20 @@ For hysterical reasons, you can also use the following syntax:
 
 =item $type = $surface->get_type [1.2]
 
+=item $surface->set_mime_data ($mime_type, $mime_data) [1.10]
+
+=item $mime_data = $surface->get_mime_data ($mime_type) [1.10]
+
+=item $bool = $surface->supports_mime_type ($mime_type) [1.12]
+
+=over
+
+=item $mime_type: string
+
+=item $mime_data: binary data string
+
+=back
+
 =item $status = $surface->copy_page [1.6]
 
 =over
@@ -1694,6 +1708,14 @@ For hysterical reasons, you can also use the following syntax:
 =back
 
 =item ($x0, $y0, $width, $height) = $surface->ink_extents [1.10]
+
+=item $extents_ref = $surface->get_extents [1.12]
+
+=over
+
+=item $extents_ref: I<Cairo::Rectangle> reference
+
+=back
 
 =back
 

@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 89;
+use Test::More tests => 96;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -269,6 +269,29 @@ SKIP: {
 	}
 
 	SKIP: {
+		skip 'new stuff', 3
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 10, 0);
+
+		my $mime_data = 'mime data for {set,get}_mime_data';
+		is ($surf->set_mime_data('image/jpeg', $mime_data), 'success');
+
+		my $recovered_mime_data = $surf->get_mime_data('unset mime type');
+		is ($recovered_mime_data, undef);
+
+		$recovered_mime_data = $surf->get_mime_data('image/jpeg');
+		is ($recovered_mime_data, $mime_data);
+		}
+
+	SKIP: {
+		skip 'new stuff', 2
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 12, 0);
+
+		is ($surf->supports_mime_type('image/jpeg'), 1);
+		is ($surf->supports_mime_type('unsupported mime type'), 0);
+
+	}
+
+	SKIP: {
 		skip 'new stuff', 1
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 16, 0);
 
@@ -392,7 +415,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'svg surface', 5
+	skip 'recording surface', 7
 		unless Cairo::HAS_RECORDING_SURFACE;
 
 	my $surf = Cairo::RecordingSurface->create (
@@ -411,4 +434,15 @@ SKIP: {
 	$surf = Cairo::RecordingSurface->create ('color', undef);
 	isa_ok ($surf, 'Cairo::RecordingSurface');
 	isa_ok ($surf, 'Cairo::Surface');
+
+	SKIP: {
+		skip 'get_extents', 2
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 12, 0);
+
+		$surf = Cairo::RecordingSurface->create ('color', undef);
+		is ($surf->get_extents(), undef);
+
+		$surf =  Cairo::RecordingSurface->create ('color', {x => 5, y => 10, width => 15, height => 20});
+		is_deeply ($surf->get_extents(), {x => 5, y => 10, width => 15, height => 20});
+	}
 }

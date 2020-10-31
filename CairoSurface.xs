@@ -295,6 +295,14 @@ read_func_marshaller (void *closure,
 
 /* -------------------------------------------------------------------------- */
 
+static void
+data_destroy (void *data)
+{
+	SvREFCNT_dec ((SV *) data);
+}
+
+/* -------------------------------------------------------------------------- */
+
 MODULE = Cairo::Surface	PACKAGE = Cairo::Surface	PREFIX = cairo_surface_
 
 void DESTROY (cairo_surface_t * surface);
@@ -371,6 +379,41 @@ void cairo_surface_mark_dirty_rectangle (cairo_surface_t *surface, int x, int y,
 cairo_surface_type_t cairo_surface_get_type (cairo_surface_t *surface);
 
 cairo_content_t cairo_surface_get_content (cairo_surface_t *surface);
+
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 10, 0)
+
+# cairo_status_t cairo_surface_set_mime_data (cairo_surface_t *surface, const char *mime_type, const unsigned char *data, unsigned long  length, cairo_destroy_func_t destroy, void *closure);
+cairo_status_t
+cairo_surface_set_mime_data (cairo_surface_t *surface, const char *mime_type, SV *data);
+    PREINIT:
+	const unsigned char *mime_data;
+	unsigned long length;
+    CODE:
+	SvREFCNT_inc (data);
+	mime_data = (const unsigned char *) SvPV(data, length);
+	RETVAL = cairo_surface_set_mime_data (surface, mime_type, mime_data, length, data_destroy, data);
+    OUTPUT:
+	RETVAL
+
+# void cairo_surface_get_mime_data (cairo_surface_t *surface, const char *mime_type, const unsigned char **data, unsigned long *length);
+SV *
+cairo_surface_get_mime_data (cairo_surface_t *surface, const char *mime_type);
+    PREINIT:
+	const unsigned char *data;
+	unsigned long length;
+    CODE:
+	cairo_surface_get_mime_data (surface, mime_type, &data, &length);
+	RETVAL = newSVpvn ((const char *) data, length);
+    OUTPUT:
+	RETVAL
+
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+
+cairo_bool_t cairo_surface_supports_mime_type (cairo_surface_t *surface, const char *mime_type);
 
 #endif
 
@@ -764,6 +807,22 @@ cairo_recording_surface_create (class, cairo_content_t content, cairo_rectangle_
 	content, extents
 
 void cairo_recording_surface_ink_extents (cairo_surface_t *surface, OUTLIST double x0, OUTLIST double y0, OUTLIST double width, OUTLIST double height);
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
+
+# cairo_bool_t cairo_recording_surface_get_extents (cairo_surface_t *surface, cairo_rectangle_t *extents);
+cairo_rectangle_t *
+cairo_recording_surface_get_extents (cairo_surface_t *surface)
+    PREINIT:
+	cairo_bool_t status;
+	cairo_rectangle_t rect;
+    CODE:
+	status = cairo_recording_surface_get_extents (surface, &rect);
+	RETVAL = status ? &rect : NULL;
+    OUTPUT:
+	RETVAL
+
+#endif
 
 #endif
 
