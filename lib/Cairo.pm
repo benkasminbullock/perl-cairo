@@ -1523,6 +1523,20 @@ For hysterical reasons, you can also use the following syntax:
 
 =back
 
+=item $id = $surface->add_outline($parent_id, $name, $attributes, $flags) [1.16]
+
+=over
+
+=item $id: int, item ID
+
+=item $name: string, item display
+
+=item $attributes: string, item attributes
+
+=item $flags: list reference, item flags
+
+=back
+
 =item $surface->set_metadata($name, $value) [1.16]
 
 =over
@@ -1530,6 +1544,24 @@ For hysterical reasons, you can also use the following syntax:
 =item $name: string
 
 =item $value: string
+
+=back
+
+=item $surface->set_page_label($label) [1.16]
+
+=over
+
+=item $label: string, page label
+
+=back
+
+=item $surface->set_thumbnail_size($width, $height) [1.16]
+
+=over
+
+=item $width: int, thumbnail width
+
+=item $height: int, thumbnail height
 
 =back
 

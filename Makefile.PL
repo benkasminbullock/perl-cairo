@@ -539,8 +539,21 @@ if ($have_cairo_1_16) {
 		CAIRO_PDF_METADATA_CREATE_DATE
 		CAIRO_PDF_METADATA_MOD_DATE
 	/];
+
+	$flags{cairo_pdf_outline_flags_t} = [qw/
+		CAIRO_PDF_OUTLINE_FLAG_
+		CAIRO_PDF_OUTLINE_FLAG_OPEN
+		CAIRO_PDF_OUTLINE_FLAG_BOLD
+		CAIRO_PDF_OUTLINE_FLAG_ITALIC
+	/];
+
+	 push @exports, qw/newSVCairoPdfOutline
+			SvCairoPdfOutline
+			cairo_pdf_outline_flags_from_sv
+			cairo_pdf_outline_flags_to_sv/;
 } else {
 	$enums{cairo_pdf_metadata_t} = [];
+	$flags{cairo_pdf_outline_flags_t} = [];
 }
 
 # --------------------------------------------------------------------------- #

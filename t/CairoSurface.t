@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 96;
+use Test::More tests => 99;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -216,7 +216,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 14
+	skip 'pdf surface', 17
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -299,6 +299,24 @@ SKIP: {
 		$surf->set_metadata("author","Johan Vromans");
 		$surf->set_metadata("subject","cairo_pdf_set_metadata");
 		ok(1);	# No get_metadata, so assume OK if we're still alive
+	}
+
+	SKIP: {
+		skip 'new stuff', 3
+			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 16, 0);
+
+		$surf->set_page_label('Page label');
+		is ($surf->status(), 'success');
+
+		$surf->set_thumbnail_size(20, 20);
+		is ($surf->status(), 'success');
+
+		my $parent = $surf->add_outline(0, 'Cover', "dest='page=1'", ['bold']);
+		$parent = $surf->add_outline($parent, 'Chapter 1', 'page=2', ['bold', 'open']);
+		$parent = $surf->add_outline($parent, 'Section 1', 'page=2', ['open']);
+		$parent = $surf->add_outline($parent, 'Section 1.1', 'page=2', ['italic']);
+		$parent = $surf->add_outline($parent, 'Review', 'page=2', []);
+		is ($surf->status(), 'success');
 	}
 
 	unlink 'tmp.pdf';

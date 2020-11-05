@@ -625,7 +625,13 @@ cairo_pdf_surface_version_to_string (...)
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 16, 0)
 
+int cairo_pdf_surface_add_outline (cairo_surface_t *surface, int parent_id, const char *utf8, const char *link_attribs, cairo_pdf_outline_flags_t flags);
+
 void cairo_pdf_surface_set_metadata (cairo_surface_t *surface, cairo_pdf_metadata_t metadata, const char_utf8 * utf8);
+
+void cairo_pdf_surface_set_page_label (cairo_surface_t *surface, const char *utf8);
+
+void cairo_pdf_surface_set_thumbnail_size (cairo_surface_t *surface, int width, int height);
 
 #endif
 
