@@ -14,6 +14,7 @@ doctypes
 examples/freetype-font.pl
 examples/glyph-text.pl
 examples/mime-unique-id.pl
+examples/pdf-tagged-text.pl
 examples/png-streams.pl
 examples/png/bevels.pl
 examples/png/caps_joins.pl
