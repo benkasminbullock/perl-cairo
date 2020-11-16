@@ -33,11 +33,6 @@ use constant
 	TEXT_SIZE		=> 12,
 	HEADING_HEIGHT		=> 50,
 	MARGIN			=> 50,
-
-	CAIRO_TAG_DEST		=> 'cairo.dest',
-	CAIRO_TAG_LINK		=> 'Link',
-
-	CAIRO_PDF_OUTLINE_ROOT	=> 0,
 	};
 
 
@@ -186,9 +181,9 @@ sub draw_contents
 
 	$cr->tag_begin('TOCI', '');
 	$cr->tag_begin('Reference', '');
-	$cr->tag_begin(CAIRO_TAG_LINK, "dest='".$$section[1]."'");
+	$cr->tag_begin(Cairo::TAG_LINK, "dest='".$$section[1]."'");
 	$cr->show_text($$section[1]);
-	$cr->tag_end(CAIRO_TAG_LINK);
+	$cr->tag_end(Cairo::TAG_LINK);
 	$cr->tag_end('Reference');
 	$cr->tag_end('TOCI');
 
@@ -210,7 +205,7 @@ sub draw_section
 		draw_page_num($cr, undef, $page_num++);
 		$y_pos = MARGIN;
 
-		$parent = CAIRO_PDF_OUTLINE_ROOT;
+		$parent = $cr->get_target->OUTLINE_ROOT;
 		}
 	else
 		{
@@ -232,9 +227,9 @@ sub draw_section
 	$cr->move_to(MARGIN, $y_pos);
 
 	$cr->tag_begin($level_data[$$section[0]]->[1], '');
-	$cr->tag_begin(CAIRO_TAG_DEST, "name='".$$section[1]."'");
+	$cr->tag_begin(Cairo::TAG_DEST, "name='".$$section[1]."'");
 	$cr->show_text($$section[1]);
-	$cr->tag_end(CAIRO_TAG_DEST);
+	$cr->tag_end(Cairo::TAG_DEST);
 	$cr->tag_end($level_data[$$section[0]]->[1]);
 
 	$y_pos += HEADING_HEIGHT;
@@ -291,16 +286,16 @@ sub create_document
 	$cr->tag_begin("Document", '');
 
 	draw_cover($cr);
-	$surface->add_outline(CAIRO_PDF_OUTLINE_ROOT, 'Cover', 'page=1', ['bold']);
+	$surface->add_outline($surface->OUTLINE_ROOT, 'Cover', 'page=1', ['bold']);
 	$cr->show_page();
 
 	$page_num = 0;
 	draw_page_num($cr, $roman_numerals[$page_num++], 0);
 	$y_pos = MARGIN;
 
-	$surface->add_outline(CAIRO_PDF_OUTLINE_ROOT, "Contents", "dest='TOC'", ['bold']);
+	$surface->add_outline($surface->OUTLINE_ROOT, "Contents", "dest='TOC'", ['bold']);
 
-	$cr->tag_begin(CAIRO_TAG_DEST, "name='TOC' internal");
+	$cr->tag_begin(Cairo::TAG_DEST, "name='TOC' internal");
 	$cr->tag_begin("TOC", '');
 
 	foreach (@contents)
@@ -309,7 +304,7 @@ sub create_document
 		}
 
 	$cr->tag_end("TOC");
-	$cr->tag_end(CAIRO_TAG_DEST);
+	$cr->tag_end(Cairo::TAG_DEST);
 
 	$page_num = 1;
 	foreach (@contents)

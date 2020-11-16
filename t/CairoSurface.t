@@ -12,7 +12,7 @@ use warnings;
 
 use Config; # for byteorder
 
-use Test::More tests => 99;
+use Test::More tests => 100;
 
 use constant IMG_WIDTH => 256;
 use constant IMG_HEIGHT => 256;
@@ -216,7 +216,7 @@ SKIP: {
 }
 
 SKIP: {
-	skip 'pdf surface', 17
+	skip 'pdf surface', 18
 		unless Cairo::HAS_PDF_SURFACE;
 
 	my $surf = Cairo::PdfSurface->create ('tmp.pdf', IMG_WIDTH, IMG_HEIGHT);
@@ -269,16 +269,17 @@ SKIP: {
 	}
 
 	SKIP: {
-		skip 'new stuff', 3
+		skip 'new stuff', 4
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 10, 0);
 
 		my $mime_data = 'mime data for {set,get}_mime_data';
-		is ($surf->set_mime_data('image/jpeg', $mime_data), 'success');
+		is ($surf->MIME_TYPE_JPEG, 'image/jpeg');
+		is ($surf->set_mime_data($surf->MIME_TYPE_JPEG, $mime_data), 'success');
 
 		my $recovered_mime_data = $surf->get_mime_data('unset mime type');
 		is ($recovered_mime_data, undef);
 
-		$recovered_mime_data = $surf->get_mime_data('image/jpeg');
+		$recovered_mime_data = $surf->get_mime_data($surf->MIME_TYPE_JPEG);
 		is ($recovered_mime_data, $mime_data);
 		}
 
@@ -286,7 +287,7 @@ SKIP: {
 		skip 'new stuff', 2
 			unless Cairo::VERSION >= Cairo::VERSION_ENCODE (1, 12, 0);
 
-		is ($surf->supports_mime_type('image/jpeg'), 1);
+		is ($surf->supports_mime_type(Cairo::Surface::MIME_TYPE_JPEG), 1);
 		is ($surf->supports_mime_type('unsupported mime type'), 0);
 
 	}
@@ -311,7 +312,7 @@ SKIP: {
 		$surf->set_thumbnail_size(20, 20);
 		is ($surf->status(), 'success');
 
-		my $parent = $surf->add_outline(0, 'Cover', "dest='page=1'", ['bold']);
+		my $parent = $surf->add_outline($surf->OUTLINE_ROOT(), 'Cover', "dest='page=1'", ['bold']);
 		$parent = $surf->add_outline($parent, 'Chapter 1', 'page=2', ['bold', 'open']);
 		$parent = $surf->add_outline($parent, 'Section 1', 'page=2', ['open']);
 		$parent = $surf->add_outline($parent, 'Section 1.1', 'page=2', ['italic']);

@@ -38,8 +38,6 @@ use constant
 	JPG_FILENAME		=> 'romedalen.jpg',
 	OUTPUT_FILENAME		=> 'mime-unique-id.perl.pdf',
 	M_PI			=> 3.1415926,
-	CAIRO_MIME_TYPE_JPEG		=> 'image/jpeg',
-	CAIRO_MIME_TYPE_UNIQUE_ID	=> 'application/x-cairo.uuid',
 	};
 
 
@@ -53,9 +51,9 @@ sub create_image_surface
 		die;
 		}
 
-	$surface->set_mime_data(CAIRO_MIME_TYPE_UNIQUE_ID, PNG_FILENAME);
+	$surface->set_mime_data($surface->MIME_TYPE_UNIQUE_ID, PNG_FILENAME);
 
-	$surface->set_mime_data(CAIRO_MIME_TYPE_UNIQUE_ID, 'image');
+	$surface->set_mime_data($surface->MIME_TYPE_UNIQUE_ID, 'image');
 
 	return $surface;
 	}
@@ -87,14 +85,14 @@ sub create_recording_surface_with_mime_jpg
 		}
 	close($FH);
 
-	$surface->set_mime_data(CAIRO_MIME_TYPE_JPEG, $data);
+	$surface->set_mime_data($surface->MIME_TYPE_JPEG, $data);
 	if ($surface->status() ne 'success')
 		{
 		say $surface->status();
 		die;
 		}
 
-	$surface->set_mime_data(CAIRO_MIME_TYPE_UNIQUE_ID, 'jpeg');
+	$surface->set_mime_data($surface->MIME_TYPE_UNIQUE_ID, 'jpeg');
 	if ($surface->status() ne 'success')
 		{
 		say $surface->status();
@@ -172,7 +170,7 @@ sub create_recording_surface
 		}
 	$cr = undef;
 
-	$surface->set_mime_data(CAIRO_MIME_TYPE_UNIQUE_ID, $bounded ? 'recording bounded' : 'recording unbounded');
+	$surface->set_mime_data($surface->MIME_TYPE_UNIQUE_ID, $bounded ? 'recording bounded' : 'recording unbounded');
 	if ($surface->status() ne 'success')
 		{
 		say $surface->status();

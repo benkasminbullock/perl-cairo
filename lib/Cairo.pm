@@ -358,6 +358,16 @@ C<$cr-E<gt>restore> to restore to the saved state.
 
 =back
 
+=item Predefined names:
+
+=over
+
+=item Cairo::TAG_DEST [1.16]
+
+=item Cairo::TAG_LINK [1.16]
+
+=back
+
 =item $cr->copy_page
 
 =item $cr->show_page
@@ -1379,6 +1389,40 @@ For hysterical reasons, you can also use the following syntax:
 
 =item $mime_type: string
 
+=over
+
+=item Predefined MIME types:
+
+=over
+
+=item Cairo::Surface::MIME_TYPE_JP2 [1.10]
+
+=item Cairo::Surface::MIME_TYPE_JPEG [1.10]
+
+=item Cairo::Surface::MIME_TYPE_PNG [1.10]
+
+=item Cairo::Surface::MIME_TYPE_URI [1.10]
+
+=item Cairo::Surface::MIME_TYPE_UNIQUE_ID [1.12]
+
+=item Cairo::Surface::MIME_TYPE_JBIG2 [1.14]
+
+=item Cairo::Surface::MIME_TYPE_JBIG2_GLOBAL [1.14]
+
+=item Cairo::Surface::MIME_TYPE_JBIG2_GLOBAL_PARAMS [1.14]
+
+=item Cairo::Surface::MIME_TYPE_CCITT_FAX [1.16]
+
+=item Cairo::Surface::MIME_TYPE_CCITT_FAX_PARAMS [1.16]
+
+=item Cairo::Surface::MIME_TYPE_EPS [1.16]
+
+=item Cairo::Surface::MIME_TYPE_EPS_PARAMS [1.16]
+
+=back
+
+=back
+
 =item $mime_data: binary data string
 
 =back
@@ -1523,11 +1567,13 @@ For hysterical reasons, you can also use the following syntax:
 
 =back
 
-=item $id = $surface->add_outline($parent_id, $name, $attributes, $flags) [1.16]
+=item $item_id = $surface->add_outline($parent_id, $name, $attributes, $flags) [1.16]
 
 =over
 
-=item $id: int, item ID
+=item $item_id: int, item ID
+
+=item $parent_id: parent item id or Cairo::PdfSurface::OUTLINE_ROOT
 
 =item $name: string, item display
 

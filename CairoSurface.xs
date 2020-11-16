@@ -409,11 +409,40 @@ cairo_surface_get_mime_data (cairo_surface_t *surface, const char *mime_type);
     OUTPUT:
 	RETVAL
 
+BOOT:
+    HV *stashsurface = gv_stashpv("Cairo::Surface", 0);
+    newCONSTSUB (stashsurface, "MIME_TYPE_JP2",  newSVpv (CAIRO_MIME_TYPE_JP2,  0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_JPEG", newSVpv (CAIRO_MIME_TYPE_JPEG, 0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_PNG",  newSVpv (CAIRO_MIME_TYPE_PNG,  0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_URI",  newSVpv (CAIRO_MIME_TYPE_URI,  0));
+
 #endif
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
 
 cairo_bool_t cairo_surface_supports_mime_type (cairo_surface_t *surface, const char *mime_type);
+
+BOOT:
+    newCONSTSUB (stashsurface, "MIME_TYPE_UNIQUE_ID",  newSVpv (CAIRO_MIME_TYPE_UNIQUE_ID,  0));
+
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+
+BOOT:
+    newCONSTSUB (stashsurface, "MIME_TYPE_JBIG2",            newSVpv (CAIRO_MIME_TYPE_JBIG2,            0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_JBIG2_GLOBAL",     newSVpv (CAIRO_MIME_TYPE_JBIG2_GLOBAL,     0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_JBIG2_GLOBAL_ID",  newSVpv (CAIRO_MIME_TYPE_JBIG2_GLOBAL_ID,  0));
+
+#endif
+
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 16, 0)
+
+BOOT:
+    newCONSTSUB (stashsurface, "MIME_TYPE_CCITT_FAX",         newSVpv (CAIRO_MIME_TYPE_CCITT_FAX,          0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_CCITT_FAX_PARAMS",  newSVpv (CAIRO_MIME_TYPE_CCITT_FAX_PARAMS,   0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_EPS",               newSVpv (CAIRO_MIME_TYPE_EPS,                0));
+    newCONSTSUB (stashsurface, "MIME_TYPE_EPS_PARAMS",        newSVpv (CAIRO_MIME_TYPE_EPS_PARAMS,         0));
 
 #endif
 
@@ -626,6 +655,10 @@ cairo_pdf_surface_version_to_string (...)
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 16, 0)
 
 int cairo_pdf_surface_add_outline (cairo_surface_t *surface, int parent_id, const char *utf8, const char *link_attribs, cairo_pdf_outline_flags_t flags);
+
+BOOT:
+    HV *stashpdfsurface = gv_stashpv("Cairo::PdfSurface", 0);
+    newCONSTSUB(stashpdfsurface, "OUTLINE_ROOT", newSViv(CAIRO_PDF_OUTLINE_ROOT));
 
 void cairo_pdf_surface_set_metadata (cairo_surface_t *surface, cairo_pdf_metadata_t metadata, const char_utf8 * utf8);
 
