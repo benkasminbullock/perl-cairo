@@ -45,9 +45,9 @@ my %meta_merge = (
                     mailto  => 'bug-Cairo [at] rt.cpan.org',
             },
             repository  => {
-                    url     => 'git://git.gnome.org/perl-Cairo',
+                    url     => 'https://gitlab.gnome.org/GNOME/perl-cairo.git',
                     type    => 'git',
-                    web     => 'http://git.gnome.org/browse/perl-Cairo',
+                    web     => 'https://gitlab.gnome.org/GNOME/perl-cairo',
             },
         },
         prereqs => {
